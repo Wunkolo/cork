@@ -1,12 +1,19 @@
-cmake_minimum_required( VERSION 3.7 )
+cmake_minimum_required( VERSION 3.18 )
 project( cork )
 
-set( MAIN_PROJECT OFF )
-if( CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR )
-	set( MAIN_PROJECT ON )
-endif()
+### Standard
+set( CMAKE_CXX_STANDARD 20 )
+set( CMAKE_CXX_STANDARD_REQUIRED ON )
+set( CMAKE_CXX_EXTENSIONS OFF )
 
-option( CORK_BUILD_TESTING "" ${${PROJECT_NAME}_IS_TOP_LEVEL} )
+### Verbosity
+set( CMAKE_COLOR_MAKEFILE ON )
+set( CMAKE_EXPORT_COMPILE_COMMANDS ON )
+
+
+### Cork
+option( CORK_BUILD_TESTING "" ${cork_IS_TOP_LEVEL} )
+option( CORK_BUILD_TOOLS "" ${cork_IS_TOP_LEVEL} )
 
 set(
 	CORK_HEADER_FILES
@@ -21,15 +28,23 @@ target_include_directories( cork INTERFACE
 )
 target_compile_features( cork INTERFACE cxx_std_20 )
 
+### Tools
+if( CORK_BUILD_TOOLS )
 
-### Standard
-set( CMAKE_CXX_STANDARD 20 )
-set( CMAKE_CXX_STANDARD_REQUIRED ON )
-set( CMAKE_CXX_EXTENSIONS OFF )
+find_package( PugiXML )
+if( NOT TARGET pugixml::pugixml )
+	message( WARNING "pugixml not found. Using embedded submodule")
+	add_subdirectory( externals/pugixml EXCLUDE_FROM_ALL )
+endif()
 
-### Verbosity
-set( CMAKE_COLOR_MAKEFILE ON )
-set( CMAKE_EXPORT_COMPILE_COMMANDS ON )
+add_executable( generate
+	tools/generate.cpp
+)
+target_include_directories( generate PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/tests )
+target_link_libraries( generate PRIVATE pugixml::pugixml )
+
+endif()
+
 
 ### Tests
 if( CORK_BUILD_TESTING )
@@ -38,7 +53,7 @@ enable_testing()
 find_package( Catch2 3 )
 if( NOT TARGET Catch2::Catch2WithMain )
 	message( WARNING "Catch2 v3 not found. Using embedded submodule")
-	add_subdirectory(externals/Catch2 EXCLUDE_FROM_ALL)
+	add_subdirectory( externals/Catch2 EXCLUDE_FROM_ALL )
 endif()
 
 add_executable( cork-tests

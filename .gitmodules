@@ -1,3 +1,6 @@
 [submodule "externals/Catch2"]
 	path = externals/Catch2
 	url = git@github.com:catchorg/Catch2.git
+[submodule "externals/pugixml"]
+	path = externals/pugixml
+	url = git@github.com:zeux/pugixml.git
