@@ -75,7 +75,10 @@ struct Reg
 	// 1 << BitWidth
 	const RegisterWidth Width : 3;
 };
+
+// Ideally, keep this type small and very cheap to pass around
 static_assert(sizeof(Reg) == sizeof(std::byte));
+static_assert(std::is_trivially_copyable_v<Reg>);
 
 struct RReg : public Reg
 {
