@@ -65,6 +65,11 @@ struct Reg
 	{
 	}
 
+	constexpr explicit Reg(std::uint8_t InIndex, RegisterWidth InWidth)
+		: Index(InIndex), Width(InWidth)
+	{
+	}
+
 	// Register Index 0-31
 	// Index 31 may be either the Zero-Register or Stack-Register depending on
 	// the context
@@ -84,6 +89,11 @@ struct RReg : public Reg
 	{
 	}
 
+	constexpr explicit RReg(std::uint8_t InIndex, RegisterWidth InWidth)
+		: Reg(InIndex, InWidth)
+	{
+	}
+
 	[[nodiscard]] XReg ToX() const;
 	[[nodiscard]] WReg ToW() const;
 };
@@ -95,14 +105,14 @@ struct RReg : public Reg
 
 struct WzrReg : public RReg
 {
-	constexpr explicit WzrReg() : RReg(32, 31)
+	constexpr explicit WzrReg() : RReg(31, RegisterWidth::Width32)
 	{
 	}
 };
 
 struct XzrReg : public RReg
 {
-	constexpr explicit XzrReg() : RReg(64, 31)
+	constexpr explicit XzrReg() : RReg(31, RegisterWidth::Width64)
 	{
 	}
 };
@@ -110,14 +120,14 @@ struct XzrReg : public RReg
 // Stack register
 struct WspReg : public RReg
 {
-	constexpr explicit WspReg() : RReg(64, 31)
+	constexpr explicit WspReg() : RReg(31, RegisterWidth::Width32)
 	{
 	}
 };
 
 struct XspReg : public RReg
 {
-	constexpr explicit XspReg() : RReg(64, 31)
+	constexpr explicit XspReg() : RReg(31, RegisterWidth::Width64)
 	{
 	}
 };
@@ -125,12 +135,13 @@ struct XspReg : public RReg
 // 32-bit general purpose register
 struct WReg final : public RReg
 {
-	constexpr explicit WReg(std::uint8_t InIndex) : RReg(InIndex, 32)
+	constexpr explicit WReg(std::uint8_t InIndex)
+		: RReg(InIndex, RegisterWidth::Width32)
 	{
 	}
 
 	// Implicitly accepts the Zr register as register 31
-	constexpr WReg(WzrReg) : RReg(31, 32)
+	constexpr WReg(WzrReg) : RReg(31, RegisterWidth::Width32)
 	{
 	}
 };
@@ -138,12 +149,13 @@ struct WReg final : public RReg
 // 64-bit general purpose register
 struct XReg final : public RReg
 {
-	constexpr explicit XReg(std::uint8_t InIndex) : RReg(InIndex, 64)
+	constexpr explicit XReg(std::uint8_t InIndex)
+		: RReg(InIndex, RegisterWidth::Width64)
 	{
 	}
 
 	// Implicitly accepts the Zr register as register 31
-	constexpr XReg(XzrReg) : RReg(31, 64)
+	constexpr XReg(XzrReg) : RReg(31, RegisterWidth::Width64)
 	{
 	}
 };
@@ -163,11 +175,11 @@ inline XReg RReg::ToX() const
 // Strictly accepts either a general purpose register, or the stack register
 struct WRegWsp : public RReg
 {
-	constexpr WRegWsp(WspReg) : RReg(32, 31)
+	constexpr WRegWsp(WspReg) : RReg(31, RegisterWidth::Width32)
 	{
 	}
 
-	constexpr WRegWsp(WReg Wr) : RReg(32, Wr.Index)
+	constexpr WRegWsp(WReg Wr) : RReg(Wr.Index, RegisterWidth::Width32)
 	{
 		// Register 31 only available through the stack register type
 		assert(Wr.Index != 31);
@@ -176,11 +188,11 @@ struct WRegWsp : public RReg
 
 struct XRegSp : public RReg
 {
-	constexpr XRegSp(XspReg) : RReg(64, 31)
+	constexpr XRegSp(XspReg) : RReg(31, RegisterWidth::Width64)
 	{
 	}
 
-	constexpr XRegSp(XReg Xr) : RReg(64, Xr.Index)
+	constexpr XRegSp(XReg Xr) : RReg(Xr.Index, RegisterWidth::Width64)
 	{
 		// Register 31 only available through the stack register type
 		assert(Xr.Index != 31);
