@@ -4,3 +4,6 @@
 [submodule "externals/pugixml"]
 	path = externals/pugixml
 	url = git@github.com:zeux/pugixml.git
+[submodule "externals/fmt"]
+	path = externals/fmt
+	url = git@github.com:fmtlib/fmt.git

@@ -31,17 +31,26 @@ target_compile_features( cork INTERFACE cxx_std_20 )
 ### Tools
 if( CORK_BUILD_TOOLS )
 
-find_package( PugiXML )
+# PugiXML
+find_package( PugiXML 1.15 REQUIRED)
 if( NOT TARGET pugixml::pugixml )
 	message( WARNING "pugixml not found. Using embedded submodule")
 	add_subdirectory( externals/pugixml EXCLUDE_FROM_ALL )
 endif()
 
+# fmt
+find_package( fmt 11.1.4 REQUIRED)
+if( NOT TARGET fmt::fmt )
+	message( WARNING "fmt not found. Using embedded submodule")
+	add_subdirectory( externals/fmt EXCLUDE_FROM_ALL )
+endif()
+
+
 add_executable( generate
 	tools/generate.cpp
 )
 target_include_directories( generate PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/tests )
-target_link_libraries( generate PRIVATE pugixml::pugixml )
+target_link_libraries( generate PRIVATE pugixml::pugixml fmt::fmt )
 
 endif()
 
