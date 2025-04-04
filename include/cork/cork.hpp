@@ -44,6 +44,7 @@ public:
 private:
 };
 
+// General purpose registers
 inline constexpr WReg W0{0}, W1{1}, W2{2}, W3{3}, W4{4}, W5{5}, W6{6}, W7{7},
 	W8{8}, W9{9}, W10{10}, W11{11}, W12{12}, W13{13}, W14{14}, W15{15}, W16{16},
 	W17{17}, W18{18}, W19{19}, W20{20}, W21{21}, W22{22}, W23{23}, W24{24},
@@ -52,5 +53,13 @@ inline constexpr XReg X0{0}, X1{1}, X2{2}, X3{3}, X4{4}, X5{5}, X6{6}, X7{7},
 	X8{8}, X9{9}, X10{10}, X11{11}, X12{12}, X13{13}, X14{14}, X15{15}, X16{16},
 	X17{17}, X18{18}, X19{19}, X20{20}, X21{21}, X22{22}, X23{23}, X24{24},
 	X25{25}, X26{26}, X27{27}, X28{28}, X29{29}, X30{30};
+
+// Zero registers
+inline constexpr XzrReg ZR(), XZR();
+inline constexpr WzrReg WZR();
+
+// Stack registers
+inline constexpr XspReg SP(), XSP();
+inline constexpr WspReg WSP();
 
 } // namespace Cork
