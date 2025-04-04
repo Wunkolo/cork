@@ -11,24 +11,24 @@
 namespace Cork
 {
 
-enum class Condition
+enum class Condition : std::uint8_t
 {
-	EQ,
-	NE,
-	CS,
-	CC,
-	MI,
-	PL,
-	VS,
-	VC,
-	HI,
-	LS,
-	GE,
-	LT,
-	GT,
-	LE,
-	AL,
-	NV,
+	EQ = 0,
+	NE = 1,
+	CS = 2,
+	CC = 3,
+	MI = 4,
+	PL = 5,
+	VS = 6,
+	VC = 7,
+	HI = 8,
+	LS = 9,
+	GE = 10,
+	LT = 11,
+	GT = 12,
+	LE = 13,
+	AL = 14,
+	NV = 15,
 	HS = CS,
 	LO = CC,
 };
