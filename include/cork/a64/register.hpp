@@ -58,9 +58,6 @@ static_assert(RegisterBits(RegisterWidth::Width512) == 512);
 static_assert(RegisterBits(RegisterWidth::Width1024) == 1024);
 static_assert(RegisterBits(RegisterWidth::Width2048) == 2048);
 
-struct WzrReg;
-struct XzrReg;
-
 struct Reg
 {
 	constexpr explicit Reg(std::uint8_t InIndex, std::uint8_t InBitWidth)
