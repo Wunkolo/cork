@@ -107,6 +107,8 @@ if( MSVC )
 elseif( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
 	target_compile_options( cork-tests PRIVATE
 		-Wall
+		-Wpedantic
+		-Werror
 		-Warray-bounds
 		-Wextra
 		-Wimplicit-fallthrough
