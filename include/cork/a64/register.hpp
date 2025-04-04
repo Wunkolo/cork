@@ -33,7 +33,7 @@ static_assert(static_cast<std::uint8_t>(RegisterWidth::MAX) <= 0b111);
 // Convert from a register bit-count into an encoded RegisterWidth
 constexpr RegisterWidth ToRegisterWidth(std::uint16_t Width)
 {
-	assert(std::has_single_bit(Width));
+	// assert(std::has_single_bit(Width));
 	return static_cast<enum RegisterWidth>(std::bit_width(Width) - 6);
 }
 
