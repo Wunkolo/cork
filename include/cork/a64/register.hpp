@@ -58,23 +58,24 @@ static_assert(RegisterBits(RegisterWidth::Width512) == 512);
 static_assert(RegisterBits(RegisterWidth::Width1024) == 1024);
 static_assert(RegisterBits(RegisterWidth::Width2048) == 2048);
 
+struct WzrReg;
+struct XzrReg;
+
 struct Reg
 {
-	constexpr explicit Reg(std::int8_t InIndex, std::uint8_t InBitWidth)
+	constexpr explicit Reg(std::uint8_t InIndex, std::uint8_t InBitWidth)
 		: Index(InIndex), Width(ToRegisterWidth(InBitWidth))
 	{
-		assert(InIndex >= -1 && InIndex <= 31);
-		assert(
-			InBitWidth != 0 && std::has_single_bit(InBitWidth)
-			&& "Invalid BitSize"
-		);
 	}
 
-	// Register Index 0-32
+	// Register Index 0-31
+	// Index 31 may be either the Zero-Register or Stack-Register depending on
+	// the context
 	const std::uint8_t Index : 5;
 	// 1 << BitWidth
 	const RegisterWidth Width : 3;
 };
+static_assert(sizeof(Reg) == sizeof(std::byte));
 
 struct RReg : public Reg
 {
@@ -87,10 +88,49 @@ struct RReg : public Reg
 	[[nodiscard]] WReg ToW() const;
 };
 
+// In some cases, register 31 is the zero-register, or the stack register.
+// Strict typing is used to enforce either case
+
+// Zero-register
+
+struct WzrReg : public RReg
+{
+	constexpr explicit WzrReg() : RReg(32, 31)
+	{
+	}
+};
+
+struct XzrReg : public RReg
+{
+	constexpr explicit XzrReg() : RReg(64, 31)
+	{
+	}
+};
+
+// Stack register
+struct WspReg : public RReg
+{
+	constexpr explicit WspReg() : RReg(64, 31)
+	{
+	}
+};
+
+struct XspReg : public RReg
+{
+	constexpr explicit XspReg() : RReg(64, 31)
+	{
+	}
+};
+
 // 32-bit general purpose register
 struct WReg final : public RReg
 {
 	constexpr explicit WReg(std::uint8_t InIndex) : RReg(InIndex, 32)
+	{
+	}
+
+	// Implicitly accepts the Zr register as register 31
+	constexpr WReg(WzrReg) : RReg(31, 32)
 	{
 	}
 };
@@ -99,6 +139,11 @@ struct WReg final : public RReg
 struct XReg final : public RReg
 {
 	constexpr explicit XReg(std::uint8_t InIndex) : RReg(InIndex, 64)
+	{
+	}
+
+	// Implicitly accepts the Zr register as register 31
+	constexpr XReg(XzrReg) : RReg(31, 64)
 	{
 	}
 };
@@ -113,6 +158,33 @@ inline XReg RReg::ToX() const
 	return XReg(Index);
 }
 
-// Utility types to limit
+// Filter-types
+
+// Strictly accepts either a general purpose register, or the stack register
+struct WRegWsp : public RReg
+{
+	constexpr WRegWsp(WspReg) : RReg(32, 31)
+	{
+	}
+
+	constexpr WRegWsp(WReg Wr) : RReg(32, Wr.Index)
+	{
+		// Register 31 only available through the stack register type
+		assert(Wr.Index != 31);
+	}
+};
+
+struct XRegSp : public RReg
+{
+	constexpr XRegSp(XspReg) : RReg(64, 31)
+	{
+	}
+
+	constexpr XRegSp(XReg Xr) : RReg(64, Xr.Index)
+	{
+		// Register 31 only available through the stack register type
+		assert(Xr.Index != 31);
+	}
+};
 
 } // namespace Cork
