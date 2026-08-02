@@ -3,6 +3,7 @@
 #include <cork/a64/register.hpp>
 
 #include <algorithm>
+#include <bit>
 #include <span>
 #include <vector>
 
@@ -54,6 +55,16 @@ consteval std::uint32_t SplatMask32()
 template<std::uint32_t BitMask>
 static constexpr std::uint32_t BitExpand(std::uint32_t BitValue) noexcept
 {
+	// Attempt to detect if this is a continous span of bits
+	constexpr std::uint32_t FirstSetBit    = std::countr_zero(BitMask);
+	constexpr std::uint32_t BitMaskShifted = BitMask >> FirstSetBit;
+
+	if constexpr( std::countr_one(BitMaskShifted) == std::popcount(BitMask) )
+	{
+		// Consecutive bits can use simpler masking and shifting
+		return (BitValue & BitMaskShifted) << FirstSetBit;
+	}
+
 	std::uint32_t Result = 0;
 	for( std::uint8_t MaskBitIndex = 0, SourceBitIndex = 0; MaskBitIndex < 32;
 		 ++MaskBitIndex )
