@@ -71,11 +71,15 @@ if( NOT TARGET Catch2::Catch2WithMain )
 	add_subdirectory( externals/Catch2 EXCLUDE_FROM_ALL )
 endif()
 
+include(catch)
+
 add_executable( cork-tests
 	tests/a64.cpp
 )
 target_include_directories( cork-tests PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/tests )
 target_link_libraries( cork-tests PRIVATE Catch2::Catch2WithMain cork )
+
+catch_discover_tests(cork-tests)
 
 ### Optimizations
 if( MSVC )
