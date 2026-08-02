@@ -57,6 +57,26 @@ void ADCS(XReg Xd, XReg Xn, XReg Xm)
 	Emit<"10111010000mmmmm000000nnnnnddddd", "d", "n", "m">(Xd, Xn, Xm);
 }
 
+/// @brief BLR - Branch with Link to Register calls a subroutine at an address
+/// in a register, setting register X30 to PC+4.
+/// @note BLR_64_branch_reg
+/// @param Xn Is the 64-bit name of the general-purpose register holding the
+/// address to be branched to, encoded in the "Rn" field.
+void BLR(XReg Xn)
+{
+	Emit<"1101011000111111000000nnnnn00000", "n">(Xn);
+}
+
+/// @brief BR - Branch to Register branches unconditionally to an address in a
+/// register, with a hint that this is not a subroutine return.
+/// @note BR_64_branch_reg
+/// @param Xn Is the 64-bit name of the general-purpose register holding the
+/// address to be branched to, encoded in the "Rn" field.
+void BR(XReg Xn)
+{
+	Emit<"1101011000011111000000nnnnn00000", "n">(Xn);
+}
+
 /// @brief BRK - Breakpoint instruction. A BRK instruction generates a
 /// Breakpoint Instruction exception. The PE records the exception in ESR_ELx,
 /// using the EC value 0x3C, and captures the value of the immediate argument in
