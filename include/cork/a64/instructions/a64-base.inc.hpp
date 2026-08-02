@@ -57,6 +57,17 @@ void ADCS(XReg Xd, XReg Xn, XReg Xm)
 	Emit<"10111010000mmmmm000000nnnnnddddd", "d", "n", "m">(Xd, Xn, Xm);
 }
 
+/// @brief B - Branch causes an unconditional branch to a label at a PC-relative
+/// offset, with a hint that this is not a subroutine call or return.
+/// @note B_only_branch_imm
+/// @param label Is the program label to be unconditionally branched to. Its
+/// offset from the address of this instruction, in the range +/-128MB, is
+/// encoded as "imm26" times 4.
+void B(SImm<26, 4> label)
+{
+	Emit<"000101iiiiiiiiiiiiiiiiiiiiiiiiii", "i">(label);
+}
+
 /// @brief BLR - Branch with Link to Register calls a subroutine at an address
 /// in a register, setting register X30 to PC+4.
 /// @note BLR_64_branch_reg
