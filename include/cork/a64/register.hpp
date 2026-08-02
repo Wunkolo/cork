@@ -226,6 +226,13 @@ struct Imm
 {
 	static constexpr std::uint32_t Mask = (1 << BitSize) - 1;
 	std::uint32_t                  Value;
+
+	constexpr Imm(std::uint32_t ImmValue) : Value(ImmValue)
+	{
+		// Ensure value can be encoded, maybe do this at encode-time and not in
+		// the ctor?
+		assert(Value == (ImmValue & Mask));
+	}
 };
 
 template<std::size_t BitSize>
@@ -233,6 +240,13 @@ struct SImm
 {
 	static constexpr std::uint32_t Mask = (1 << BitSize) - 1;
 	std::int32_t                   Value;
+
+	constexpr SImm(std::int32_t ImmValue) : Value(ImmValue)
+	{
+		// Ensure value can be encoded, maybe do this at encode-time and not in
+		// the ctor?
+		assert(Value == (ImmValue & Mask));
+	}
 };
 
 } // namespace Cork
