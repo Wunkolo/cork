@@ -38,14 +38,14 @@ target_compile_features( cork INTERFACE cxx_std_20 )
 if( CORK_BUILD_TOOLS )
 
 # PugiXML
-find_package( PugiXML 1.15 REQUIRED)
+find_package( PugiXML 1.15)
 if( NOT TARGET pugixml::pugixml )
 	message( WARNING "pugixml not found. Using embedded submodule")
 	add_subdirectory( externals/pugixml EXCLUDE_FROM_ALL )
 endif()
 
 # fmt
-find_package( fmt 11.1.4 REQUIRED)
+find_package( fmt 11.1.4)
 if( NOT TARGET fmt::fmt )
 	message( WARNING "fmt not found. Using embedded submodule")
 	add_subdirectory( externals/fmt EXCLUDE_FROM_ALL )
