@@ -82,6 +82,20 @@ std::uint32_t Encode(XReg Value)
 	return BitExpand<Splat>(static_cast<std::uint32_t>(Value.Index));
 }
 
+template<std::uint32_t Splat, std::size_t BitWidth>
+std::uint32_t Encode(Imm<BitWidth> Value)
+{
+	static_assert(std::popcount(Splat) >= BitWidth);
+	return BitExpand<Splat>(static_cast<std::uint32_t>(Value.Value));
+}
+
+template<std::uint32_t Splat, std::size_t BitWidth>
+std::uint32_t Encode(SImm<BitWidth> Value)
+{
+	static_assert(std::popcount(Splat) >= BitWidth);
+	return BitExpand<Splat>(static_cast<std::uint32_t>(Value.Value));
+}
+
 // In general, it's expected that CodeGenerator does not hold onto any state
 // and instead is a re-usable buffer for emitting position-independent code,
 // that is then copied over into actual executable memory.
