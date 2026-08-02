@@ -119,6 +119,28 @@ void NOP()
 	Emit<"11010101000000110010000000011111">();
 }
 
+/// @brief RBIT - Reverse Bits reverses the bit order in a register.
+/// @note RBIT_32_dp_1src
+/// @param Wd Is the 32-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Wn Is the 32-bit name of the general-purpose source register, encoded
+/// in the "Rn" field.
+void RBIT(WReg Wd, WReg Wn)
+{
+	Emit<"0101101011000000000000nnnnnddddd", "d", "n">(Wd, Wn);
+}
+
+/// @brief RBIT - Reverse Bits reverses the bit order in a register.
+/// @note RBIT_64_dp_1src
+/// @param Xd Is the 64-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Xn Is the 64-bit name of the general-purpose source register, encoded
+/// in the "Rn" field.
+void RBIT(XReg Xd, XReg Xn)
+{
+	Emit<"1101101011000000000000nnnnnddddd", "d", "n">(Xd, Xn);
+}
+
 /// @brief SMC - Secure Monitor Call causes an exception to EL3. SMC is
 /// available only for software executing at EL1 or higher. It is UNDEFINED in
 /// EL0. If the values of HCR_EL2.TSC and SCR_EL3.SMD are both 0, execution of
