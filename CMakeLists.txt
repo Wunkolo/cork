@@ -18,11 +18,17 @@ option( CORK_BUILD_TOOLS "" ${cork_IS_TOP_LEVEL} )
 set(
 	CORK_HEADER_FILES
 	${CMAKE_CURRENT_SOURCE_DIR}/include/cork/cork.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/include/cork/code_block.hpp
+)
+set(
+	CORK_SOURCE_FILES
+	${CMAKE_CURRENT_SOURCE_DIR}/source/cork/code_block.cpp
 )
 
-add_library( cork INTERFACE )
+add_library( cork )
 target_sources( cork INTERFACE "$<BUILD_INTERFACE:${CORK_HEADER_FILES}>" )
-target_include_directories( cork INTERFACE
+target_sources( cork PRIVATE "$<BUILD_INTERFACE:${CORK_SOURCE_FILES}>" )
+target_include_directories( cork PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
 )
