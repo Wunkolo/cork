@@ -72,6 +72,17 @@ void BRK(Imm<16> imm)
 	Emit<"11010100001iiiiiiiiiiiiiiii00000", "i">(imm);
 }
 
+/// @brief ERET - Exception Return using the ELR and SPSR for the current
+/// Exception level. When executed, the PE restores PSTATE from the SPSR, and
+/// branches to the address held in the ELR. The PE checks the SPSR for the
+/// current Exception level for an illegal return event. See Illegal return
+/// events from AArch64 state. ERET is UNDEFINED at EL0.
+/// @note ERET_64E_branch_reg
+void ERET()
+{
+	Emit<"11010110100111110000001111100000">();
+}
+
 /// @brief HLT - Halt instruction. An HLT instruction can generate a Halt
 /// Instruction debug event, which causes entry into Debug state. Within a
 /// guarded memory region, while PSTATE.BTYPE != 0b00, a HLT instruction that
