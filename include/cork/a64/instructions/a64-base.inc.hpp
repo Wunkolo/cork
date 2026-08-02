@@ -141,6 +141,17 @@ void RBIT(XReg Xd, XReg Xn)
 	Emit<"1101101011000000000000nnnnnddddd", "d", "n">(Xd, Xn);
 }
 
+/// @brief RET - Return from subroutine branches unconditionally to an address
+/// in a register, with a hint that this is a subroutine return.
+/// @note RET_64R_branch_reg
+/// @param Xn Is the 64-bit name of the general-purpose register holding the
+/// address to be branched to, encoded in the "Rn" field. Defaults to X30 if
+/// absent.
+void RET(XReg Xn)
+{
+	Emit<"1101011001011111000000nnnnn00000", "n">(Xn);
+}
+
 /// @brief REV - Reverse Bytes reverses the byte order in a register.
 /// @note REV_32_dp_1src
 /// @param Wd Is the 32-bit name of the general-purpose destination register,
