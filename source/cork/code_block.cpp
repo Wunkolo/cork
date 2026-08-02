@@ -13,6 +13,11 @@ namespace Cork
 void CodeBlock::Protect(std::span<const std::byte> AddressSpan)
 {
 #if defined(_WIN32)
+	DWORD OldProtect;
+	VirtualProtect(
+		const_cast<std::byte*>(AddressSpan.data()), AddressSpan.size(),
+		PAGE_EXECUTE_READ, &OldProtect
+	);
 #else
 	mprotect(
 		const_cast<std::byte*>(AddressSpan.data()), AddressSpan.size(),
@@ -24,6 +29,11 @@ void CodeBlock::Protect(std::span<const std::byte> AddressSpan)
 void CodeBlock::UnProtect(std::span<const std::byte> AddressSpan)
 {
 #if defined(_WIN32)
+	DWORD OldProtect;
+	VirtualProtect(
+		const_cast<std::byte*>(AddressSpan.data()), AddressSpan.size(),
+		PAGE_EXECUTE_READWRITE, &OldProtect
+	);
 #else
 	mprotect(
 		const_cast<std::byte*>(AddressSpan.data()), AddressSpan.size(),
