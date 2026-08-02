@@ -3,6 +3,9 @@
 #if defined(_WIN32)
 #define NOMINMAX
 #include <windows.h>
+#elif defined(__APPLE__)
+#include <libkern/OSCacheControl.h> // sys_icache_invalidate
+#include <sys/mman.h>
 #else
 #include <sys/mman.h>
 #endif
@@ -18,6 +21,8 @@ void CodeBlock::Protect(std::span<const std::byte> AddressSpan)
 		const_cast<std::byte*>(AddressSpan.data()), AddressSpan.size(),
 		PAGE_EXECUTE_READ, &OldProtect
 	);
+#elif defined(__APPLE__)
+	pthread_jit_write_protect_np(1);
 #else
 	mprotect(
 		const_cast<std::byte*>(AddressSpan.data()), AddressSpan.size(),
@@ -34,6 +39,8 @@ void CodeBlock::UnProtect(std::span<const std::byte> AddressSpan)
 		const_cast<std::byte*>(AddressSpan.data()), AddressSpan.size(),
 		PAGE_EXECUTE_READWRITE, &OldProtect
 	);
+#elif defined(__APPLE__)
+	pthread_jit_write_protect_np(0);
 #else
 	mprotect(
 		const_cast<std::byte*>(AddressSpan.data()), AddressSpan.size(),
@@ -46,6 +53,10 @@ void CodeBlock::Invalidate(std::span<const std::byte> AddressSpan)
 #if defined(_WIN32)
 	FlushInstructionCache(
 		GetCurrentProcess(), AddressSpan.data(), AddressSpan.size()
+	);
+#elif defined(__APPLE__)
+	sys_icache_invalidate(
+		const_cast<std::byte*>(AddressSpan.data()), AddressSpan.size()
 	);
 #else
 	__builtin___clear_cache(
@@ -67,12 +78,20 @@ std::optional<CodeBlock> CodeBlock::Create(std::size_t ByteSize)
 	NewAddress = static_cast<std::uint32_t*>(
 		VirtualAlloc(nullptr, ByteSize, MEM_COMMIT, PAGE_EXECUTE_READWRITE)
 	);
+#elif defined(__APPLE__)
+	// Note that on MacOS, threads have to be marked to allow write+execute
+	// access with pthread_jit_write_protect_np
+	NewAddress = static_cast<std::uint32_t*>(mmap(
+		nullptr, ByteSize, PROT_READ | PROT_WRITE | PROT_EXEC,
+		MAP_ANON | MAP_PRIVATE | MAP_JIT, -1, 0
+	));
 #else
 	NewAddress = static_cast<std::uint32_t*>(mmap(
 		nullptr, ByteSize, PROT_READ | PROT_WRITE | PROT_EXEC,
 		MAP_ANON | MAP_PRIVATE, -1, 0
 	));
 #endif
+
 	if( NewAddress == nullptr )
 	{
 		return std::nullopt;

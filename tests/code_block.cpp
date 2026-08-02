@@ -23,6 +23,9 @@ TEST_CASE("CodeBlock Execute a64", "[code_block]")
 	const CodeBlock& Code = CreateResult.value();
 	REQUIRE(Code.BlockMemory.data() != nullptr);
 
+	// Allow write access
+	Code.UnProtect();
+
 	// Copy code over
 	std::copy(TestCode.cbegin(), TestCode.cend(), Code.BlockMemory.begin());
 
