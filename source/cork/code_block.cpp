@@ -78,7 +78,9 @@ std::optional<CodeBlock> CodeBlock::Create(std::size_t ByteSize)
 		return std::nullopt;
 	}
 
-	return CodeBlock(std::span<std::uint32_t>(NewAddress, InstructionCount));
+	return std::make_optional<CodeBlock>(
+		std::span<std::uint32_t>(NewAddress, InstructionCount)
+	);
 }
 
 CodeBlock::~CodeBlock()

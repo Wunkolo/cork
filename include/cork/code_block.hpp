@@ -32,6 +32,11 @@ public:
 	}
 	~CodeBlock();
 
+	CodeBlock(const CodeBlock&)            = delete;
+	CodeBlock(CodeBlock&&)                 = delete;
+	CodeBlock& operator=(const CodeBlock&) = delete;
+	CodeBlock& operator=(CodeBlock&&)      = delete;
+
 	void Protect() const
 	{
 		Protect(std::as_bytes(BlockMemory));
