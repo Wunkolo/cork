@@ -56,3 +56,41 @@ void ADCS(XReg Xd, XReg Xn, XReg Xm)
 {
 	Emit<"10111010000mmmmm000000nnnnnddddd", "d", "n", "m">(Xd, Xn, Xm);
 }
+
+/// @brief WFE - Wait For Event is a hint instruction that indicates that the PE
+/// can enter a low-power state and remain there until a wakeup event occurs.
+/// Wakeup events include the event signaled as a result of executing the SEV
+/// instruction on any PE in the multiprocessor system. For more information,
+/// see Wait For Event mechanism and Send event. As described in Wait For Event
+/// mechanism and Send event, the execution of a WFE instruction that would
+/// otherwise cause entry to a low-power state can be trapped to a higher
+/// Exception level.
+/// @note WFE_HI_hints
+void WFE()
+{
+	Emit<"11010101000000110010000001011111">();
+}
+
+/// @brief WFI - Wait For Interrupt is a hint instruction that indicates that
+/// the PE can enter a low-power state and remain there until a wakeup event
+/// occurs. For more information, see Wait For Interrupt. As described in Wait
+/// For Interrupt, the execution of a WFI instruction that would otherwise cause
+/// entry to a low-power state can be trapped to a higher Exception level.
+/// @note WFI_HI_hints
+void WFI()
+{
+	Emit<"11010101000000110010000001111111">();
+}
+
+/// @brief YIELD - YIELD is a hint instruction. Software with a multithreading
+/// capability can use a YIELD instruction to indicate to the PE that it is
+/// performing a task, for example a spin-lock, that could be swapped out to
+/// improve overall system performance. The PE can use this hint to suspend and
+/// resume multiple software threads if it supports the capability. For more
+/// information about the recommended use of this instruction, see The YIELD
+/// instruction.
+/// @note YIELD_HI_hints
+void YIELD()
+{
+	Emit<"11010101000000110010000000111111">();
+}
