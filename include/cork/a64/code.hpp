@@ -81,6 +81,10 @@ std::uint32_t Encode(XReg Value)
 	static_assert(std::popcount(Splat) == 5);
 	return BitExpand<Splat>(static_cast<std::uint32_t>(Value.Index));
 }
+
+// In general, it's expected that CodeGenerator does not hold onto any state
+// and instead is a re-usable buffer for emitting position-independent code,
+// that is then copied over into actual executable memory.
 class CodeGenerator
 {
 private:
@@ -113,57 +117,7 @@ private:
 public:
 	CodeGenerator() = default;
 
-	/// @brief Add with Carry.
-	/// @note ADC_32_addsub_carry
-	/// @param Wd Is the 32-bit name of the general-purpose destination
-	/// register, encoded in the "Rd" field.
-	/// @param Wn Is the 32-bit name of the first general-purpose source
-	/// register, encoded in the "Rn" field.
-	/// @param Wm Is the 32-bit name of the second general-purpose source
-	/// register, encoded in the "Rm" field.
-	void ADC(WReg Wd, WReg Wn, WReg Wm)
-	{
-		Emit<"00011010000mmmmm000000nnnnnddddd", "d", "n", "m">(Wd, Wn, Wm);
-	}
-
-	/// @brief Add with Carry.
-	/// @note ADC_64_addsub_carry
-	/// @param Xd Is the 64-bit name of the general-purpose destination
-	/// register, encoded in the "Rd" field.
-	/// @param Xn Is the 64-bit name of the first general-purpose source
-	/// register, encoded in the "Rn" field.
-	/// @param Xm Is the 64-bit name of the second general-purpose source
-	/// register, encoded in the "Rm" field.
-	void ADC(XReg Xd, XReg Xn, XReg Xm)
-	{
-		Emit<"10011010000mmmmm000000nnnnnddddd", "d", "n", "m">(Xd, Xn, Xm);
-	}
-
-	/// @brief Add with Carry, setting flags.
-	/// @note ADC_32_addsub_carry
-	/// @param Wd Is the 32-bit name of the general-purpose destination
-	/// register, encoded in the "Rd" field.
-	/// @param Wn Is the 32-bit name of the first general-purpose source
-	/// register, encoded in the "Rn" field.
-	/// @param Wm Is the 32-bit name of the second general-purpose source
-	/// register, encoded in the "Rm" field.
-	void ADCS(WReg Wd, WReg Wn, WReg Wm)
-	{
-		Emit<"00111010000mmmmm000000nnnnnddddd", "d", "n", "m">(Wd, Wn, Wm);
-	}
-
-	/// @brief Add with Carry, setting flags.
-	/// @note ADC_64_addsub_carry
-	/// @param Xd Is the 64-bit name of the general-purpose destination
-	/// register, encoded in the "Rd" field.
-	/// @param Xn Is the 64-bit name of the first general-purpose source
-	/// register, encoded in the "Rn" field.
-	/// @param Xm Is the 64-bit name of the second general-purpose source
-	/// register, encoded in the "Rm" field.
-	void ADCS(XReg Xd, XReg Xn, XReg Xm)
-	{
-		Emit<"10111010000mmmmm000000nnnnnddddd", "d", "n", "m">(Xd, Xn, Xm);
-	}
+#include <cork/a64/instructions/a64-base.inc.hpp>
 
 	std::span<const std::uint32_t> GetCode() const
 	{
