@@ -75,6 +75,7 @@ include(catch)
 
 add_executable( cork-tests
 	tests/a64.cpp
+	tests/code_block.cpp
 )
 target_include_directories( cork-tests PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/tests )
 target_link_libraries( cork-tests PRIVATE Catch2::Catch2WithMain cork )
