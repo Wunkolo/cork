@@ -225,7 +225,7 @@ template<std::size_t BitSize>
 struct Imm
 {
 	static constexpr std::uint32_t Mask = (1 << BitSize) - 1;
-	std::uint32_t                  Value;
+	const std::uint32_t            Value;
 
 	constexpr Imm(std::uint32_t ImmValue) : Value(ImmValue)
 	{
@@ -239,7 +239,7 @@ template<std::size_t BitSize>
 struct SImm
 {
 	static constexpr std::uint32_t Mask = (1 << BitSize) - 1;
-	std::int32_t                   Value;
+	const std::int32_t             Value;
 
 	constexpr SImm(std::int32_t ImmValue) : Value(ImmValue)
 	{
