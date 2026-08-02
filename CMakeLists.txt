@@ -71,7 +71,7 @@ if( NOT TARGET Catch2::Catch2WithMain )
 	add_subdirectory( externals/Catch2 EXCLUDE_FROM_ALL )
 endif()
 
-include(catch)
+include(Catch)
 
 add_executable( cork-tests
 	tests/a64.cpp
