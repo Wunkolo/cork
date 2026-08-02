@@ -57,6 +57,30 @@ void ADCS(XReg Xd, XReg Xn, XReg Xm)
 	Emit<"10111010000mmmmm000000nnnnnddddd", "d", "n", "m">(Xd, Xn, Xm);
 }
 
+/// @brief BRK - Breakpoint instruction. A BRK instruction generates a
+/// Breakpoint Instruction exception. The PE records the exception in ESR_ELx,
+/// using the EC value 0x3C, and captures the value of the immediate argument in
+/// ESR_ELx.ISS. Within a guarded memory region, while PSTATE.BTYPE != 0b00, a
+/// BRK instruction will not generate a Branch Target Exception and will
+/// generate a Breakpoint Instruction exception as normal. For more information,
+/// see PSTATE.BTYPE.
+/// @note BRK_EX_exception
+/// @param imm Is a 16-bit unsigned immediate, in the range 0 to 65535, encoded
+/// in the "imm16" field.
+void BRK(Imm<16> imm)
+{
+	Emit<"11010100001iiiiiiiiiiiiiiii00000", "i">(imm);
+}
+
+/// @brief NOP - No Operation does nothing, other than advance the value of the
+/// program counter by 4. This instruction can be used for instruction alignment
+/// purposes.
+/// @note NOP_HI_hints
+void NOP()
+{
+	Emit<"11010101000000110010000000011111">();
+}
+
 /// @brief WFE - Wait For Event is a hint instruction that indicates that the PE
 /// can enter a low-power state and remain there until a wakeup event occurs.
 /// Wakeup events include the event signaled as a result of executing the SEV
