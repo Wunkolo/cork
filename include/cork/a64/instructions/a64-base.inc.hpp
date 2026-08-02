@@ -141,6 +141,79 @@ void RBIT(XReg Xd, XReg Xn)
 	Emit<"1101101011000000000000nnnnnddddd", "d", "n">(Xd, Xn);
 }
 
+/// @brief REV - Reverse Bytes reverses the byte order in a register.
+/// @note REV_32_dp_1src
+/// @param Wd Is the 32-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Wn Is the 32-bit name of the general-purpose source register, encoded
+/// in the "Rn" field.
+void REV(WReg Wd, WReg Wn)
+{
+	Emit<"0101101011000000000010nnnnnddddd", "d", "n">(Wd, Wn);
+}
+
+/// @brief REV - Reverse Bytes reverses the byte order in a register.
+/// @note REV_64_dp_1src
+/// @param Xd Is the 64-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Xn Is the 64-bit name of the general-purpose source register, encoded
+/// in the "Rn" field.
+void REV(XReg Xd, XReg Xn)
+{
+	Emit<"1101101011000000000011nnnnnddddd", "d", "n">(Xd, Xn);
+}
+
+/// @brief REV16 - Reverse bytes in 16-bit halfwords reverses the byte order in
+/// each 16-bit halfword of a register.
+/// @note REV16_32_dp_1src
+/// @param Wd Is the 32-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Wn Is the 32-bit name of the general-purpose source register, encoded
+/// in the "Rn" field.
+void REV16(WReg Wd, WReg Wn)
+{
+	Emit<"0101101011000000000001nnnnnddddd", "d", "n">(Wd, Wn);
+}
+
+/// @brief REV16 - Reverse bytes in 16-bit halfwords reverses the byte order in
+/// each 16-bit halfword of a register.
+/// @note REV16_64_dp_1src
+/// @param Xd Is the 64-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Xn Is the 64-bit name of the general-purpose source register, encoded
+/// in the "Rn" field.
+void REV16(XReg Xd, XReg Xn)
+{
+	Emit<"1101101011000000000001nnnnnddddd", "d", "n">(Xd, Xn);
+}
+
+/// @brief REV32 - Reverse bytes in 32-bit words reverses the byte order in each
+/// 32-bit word of a register.
+/// @note REV32_64_dp_1src
+/// @param Xd Is the 64-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Xn Is the 64-bit name of the general-purpose source register, encoded
+/// in the "Rn" field.
+void REV32(XReg Xd, XReg Xn)
+{
+	Emit<"1101101011000000000010nnnnnddddd", "d", "n">(Xd, Xn);
+}
+
+/// @brief REV64 - Reverse Bytes reverses the byte order in a 64-bit
+/// general-purpose register. When assembling for Armv8.2, an assembler must
+/// support this pseudo-instruction. It is OPTIONAL whether an assembler
+/// supports this pseudo-instruction when assembling for an architecture earlier
+/// than Armv8.2.
+/// @note REV64_REV_64_dp_1src
+/// @param Xd Is the 64-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Xn Is the 64-bit name of the general-purpose source register, encoded
+/// in the "Rn" field.
+void REV64(XReg Xd, XReg Xn)
+{
+	Emit<"1101101011000000000011nnnnnddddd", "d", "n">(Xd, Xn);
+}
+
 /// @brief SMC - Secure Monitor Call causes an exception to EL3. SMC is
 /// available only for software executing at EL1 or higher. It is UNDEFINED in
 /// EL0. If the values of HCR_EL2.TSC and SCR_EL3.SMD are both 0, execution of
