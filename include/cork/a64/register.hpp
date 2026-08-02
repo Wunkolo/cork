@@ -221,31 +221,56 @@ inline constexpr WspReg WSP{};
 // Stack register(64-bit)
 inline constexpr XspReg SP{}, XSP{};
 
-template<std::size_t BitSize>
+template<std::size_t BitSize, std::size_t Alignment = 1>
 struct Imm
 {
-	static constexpr std::uint32_t Mask = (1 << BitSize) - 1;
+	static_assert(
+		std::has_single_bit(Alignment),
+		"Alignment must be a positive power of two"
+	);
+
+	static constexpr std::uint32_t AlignmentMask = Alignment - 1;
+	static constexpr std::uint32_t Mask          = (1 << BitSize) - 1;
 	const std::uint32_t            Value;
 
 	constexpr Imm(std::uint32_t ImmValue) : Value(ImmValue)
 	{
 		// Ensure value can be encoded, maybe do this at encode-time and not in
 		// the ctor?
-		assert(Value == (ImmValue & Mask));
+		assert((ImmValue & Mask) == Value);
+
+		if constexpr( Alignment > 1 )
+		{
+			// Not aligned
+			assert((ImmValue & AlignmentMask) == 0);
+		}
 	}
 };
 
-template<std::size_t BitSize>
+template<std::size_t BitSize, std::size_t Alignment = 1>
 struct SImm
 {
-	static constexpr std::uint32_t Mask = (1 << BitSize) - 1;
+	static_assert(Alignment >= 1, "Alignment must be positive non-zero");
+
+	static constexpr std::uint32_t AlignmentMask = Alignment - 1;
+	static constexpr std::uint32_t Mask          = (1 << BitSize) - 1;
 	const std::int32_t             Value;
 
 	constexpr SImm(std::int32_t ImmValue) : Value(ImmValue)
 	{
+		const struct
+		{
+			std::int32_t i32 : BitSize;
+		} SignExtended{.i32 = ImmValue};
 		// Ensure value can be encoded, maybe do this at encode-time and not in
 		// the ctor?
-		assert(Value == (ImmValue & Mask));
+		assert((SignExtended.i32 & Mask) == (Value & Mask));
+
+		if constexpr( Alignment > 1 )
+		{
+			// Not aligned
+			assert((ImmValue & AlignmentMask) == 0);
+		}
 	}
 };
 

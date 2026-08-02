@@ -93,18 +93,22 @@ std::uint32_t Encode(XReg Value)
 	return BitExpand<Splat>(static_cast<std::uint32_t>(Value.Index));
 }
 
-template<std::uint32_t Splat, std::size_t BitWidth>
-std::uint32_t Encode(Imm<BitWidth> Value)
+template<std::uint32_t Splat, std::size_t BitWidth, std::size_t Alignment>
+std::uint32_t Encode(Imm<BitWidth, Alignment> Value)
 {
 	static_assert(std::popcount(Splat) >= BitWidth);
-	return BitExpand<Splat>(static_cast<std::uint32_t>(Value.Value));
+	return BitExpand<Splat>(
+		static_cast<std::uint32_t>(Value.Value / Alignment)
+	);
 }
 
-template<std::uint32_t Splat, std::size_t BitWidth>
-std::uint32_t Encode(SImm<BitWidth> Value)
+template<std::uint32_t Splat, std::size_t BitWidth, std::size_t Alignment>
+std::uint32_t Encode(SImm<BitWidth, Alignment> Value)
 {
 	static_assert(std::popcount(Splat) >= BitWidth);
-	return BitExpand<Splat>(static_cast<std::uint32_t>(Value.Value));
+	return BitExpand<Splat>(
+		static_cast<std::uint32_t>(Value.Value / Alignment)
+	);
 }
 
 // In general, it's expected that CodeGenerator does not hold onto any state
