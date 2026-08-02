@@ -21,6 +21,7 @@ public:
 	static void Invalidate(std::span<const std::byte> AddressSpan);
 
 	// Create a codeblock of memory with read+write+execute permissions
+	[[nodiscard]]
 	static std::optional<CodeBlock> Create(std::size_t ByteSize);
 
 	const std::span<std::uint32_t> BlockMemory;
@@ -43,8 +44,6 @@ public:
 	{
 		Invalidate(std::as_bytes(BlockMemory));
 	}
-
-	std::span<std::uint32_t> Data() const;
 };
 
 } // namespace Cork
