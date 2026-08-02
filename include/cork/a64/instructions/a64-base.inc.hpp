@@ -81,6 +81,17 @@ void NOP()
 	Emit<"11010101000000110010000000011111">();
 }
 
+/// @brief UDF - Permanently Undefined generates an Undefined Instruction
+/// exception (ESR_ELx.EC = 0b000000). The encodings for UDF used in this
+/// section are defined as permanently UNDEFINED.
+/// @note UDF_only_perm_undef
+/// @param imm is a 16-bit unsigned immediate, in the range 0 to 65535, encoded
+/// in the "imm16" field. The PE ignores the value of this constant.
+void UDF(Imm<16> imm)
+{
+	Emit<"0000000000000000iiiiiiiiiiiiiiii", "i">(imm);
+}
+
 /// @brief WFE - Wait For Event is a hint instruction that indicates that the PE
 /// can enter a low-power state and remain there until a wakeup event occurs.
 /// Wakeup events include the event signaled as a result of executing the SEV
