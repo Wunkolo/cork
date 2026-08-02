@@ -221,4 +221,18 @@ inline constexpr WspReg WSP{};
 // Stack register(64-bit)
 inline constexpr XspReg SP{}, XSP{};
 
+template<std::size_t BitSize>
+struct Imm
+{
+	static constexpr std::uint32_t Mask = (1 << BitSize) - 1;
+	std::uint32_t                  Value;
+};
+
+template<std::size_t BitSize>
+struct SImm
+{
+	static constexpr std::uint32_t Mask = (1 << BitSize) - 1;
+	std::int32_t                   Value;
+};
+
 } // namespace Cork
