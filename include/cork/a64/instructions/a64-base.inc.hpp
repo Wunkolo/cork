@@ -72,6 +72,33 @@ void BRK(Imm<16> imm)
 	Emit<"11010100001iiiiiiiiiiiiiiii00000", "i">(imm);
 }
 
+/// @brief HLT - Halt instruction. An HLT instruction can generate a Halt
+/// Instruction debug event, which causes entry into Debug state. Within a
+/// guarded memory region, while PSTATE.BTYPE != 0b00, a HLT instruction that
+/// would cause entry into Debug state will not generate a Branch Target
+/// Exception and will cause entry into Debug state as normal. For more
+/// information, see PSTATE.BTYPE.
+/// @note HLT_EX_exception
+/// @param imm Is a 16-bit unsigned immediate, in the range 0 to 65535, encoded
+/// in the "imm16" field.
+void HLT(Imm<16> imm)
+{
+	Emit<"11010100010iiiiiiiiiiiiiiii00000", "i">(imm);
+}
+
+/// @brief HVC - Hypervisor Call causes an exception to EL2. Software executing
+/// at EL1 can use this instruction to call the hypervisor to request a service.
+/// The HVC instruction is UNDEFINED: On executing an HVC instruction, the PE
+/// records the exception as a Hypervisor Call exception in ESR_ELx, using the
+/// EC value 0x16, and the value of the immediate argument.
+/// @note HVC_EX_exception
+/// @param imm Is a 16-bit unsigned immediate, in the range 0 to 65535, encoded
+/// in the "imm16" field.
+void HVC(Imm<16> imm)
+{
+	Emit<"11010100000iiiiiiiiiiiiiiii00010", "i">(imm);
+}
+
 /// @brief NOP - No Operation does nothing, other than advance the value of the
 /// program counter by 4. This instruction can be used for instruction alignment
 /// purposes.
@@ -79,6 +106,36 @@ void BRK(Imm<16> imm)
 void NOP()
 {
 	Emit<"11010101000000110010000000011111">();
+}
+
+/// @brief SMC - Secure Monitor Call causes an exception to EL3. SMC is
+/// available only for software executing at EL1 or higher. It is UNDEFINED in
+/// EL0. If the values of HCR_EL2.TSC and SCR_EL3.SMD are both 0, execution of
+/// an SMC instruction at EL1 or higher generates a Secure Monitor Call
+/// exception, recording it in ESR_ELx, using the EC value 0x17, that is taken
+/// to EL3. If the value of HCR_EL2.TSC is 1 and EL2 is enabled in the current
+/// Security state, execution of an SMC instruction at EL1 generates an
+/// exception that is taken to EL2, regardless of the value of SCR_EL3.SMD. If
+/// the value of HCR_EL2.TSC is 0 and the value of SCR_EL3.SMD is 1, the SMC
+/// instruction is UNDEFINED.
+/// @note SMC_EX_exception
+/// @param imm Is a 16-bit unsigned immediate, in the range 0 to 65535, encoded
+/// in the "imm16" field.
+void SMC(Imm<16> imm)
+{
+	Emit<"11010100000iiiiiiiiiiiiiiii00011", "i">(imm);
+}
+
+/// @brief SVC - Supervisor Call causes an exception to be taken to EL1. On
+/// executing an SVC instruction, the PE records the exception as a Supervisor
+/// Call exception in ESR_ELx, using the EC value 0x15, and the value of the
+/// immediate argument.
+/// @note SVC_EX_exception
+/// @param imm Is a 16-bit unsigned immediate, in the range 0 to 65535, encoded
+/// in the "imm16" field.
+void SVC(Imm<16> imm)
+{
+	Emit<"11010100000iiiiiiiiiiiiiiii00001", "i">(imm);
 }
 
 /// @brief UDF - Permanently Undefined generates an Undefined Instruction
