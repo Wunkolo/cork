@@ -250,7 +250,10 @@ struct Imm
 template<std::size_t BitSize, std::size_t Alignment = 1>
 struct SImm
 {
-	static_assert(Alignment >= 1, "Alignment must be positive non-zero");
+	static_assert(
+		std::has_single_bit(Alignment),
+		"Alignment must be positive power of two"
+	);
 
 	static constexpr std::uint32_t AlignmentMask = Alignment - 1;
 	static constexpr std::uint32_t Mask          = (1 << BitSize) - 1;
@@ -264,7 +267,7 @@ struct SImm
 		} SignExtended{.i32 = ImmValue};
 		// Ensure value can be encoded, maybe do this at encode-time and not in
 		// the ctor?
-		assert((SignExtended.i32 & Mask) == (Value & Mask));
+		assert((SignExtended.i32 & Mask) == static_cast<std::uint32_t>(Value));
 
 		if constexpr( Alignment > 1 )
 		{
