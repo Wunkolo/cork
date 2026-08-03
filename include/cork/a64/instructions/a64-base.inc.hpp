@@ -177,6 +177,86 @@ void CBZ(XReg Xt, SImm<19, 4> label)
 	Emit<"10110100iiiiiiiiiiiiiiiiiiittttt", "t", "i">(Xt, label);
 }
 
+/// @brief CINC - Conditional Increment returns, in the destination register,
+/// the value of the source register incremented by 1 if the condition is TRUE,
+/// and otherwise returns the value of the source register.
+/// @note CINC_CSINC_32_condsel
+/// @param Wd Is the 32-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Wn Is the 32-bit name of the general-purpose source register, encoded
+/// in the "Rn" and "Rm" fields.
+/// @param cond Is one of the standard conditions, excluding AL and NV,
+/// encoded with its least significant bit inverted.
+void CINC(WReg Wd, WReg Wn, Condition cond)
+{
+	assert(cond != Condition::AL);
+	assert(cond != Condition::NV);
+	const Condition invcond = Invert(cond);
+	Emit<"00011010100mmmmmcccc01nnnnnddddd", "d", "n", "m", "c">(
+		Wd, Wn, Wn, invcond
+	);
+}
+
+/// @brief CINC - Conditional Increment returns, in the destination register,
+/// the value of the source register incremented by 1 if the condition is TRUE,
+/// and otherwise returns the value of the source register.
+/// @note CINC_CSINC_64_condsel
+/// @param Xd Is the 64-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Xn Is the 64-bit name of the general-purpose source register, encoded
+/// in the "Rn" and "Rm" fields.
+/// @param cond Is one of the standard conditions, excluding AL and NV,
+/// encoded with its least significant bit inverted.
+void CINC(XReg Xd, XReg Xn, Condition cond)
+{
+	assert(cond != Condition::AL);
+	assert(cond != Condition::NV);
+	const Condition invcond = Invert(cond);
+	Emit<"10011010100mmmmmcccc01nnnnnddddd", "d", "n", "m", "c">(
+		Xd, Xn, Xn, invcond
+	);
+}
+
+/// @brief CINV - Conditional Invert returns, in the destination register, the
+/// bitwise inversion of the value of the source register if the condition is
+/// TRUE, and otherwise returns the value of the source register.
+/// @note CINV_CSINV_32_condsel
+/// @param Wd Is the 32-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Wn Is the 32-bit name of the general-purpose source register, encoded
+/// in the "Rn" and "Rm" fields.
+/// @param cond Is one of the standard conditions, excluding AL and NV,
+/// encoded with its least significant bit inverted.
+void CINV(WReg Wd, WReg Wn, Condition cond)
+{
+	assert(cond != Condition::AL);
+	assert(cond != Condition::NV);
+	const Condition invcond = Invert(cond);
+	Emit<"01011010100mmmmmcccc00nnnnnddddd", "d", "n", "m", "c">(
+		Wd, Wn, Wn, invcond
+	);
+}
+
+/// @brief CINV - Conditional Invert returns, in the destination register, the
+/// bitwise inversion of the value of the source register if the condition is
+/// TRUE, and otherwise returns the value of the source register.
+/// @note CINV_CSINV_64_condsel
+/// @param Xd Is the 64-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Xn Is the 64-bit name of the general-purpose source register, encoded
+/// in the "Rn" and "Rm" fields.
+/// @param cond Is one of the standard conditions, excluding AL and NV,
+/// encoded with its least significant bit inverted.
+void CINV(XReg Xd, XReg Xn, Condition cond)
+{
+	assert(cond != Condition::AL);
+	assert(cond != Condition::NV);
+	const Condition invcond = Invert(cond);
+	Emit<"11011010100mmmmmcccc00nnnnnddddd", "d", "n", "m", "c">(
+		Xd, Xn, Xn, invcond
+	);
+}
+
 /// @brief CLREX - Clear Exclusive clears the local monitor of the executing PE.
 /// @note CLREX_BN_barriers
 /// @param imm Is an optional 4-bit unsigned immediate, in the range 0 to 15,
