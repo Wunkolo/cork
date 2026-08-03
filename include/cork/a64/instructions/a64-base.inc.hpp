@@ -71,8 +71,7 @@ void B(SImm<26, 4> label)
 /// @brief B - Branch conditionally to a label at a PC-relative offset, with a
 /// hint that this is not a subroutine call or return.
 /// @note B_only_condbranch
-/// @param cond Is one of the standard conditions, encoded in the standard way,
-/// and
+/// @param cond Is one of the standard conditions
 /// @param label Is the program label to be conditionally branched to. Its
 /// offset from the address of this instruction, in the range +/-1MB, is encoded
 /// as "imm19" times 4.
@@ -176,6 +175,60 @@ void CBZ(WReg Wt, SImm<19, 4> label)
 void CBZ(XReg Xt, SImm<19, 4> label)
 {
 	Emit<"10110100iiiiiiiiiiiiiiiiiiittttt", "t", "i">(Xt, label);
+}
+
+/// @brief CLS - Count Leading Sign bits counts the number of leading bits of
+/// the source register that have the same value as the most significant bit of
+/// the register, and writes the result to the destination register. This count
+/// does not include the most significant bit of the source register.
+/// @note CLS_32_dp_1src
+/// @param Wd Is the 32-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Wn Is the 32-bit name of the general-purpose source register, encoded
+/// in the "Rn" field.
+void CLS(WReg Wd, WReg Wn)
+{
+	Emit<"0101101011000000000101nnnnnddddd", "d", "n">(Wd, Wn);
+}
+
+/// @brief CLS - Count Leading Sign bits counts the number of leading bits of
+/// the source register that have the same value as the most significant bit of
+/// the register, and writes the result to the destination register. This count
+/// does not include the most significant bit of the source register.
+/// @note CLS_64_dp_1src
+/// @param Xd Is the 64-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Xn Is the 64-bit name of the general-purpose source register, encoded
+/// in the "Rn" field.
+void CLS(XReg Xd, XReg Xn)
+{
+	Emit<"1101101011000000000101nnnnnddddd", "d", "n">(Xd, Xn);
+}
+
+/// @brief CLZ - Count Leading Zeros counts the number of consecutive binary
+/// zero bits, starting from the most significant bit in the source register,
+/// and places the count in the destination register.
+/// @note CLZ_32_dp_1src
+/// @param Wd Is the 32-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Wn Is the 32-bit name of the general-purpose source register, encoded
+/// in the "Rn" field.
+void CLZ(WReg Wd, WReg Wn)
+{
+	Emit<"0101101011000000000100nnnnnddddd", "d", "n">(Wd, Wn);
+}
+
+/// @brief CLZ - Count Leading Zeros counts the number of consecutive binary
+/// zero bits, starting from the most significant bit in the source register,
+/// and places the count in the destination register.
+/// @note CLZ_64_dp_1src
+/// @param Xd Is the 64-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Xn Is the 64-bit name of the general-purpose source register, encoded
+/// in the "Rn" field.
+void CLZ(XReg Xd, XReg Xn)
+{
+	Emit<"1101101011000000000100nnnnnddddd", "d", "n">(Xd, Xn);
 }
 
 /// @brief ERET - Exception Return using the ELR and SPSR for the current
