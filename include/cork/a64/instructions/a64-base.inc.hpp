@@ -68,6 +68,19 @@ void B(SImm<26, 4> label)
 	Emit<"000101iiiiiiiiiiiiiiiiiiiiiiiiii", "i">(label);
 }
 
+/// @brief B - Branch conditionally to a label at a PC-relative offset, with a
+/// hint that this is not a subroutine call or return.
+/// @note B_only_condbranch
+/// @param cond Is one of the standard conditions, encoded in the standard way,
+/// and
+/// @param label Is the program label to be conditionally branched to. Its
+/// offset from the address of this instruction, in the range +/-1MB, is encoded
+/// as "imm19" times 4.
+void B(Condition cond, SImm<19, 4> label)
+{
+	Emit<"01010100iiiiiiiiiiiiiiiiiii0cccc", "i", "c">(label, cond);
+}
+
 /// @brief BLR - Branch with Link to Register calls a subroutine at an address
 /// in a register, setting register X30 to PC+4.
 /// @note BLR_64_branch_reg
