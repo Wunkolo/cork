@@ -177,6 +177,15 @@ void CBZ(XReg Xt, SImm<19, 4> label)
 	Emit<"10110100iiiiiiiiiiiiiiiiiiittttt", "t", "i">(Xt, label);
 }
 
+/// @brief CLREX - Clear Exclusive clears the local monitor of the executing PE.
+/// @note CLREX_BN_barriers
+/// @param imm Is an optional 4-bit unsigned immediate, in the range 0 to 15,
+/// defaulting to 15 and encoded in the "CRm" field.
+void CLREX(Imm<4> imm = 0b1111)
+{
+	Emit<"11010101000000110011MMMM01011111", "M">(imm);
+}
+
 /// @brief CLS - Count Leading Sign bits counts the number of leading bits of
 /// the source register that have the same value as the most significant bit of
 /// the register, and writes the result to the destination register. This count
