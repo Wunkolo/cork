@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cork/a64/enum.hpp>
 #include <cork/a64/register.hpp>
 
 #include <algorithm>
@@ -91,6 +92,13 @@ std::uint32_t Encode(XReg Value)
 {
 	static_assert(std::popcount(Splat) == 5);
 	return BitExpand<Splat>(static_cast<std::uint32_t>(Value.Index));
+}
+
+template<std::uint32_t Splat>
+std::uint32_t Encode(Condition Value)
+{
+	static_assert(std::popcount(Splat) == 4);
+	return BitExpand<Splat>(static_cast<std::uint32_t>(Value));
 }
 
 template<std::uint32_t Splat, std::size_t BitWidth, std::size_t Alignment>
