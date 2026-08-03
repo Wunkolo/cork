@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdint>
+#include <type_traits>
 
 namespace Cork
 {
@@ -27,5 +28,12 @@ enum class Condition : std::uint8_t
 	HS = CS,
 	LO = CC,
 };
+
+constexpr Condition Invert(Condition BaseCondition)
+{
+	return static_cast<Condition>(
+		static_cast<std::underlying_type_t<Condition>>(BaseCondition) ^ 1
+	);
+}
 
 } // namespace Cork
