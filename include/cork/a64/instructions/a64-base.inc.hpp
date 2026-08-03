@@ -116,6 +116,68 @@ void BRK(Imm<16> imm)
 	Emit<"11010100001iiiiiiiiiiiiiiii00000", "i">(imm);
 }
 
+/// @brief CBNZ - Compare and Branch on Nonzero compares the value in a register
+/// with zero, and conditionally branches to a label at a PC-relative offset if
+/// the comparison is not equal. It provides a hint that this is not a
+/// subroutine call or return. This instruction does not affect the condition
+/// flags.
+/// @note CBNZ_32_compbranch
+/// @param Wt Is the 32-bit name of the general-purpose register to be tested,
+/// encoded in the "Rt" field.
+/// @param label Is the program label to be conditionally branched to. Its
+/// offset from the address of this instruction, in the range +/-1MB, is encoded
+/// as "imm19" times 4.
+void CBNZ(WReg Wt, SImm<19, 4> label)
+{
+	Emit<"00110101iiiiiiiiiiiiiiiiiiittttt", "t", "i">(Wt, label);
+}
+
+/// @brief CBNZ - Compare and Branch on Nonzero compares the value in a register
+/// with zero, and conditionally branches to a label at a PC-relative offset if
+/// the comparison is not equal. It provides a hint that this is not a
+/// subroutine call or return. This instruction does not affect the condition
+/// flags.
+/// @note CBNZ_64_compbranch
+/// @param Xt Is the 64-bit name of the general-purpose register to be tested,
+/// encoded in the "Rt" field.
+/// @param label Is the program label to be conditionally branched to. Its
+/// offset from the address of this instruction, in the range +/-1MB, is encoded
+/// as "imm19" times 4.
+void CBNZ(XReg Xt, SImm<19, 4> label)
+{
+	Emit<"10110101iiiiiiiiiiiiiiiiiiittttt", "t", "i">(Xt, label);
+}
+
+/// @brief CBZ - Compare and Branch on Zero compares the value in a register
+/// with zero, and conditionally branches to a label at a PC-relative offset if
+/// the comparison is equal. It provides a hint that this is not a subroutine
+/// call or return. This instruction does not affect condition flags.
+/// @note CBZ_32_compbranch
+/// @param Wt Is the 32-bit name of the general-purpose register to be tested,
+/// encoded in the "Rt" field.
+/// @param label Is the program label to be conditionally branched to. Its
+/// offset from the address of this instruction, in the range +/-1MB, is encoded
+/// as "imm19" times 4.
+void CBZ(WReg Wt, SImm<19, 4> label)
+{
+	Emit<"00110100iiiiiiiiiiiiiiiiiiittttt", "t", "i">(Wt, label);
+}
+
+/// @brief CBZ - Compare and Branch on Zero compares the value in a register
+/// with zero, and conditionally branches to a label at a PC-relative offset if
+/// the comparison is equal. It provides a hint that this is not a subroutine
+/// call or return. This instruction does not affect condition flags.
+/// @note CBZ_64_compbranch
+/// @param Xt Is the 64-bit name of the general-purpose register to be tested,
+/// encoded in the "Rt" field.
+/// @param label Is the program label to be conditionally branched to. Its
+/// offset from the address of this instruction, in the range +/-1MB, is encoded
+/// as "imm19" times 4.
+void CBZ(XReg Xt, SImm<19, 4> label)
+{
+	Emit<"10110100iiiiiiiiiiiiiiiiiiittttt", "t", "i">(Xt, label);
+}
+
 /// @brief ERET - Exception Return using the ELR and SPSR for the current
 /// Exception level. When executed, the PE restores PSTATE from the SPSR, and
 /// branches to the address held in the ELR. The PE checks the SPSR for the
