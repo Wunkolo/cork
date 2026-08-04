@@ -218,6 +218,17 @@ inline constexpr Condition EQ{Condition::EQ}, NE{Condition::NE},
 	GE{Condition::GE}, LT{Condition::LT}, GT{Condition::GT}, LE{Condition::LE},
 	AL{Condition::AL}, NV{Condition::NV}, HS{Condition::HS}, LO{Condition::LO};
 
+// Register extensions
+inline constexpr RegisterExtension UXTB{RegisterExtension::UXTB},
+	UXTH{RegisterExtension::UXTH}, UXTW{RegisterExtension::UXTW},
+	UXTX{RegisterExtension::UXTX}, SXTB{RegisterExtension::SXTB},
+	SXTH{RegisterExtension::SXTH}, SXTW{RegisterExtension::SXTW},
+	SXTX{RegisterExtension::SXTX};
+
+// Shifts
+inline constexpr Shift LSL{Shift::LSL}, LSR{Shift::LSR}, ASR{Shift::ASR},
+	ROR{Shift::ROR};
+
 // Zero register(32-bit)
 inline constexpr WzrReg WZR{};
 // Zero register(64-bit)

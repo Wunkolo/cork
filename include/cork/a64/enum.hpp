@@ -55,4 +55,24 @@ enum class ConditionFlag : std::uint8_t
 	NZCV = 0b1111,
 };
 
+enum class RegisterExtension : std::uint8_t
+{
+	UXTB = 0b000,
+	UXTH = 0b001,
+	UXTW = 0b010, // 32-bit LSL
+	UXTX = 0b011, // 64-bit LSL
+	SXTB = 0b100,
+	SXTH = 0b101,
+	SXTW = 0b110,
+	SXTX = 0b111,
+};
+
+enum class Shift : std::uint8_t
+{
+	LSL = 0b00,
+	LSR = 0b01,
+	ASR = 0b10,
+	ROR = 0b11,
+};
+
 } // namespace Cork
