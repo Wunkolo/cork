@@ -36,4 +36,23 @@ constexpr Condition Invert(Condition BaseCondition)
 	);
 }
 
+enum class ConditionFlag : std::uint8_t
+{
+	V    = 0b0001,
+	C    = 0b0010,
+	CV   = 0b0011,
+	Z    = 0b0100,
+	ZV   = 0b0101,
+	ZC   = 0b0110,
+	ZCV  = 0b0111,
+	N    = 0b1000,
+	NV   = 0b1001,
+	NC   = 0b1010,
+	NCV  = 0b1011,
+	NZ   = 0b1100,
+	NZV  = 0b1101,
+	NZC  = 0b1110,
+	NZCV = 0b1111,
+};
+
 } // namespace Cork

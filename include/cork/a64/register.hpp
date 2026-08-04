@@ -211,6 +211,7 @@ inline constexpr XReg X0{0}, X1{1}, X2{2}, X3{3}, X4{4}, X5{5}, X6{6}, X7{7},
 	X17{17}, X18{18}, X19{19}, X20{20}, X21{21}, X22{22}, X23{23}, X24{24},
 	X25{25}, X26{26}, X27{27}, X28{28}, X29{29}, X30{30};
 
+// Conditions
 inline constexpr Condition EQ{Condition::EQ}, NE{Condition::NE},
 	CS{Condition::CS}, CC{Condition::CC}, MI{Condition::MI}, PL{Condition::PL},
 	VS{Condition::VS}, VC{Condition::VC}, HI{Condition::HI}, LS{Condition::LS},
