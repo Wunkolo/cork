@@ -88,7 +88,21 @@ std::uint32_t Encode(WReg Value)
 }
 
 template<std::uint32_t Splat>
+std::uint32_t Encode(WRegWsp Value)
+{
+	static_assert(std::popcount(Splat) == 5);
+	return BitExpand<Splat>(static_cast<std::uint32_t>(Value.Index));
+}
+
+template<std::uint32_t Splat>
 std::uint32_t Encode(XReg Value)
+{
+	static_assert(std::popcount(Splat) == 5);
+	return BitExpand<Splat>(static_cast<std::uint32_t>(Value.Index));
+}
+
+template<std::uint32_t Splat>
+std::uint32_t Encode(XRegSp Value)
 {
 	static_assert(std::popcount(Splat) == 5);
 	return BitExpand<Splat>(static_cast<std::uint32_t>(Value.Index));
