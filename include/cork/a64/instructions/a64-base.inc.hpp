@@ -177,6 +177,162 @@ void CBZ(XReg Xt, SImm<19, 4> label)
 	Emit<"10110100iiiiiiiiiiiiiiiiiiittttt", "t", "i">(Xt, label);
 }
 
+/// @brief CCMN - Conditional Compare Negative (immediate) sets the value of the
+/// condition flags to the result of the comparison of a register value and a
+/// negated immediate value if the condition is TRUE, and an immediate value
+/// otherwise.
+/// @note CCMN_32_condcmp_imm
+/// @param Wn Is the 32-bit name of the first general-purpose source register,
+/// encoded in the "Rn" field.
+/// @param imm Is a five bit unsigned (positive) immediate encoded in the "imm5"
+/// field.
+/// @param nzcv Is the flag bit specifier, an immediate in the range 0 to 15,
+/// giving the alternative state for the 4-bit NZCV condition flags, encoded in
+/// the "nzcv" field.
+/// @param cond Is one of the standard conditions, encoded in the standard way.
+void CCMN(WReg Wn, Imm<5> imm, ConditionFlag nzcv, Condition cond)
+{
+	Emit<"00111010010iiiiicccc10nnnnn0ffff", "n", "i", "f", "c">(
+		Wn, imm, nzcv, cond
+	);
+}
+
+/// @brief CCMN - Conditional Compare Negative (immediate) sets the value of the
+/// condition flags to the result of the comparison of a register value and a
+/// negated immediate value if the condition is TRUE, and an immediate value
+/// otherwise.
+/// @note CCMN_64_condcmp_imm
+/// @param Xn Is the 64-bit name of the first general-purpose source register,
+/// encoded in the "Rn" field.
+/// @param imm Is a five bit unsigned (positive) immediate encoded in the "imm5"
+/// field.
+/// @param nzcv Is the flag bit specifier, an immediate in the range 0 to 15,
+/// giving the alternative state for the 4-bit NZCV condition flags, encoded in
+/// the "nzcv" field.
+/// @param cond Is one of the standard conditions, encoded in the standard way.
+void CCMN(XReg Xn, Imm<5> imm, ConditionFlag nzcv, Condition cond)
+{
+	Emit<"10111010010iiiiicccc10nnnnn0ffff", "n", "i", "f", "c">(
+		Xn, imm, nzcv, cond
+	);
+}
+
+/// @brief CCMN - Conditional Compare Negative (register) sets the value of the
+/// condition flags to the result of the comparison of a register value and the
+/// inverse of another register value if the condition is TRUE, and an immediate
+/// value otherwise.
+/// @note CCMN_32_condcmp_reg
+/// @param Wn Is the 32-bit name of the first general-purpose source register,
+/// encoded in the "Rn" field.
+/// @param Wm Is the 32-bit name of the second general-purpose source register,
+/// encoded in the "Rm" field.
+/// @param nzcv Is the flag bit specifier, an immediate in the range 0 to 15,
+/// giving the alternative state for the 4-bit NZCV condition flags, encoded in
+/// the "nzcv" field.
+/// @param cond Is one of the standard conditions, encoded in the standard way.
+void CCMN(WReg Wn, WReg Wm, ConditionFlag nzcv, Condition cond)
+{
+	Emit<"00111010010mmmmmcccc00nnnnn0ffff", "n", "m", "f", "c">(
+		Wn, Wm, nzcv, cond
+	);
+}
+
+/// @brief CCMN - Conditional Compare Negative (register) sets the value of the
+/// condition flags to the result of the comparison of a register value and the
+/// inverse of another register value if the condition is TRUE, and an immediate
+/// value otherwise.
+/// @note CCMN_64_condcmp_reg
+/// @param Xn Is the 64-bit name of the first general-purpose source register,
+/// encoded in the "Rn" field.
+/// @param Xm Is the 64-bit name of the second general-purpose source register,
+/// encoded in the "Rm" field.
+/// @param nzcv Is the flag bit specifier, an immediate in the range 0 to 15,
+/// giving the alternative state for the 4-bit NZCV condition flags, encoded in
+/// the "nzcv" field.
+/// @param cond Is one of the standard conditions, encoded in the standard way.
+void CCMN(XReg Xn, XReg Xm, ConditionFlag nzcv, Condition cond)
+{
+	Emit<"10111010010mmmmmcccc00nnnnn0ffff", "n", "m", "f", "c">(
+		Xn, Xm, nzcv, cond
+	);
+}
+
+/// @brief CCMP - Conditional Compare (immediate) sets the value of the
+/// condition flags to the result of the comparison of a register value and an
+/// immediate value if the condition is TRUE, and an immediate value otherwise.
+/// @note CCMP_32_condcmp_imm
+/// @param Wn Is the 32-bit name of the first general-purpose source register,
+/// encoded in the "Rn" field.
+/// @param imm Is a five bit unsigned (positive) immediate encoded in the "imm5"
+/// field.
+/// @param nzcv Is the flag bit specifier, an immediate in the range 0 to 15,
+/// giving the alternative state for the 4-bit NZCV condition flags, encoded in
+/// the "nzcv" field.
+/// @param cond Is one of the standard conditions, encoded in the standard way.
+void CCMP(WReg Wn, Imm<5> imm, ConditionFlag nzcv, Condition cond)
+{
+	Emit<"01111010010iiiiicccc10nnnnn0ffff", "n", "i", "f", "c">(
+		Wn, imm, nzcv, cond
+	);
+}
+
+/// @brief CCMP - Conditional Compare (immediate) sets the value of the
+/// condition flags to the result of the comparison of a register value and an
+/// immediate value if the condition is TRUE, and an immediate value otherwise.
+/// @note CCMP_64_condcmp_imm
+/// @param Xn Is the 64-bit name of the first general-purpose source register,
+/// encoded in the "Rn" field.
+/// @param imm Is a five bit unsigned (positive) immediate encoded in the "imm5"
+/// field.
+/// @param nzcv Is the flag bit specifier, an immediate in the range 0 to 15,
+/// giving the alternative state for the 4-bit NZCV condition flags, encoded in
+/// the "nzcv" field.
+/// @param cond Is one of the standard conditions, encoded in the standard way.
+void CCMP(XReg Xn, Imm<5> imm, ConditionFlag nzcv, Condition cond)
+{
+	Emit<"11111010010iiiiicccc10nnnnn0ffff", "n", "i", "f", "c">(
+		Xn, imm, nzcv, cond
+	);
+}
+
+/// @brief CCMP - Conditional Compare (register) sets the value of the condition
+/// flags to the result of the comparison of two registers if the condition is
+/// TRUE, and an immediate value otherwise.
+/// @note CCMP_32_condcmp_reg
+/// @param Wn Is the 32-bit name of the first general-purpose source register,
+/// encoded in the "Rn" field.
+/// @param Wm Is the 32-bit name of the second general-purpose source register,
+/// encoded in the "Rm" field.
+/// @param nzcv Is the flag bit specifier, an immediate in the range 0 to 15,
+/// giving the alternative state for the 4-bit NZCV condition flags, encoded in
+/// the "nzcv" field.
+/// @param cond Is one of the standard conditions, encoded in the standard way.
+void CCMP(WReg Wn, WReg Wm, ConditionFlag nzcv, Condition cond)
+{
+	Emit<"01111010010mmmmmcccc00nnnnn0ffff", "n", "m", "f", "c">(
+		Wn, Wm, nzcv, cond
+	);
+}
+
+/// @brief CCMP - Conditional Compare (register) sets the value of the condition
+/// flags to the result of the comparison of two registers if the condition is
+/// TRUE, and an immediate value otherwise.
+/// @note CCMP_64_condcmp_reg
+/// @param Xn Is the 64-bit name of the first general-purpose source register,
+/// encoded in the "Rn" field.
+/// @param Xm Is the 64-bit name of the second general-purpose source register,
+/// encoded in the "Rm" field.
+/// @param nzcv Is the flag bit specifier, an immediate in the range 0 to 15,
+/// giving the alternative state for the 4-bit NZCV condition flags, encoded in
+/// the "nzcv" field.
+/// @param cond Is one of the standard conditions, encoded in the standard way.
+void CCMP(XReg Xn, XReg Xm, ConditionFlag nzcv, Condition cond)
+{
+	Emit<"11111010010mmmmmcccc00nnnnn0ffff", "n", "m", "f", "c">(
+		Xn, Xm, nzcv, cond
+	);
+}
+
 /// @brief CINC - Conditional Increment returns, in the destination register,
 /// the value of the source register incremented by 1 if the condition is TRUE,
 /// and otherwise returns the value of the source register.
