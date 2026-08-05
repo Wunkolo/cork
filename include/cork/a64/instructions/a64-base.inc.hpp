@@ -977,6 +977,56 @@ void CSNEG(XReg Xd, XReg Xn, XReg Xm, Condition cond)
 	);
 }
 
+/// @brief DCPS1 - Debug Change PE State to EL1, when executed in Debug state:
+/// The target exception level of a DCPS1 instruction is: When the target
+/// Exception level of a DCPS1 instruction is ELx, on executing this
+/// instruction: This instruction is UNDEFINED at EL0 in Non-secure state if EL2
+/// is implemented and HCR_EL2.TGE == 1. This instruction is always UNDEFINED in
+/// Non-debug state.
+/// @note DCPS1_DC_exception
+/// @param imm Is an optional 16-bit unsigned immediate, in the range 0 to
+/// 65535, defaulting to 0 and encoded in the "imm16" field.
+void DCPS1(Imm<16> imm)
+{
+	Emit<"11010100101iiiiiiiiiiiiiiii00001", "i">(imm);
+}
+
+/// @brief DCPS2 - Debug Change PE State to EL2, when executed in Debug state:
+/// The target exception level of a DCPS2 instruction is: When the target
+/// Exception level of a DCPS2 instruction is ELx, on executing this
+/// instruction: This instruction is UNDEFINED at the following exception
+/// levels: This instruction is always UNDEFINED in Non-debug state.
+/// @note DCPS2_DC_exception
+/// @param imm Is an optional 16-bit unsigned immediate, in the range 0 to
+/// 65535, defaulting to 0 and encoded in the "imm16" field.
+void DCPS2(Imm<16> imm)
+{
+	Emit<"11010100101iiiiiiiiiiiiiiii00010", "i">(imm);
+}
+
+/// @brief DCPS3 - Debug Change PE State to EL3, when executed in Debug state:
+/// The target exception level of a DCPS3 instruction is EL3. On executing a
+/// DCPS3 instruction: This instruction is UNDEFINED at all exception levels if
+/// either: This instruction is always UNDEFINED in Non-debug state.
+/// @note DCPS3_DC_exception
+/// @param imm Is an optional 16-bit unsigned immediate, in the range 0 to
+/// 65535, defaulting to 0 and encoded in the "imm16" field.
+void DCPS3(Imm<16> imm)
+{
+	Emit<"11010100101iiiiiiiiiiiiiiii00011", "i">(imm);
+}
+
+/// @brief DRPS - Debug restore PE state using the SPSR for the current
+/// Exception level. When executed, the PE restores PSTATE from the SPSR. The PE
+/// checks the SPSR for the current Exception level for an illegal return event.
+/// See Illegal return events from AArch64 state. This instruction is UNDEFINED
+/// at EL0. This instruction is UNDEFINED in Non-debug state.
+/// @note DRPS_64E_branch_reg
+void DRPS()
+{
+	Emit<"11010110101111110000001111100000">();
+}
+
 /// @brief ERET - Exception Return using the ELR and SPSR for the current
 /// Exception level. When executed, the PE restores PSTATE from the SPSR, and
 /// branches to the address held in the ELR. The PE checks the SPSR for the
