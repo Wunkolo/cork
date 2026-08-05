@@ -1659,6 +1659,32 @@ void UDIV(XReg Xd, XReg Xn, XReg Xm)
 	Emit<"10011010110mmmmm000010nnnnnddddd", "d", "n", "m">(Xd, Xn, Xm);
 }
 
+/// @brief UXTB - Unsigned Extend Byte extracts an 8-bit value from a register,
+/// zero-extends it to the size of the register, and writes the result to the
+/// destination register.
+/// @note UXTB_UBFM_32M_bitfield
+/// @param Wd Is the 32-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Wn Is the 32-bit name of the general-purpose source register, encoded
+/// in the "Rn" field.
+void UXTB(WReg Wd, WReg Wn)
+{
+	Emit<"0101001100000000000111nnnnnddddd", "d", "n">(Wd, Wn);
+}
+
+/// @brief UXTH - Unsigned Extend Halfword extracts a 16-bit value from a
+/// register, zero-extends it to the size of the register, and writes the result
+/// to the destination register.
+/// @note UXTH_UBFM_32M_bitfield
+/// @param Wd Is the 32-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Wn Is the 32-bit name of the general-purpose source register, encoded
+/// in the "Rn" field.
+void UXTH(WReg Wd, WReg Wn)
+{
+	Emit<"0101001100000000001111nnnnnddddd", "d", "n">(Wd, Wn);
+}
+
 /// @brief WFE - Wait For Event is a hint instruction that indicates that the PE
 /// can enter a low-power state and remain there until a wakeup event occurs.
 /// Wakeup events include the event signaled as a result of executing the SEV
