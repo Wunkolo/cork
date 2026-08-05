@@ -239,6 +239,13 @@ inline constexpr BarrierOperation SY{BarrierOperation::SY},
 	OSH{BarrierOperation::OSH}, OSHST{BarrierOperation::OSHST},
 	OSHLD{BarrierOperation::OSHLD};
 
+// Instruction Cache Operations
+inline constexpr InstructionCacheOperation IALLUIS{
+	InstructionCacheOperation::IALLUIS
+},
+	IALLU{InstructionCacheOperation::IALLU},
+	IVAU{InstructionCacheOperation::IVAU};
+
 // Zero register(32-bit)
 inline constexpr WzrReg WZR{};
 // Zero register(64-bit)

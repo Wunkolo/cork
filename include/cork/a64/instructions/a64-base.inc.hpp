@@ -1074,6 +1074,26 @@ void HVC(Imm<16> imm)
 	Emit<"11010100000iiiiiiiiiiiiiiii00010", "i">(imm);
 }
 
+/// @brief IC - Instruction Cache operation.
+/// @note IC_SYS_CR_systeminstrs
+/// @param ic Is an IC operation name.
+/// @param Xt Is the 64-bit name of the optional general-purpose source
+/// register, defaulting to '11111', encoded in the "Rt" field.
+void IC(InstructionCacheOperation ic, XReg Xt = XZR)
+{
+	Emit<"1101010100001ooo0111MMMMooottttt", "oMo", "t">(ic, Xt);
+}
+
+/// @brief ISB - Instruction Synchronization Barrier flushes the pipeline in the
+/// PE and is a context synchronization event. For more information, see
+/// Instruction Synchronization Barrier (ISB).
+/// @note ISB_BI_barriers
+/// @param option Specifies an optional limitation on the barrier operation.
+void ISB(BarrierOperation option = BarrierOperation::SY)
+{
+	Emit<"11010101000000110011MMMM11011111", "M">(option);
+}
+
 /// @brief NOP - No Operation does nothing, other than advance the value of the
 /// program counter by 4. This instruction can be used for instruction alignment
 /// purposes.

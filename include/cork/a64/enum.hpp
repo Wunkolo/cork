@@ -120,4 +120,16 @@ enum class BarrierOperation : std::uint8_t
 	OSHLD = 0b0001,
 };
 
+enum class InstructionCacheOperation : std::uint16_t
+{
+	// Invalidate All to PoU, Inner-Shareable
+	IALLUIS = 0b000'0001'000,
+	// Invalidate All to PoU
+	IALLU = 0b000'0101'000,
+	// Invalidate by Virtual Address to PoU
+	IVAU = 0b011'0101'001,
+
+	// Values are op1'CRm'op2
+};
+
 } // namespace Cork
