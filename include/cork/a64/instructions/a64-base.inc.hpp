@@ -1659,6 +1659,35 @@ void UDIV(XReg Xd, XReg Xn, XReg Xm)
 	Emit<"10011010110mmmmm000010nnnnnddddd", "d", "n", "m">(Xd, Xn, Xm);
 }
 
+/// @brief UMULH - Unsigned Multiply High multiplies two 64-bit register values,
+/// and writes bits[127:64] of the 128-bit result to the 64-bit destination
+/// register.
+/// @note UMULH_64_dp_3src
+/// @param Xd Is the 64-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Xn Is the 64-bit name of the first general-purpose source register
+/// holding the multiplicand, encoded in the "Rn" field.
+/// @param Xm Is the 64-bit name of the second general-purpose source register
+/// holding the multiplier, encoded in the "Rm" field.
+void UMULH(XReg Xd, XReg Xn, XReg Xm)
+{
+	Emit<"10011011110mmmmm011111nnnnnddddd", "d", "n", "m">(Xd, Xn, Xm);
+}
+
+/// @brief UMULL - Unsigned Multiply Long multiplies two 32-bit register values,
+/// and writes the result to the 64-bit destination register.
+/// @note UMULL_UMADDL_64WA_dp_3src
+/// @param Xd Is the 64-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Wn Is the 32-bit name of the first general-purpose source register
+/// holding the multiplicand, encoded in the "Rn" field.
+/// @param Wm Is the 32-bit name of the second general-purpose source register
+/// holding the multiplier, encoded in the "Rm" field.
+void UMULL(XReg Xd, WReg Wn, WReg Wm)
+{
+	Emit<"10011011101mmmmm011111nnnnnddddd", "d", "n", "m">(Xd, Wn, Wm);
+}
+
 /// @brief UXTB - Unsigned Extend Byte extracts an 8-bit value from a register,
 /// zero-extends it to the size of the register, and writes the result to the
 /// destination register.
