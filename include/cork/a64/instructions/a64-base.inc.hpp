@@ -1618,6 +1618,70 @@ void SVC(Imm<16> imm)
 	Emit<"11010100000iiiiiiiiiiiiiiii00001", "i">(imm);
 }
 
+/// @brief SXTB - Signed Extend Byte extracts an 8-bit value from a register,
+/// sign-extends it to the size of the register, and writes the result to the
+/// destination register.
+/// @note SXTB_SBFM_32M_bitfield
+/// @param Wd Is the 32-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Wn Is the 32-bit name of the general-purpose source register, encoded
+/// in the "Rn" field.
+void SXTB(WReg Wd, WReg Wn)
+{
+	Emit<"0001001100000000000111nnnnnddddd", "d", "n">(Wd, Wn);
+}
+
+/// @brief SXTB - Signed Extend Byte extracts an 8-bit value from a register,
+/// sign-extends it to the size of the register, and writes the result to the
+/// destination register.
+/// @note SXTB_SBFM_64M_bitfield
+/// @param Xd Is the 64-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Wn Is the 32-bit name of the general-purpose source register, encoded
+/// in the "Rn" field.
+void SXTB(XReg Xd, WReg Wn)
+{
+	Emit<"1001001101000000000111nnnnnddddd", "d", "n">(Xd, Wn);
+}
+
+/// @brief SXTH - Sign Extend Halfword extracts a 16-bit value, sign-extends it
+/// to the size of the register, and writes the result to the destination
+/// register.
+/// @note SXTH_SBFM_32M_bitfield
+/// @param Wd Is the 32-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Wn Is the 32-bit name of the general-purpose source register, encoded
+/// in the "Rn" field.
+void SXTH(WReg Wd, WReg Wn)
+{
+	Emit<"0001001100000000001111nnnnnddddd", "d", "n">(Wd, Wn);
+}
+
+/// @brief SXTH - Sign Extend Halfword extracts a 16-bit value, sign-extends it
+/// to the size of the register, and writes the result to the destination
+/// register.
+/// @note SXTH_SBFM_64M_bitfield
+/// @param Xd Is the 64-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Wn Is the 32-bit name of the general-purpose source register, encoded
+/// in the "Rn" field.
+void SXTH(XReg Xd, WReg Wn)
+{
+	Emit<"1001001101000000001111nnnnnddddd", "d", "n">(Xd, Wn);
+}
+
+/// @brief SXTW - Sign Extend Word sign-extends a word to the size of the
+/// register, and writes the result to the destination register.
+/// @note SXTW_SBFM_64M_bitfield
+/// @param Xd Is the 64-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Wn Is the 32-bit name of the general-purpose source register, encoded
+/// in the "Rn" field.
+void SXTW(XReg Xd, WReg Wn)
+{
+	Emit<"1001001101000000011111nnnnnddddd", "d", "n">(Xd, Wn);
+}
+
 /// @brief UDF - Permanently Undefined generates an Undefined Instruction
 /// exception (ESR_ELx.EC = 0b000000). The encodings for UDF used in this
 /// section are defined as permanently UNDEFINED.
