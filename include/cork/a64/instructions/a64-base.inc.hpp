@@ -767,6 +767,216 @@ void CSDB()
 	Emit<"11010101000000110010001010011111">();
 }
 
+/// @brief CSEL - If the condition is true, Conditional Select writes the value
+/// of the first source register to the destination register. If the condition
+/// is false, it writes the value of the second source register to the
+/// destination register.
+/// @note CSEL_32_condsel
+/// @param Wd Is the 32-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Wn Is the 32-bit name of the first general-purpose source register,
+/// encoded in the "Rn" field.
+/// @param Wm Is the 32-bit name of the second general-purpose source register,
+/// encoded in the "Rm" field.
+/// @param cond Is one of the standard conditions.
+void CSEL(WReg Wd, WReg Wn, WReg Wm, Condition cond)
+{
+	Emit<"00011010100mmmmmcccc00nnnnnddddd", "d", "n", "m", "c">(
+		Wd, Wn, Wm, cond
+	);
+}
+
+/// @brief CSEL - If the condition is true, Conditional Select writes the value
+/// of the first source register to the destination register. If the condition
+/// is false, it writes the value of the second source register to the
+/// destination register.
+/// @note CSEL_64_condsel
+/// @param Xd Is the 64-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Xn Is the 64-bit name of the first general-purpose source register,
+/// encoded in the "Rn" field.
+/// @param Xm Is the 64-bit name of the second general-purpose source register,
+/// encoded in the "Rm" field.
+/// @param cond Is one of the standard conditions.
+void CSEL(XReg Xd, XReg Xn, XReg Xm, Condition cond)
+{
+	Emit<"10011010100mmmmmcccc00nnnnnddddd", "d", "n", "m", "c">(
+		Xd, Xn, Xm, cond
+	);
+}
+
+/// @brief CSET - Conditional Set sets the destination register to 1 if the
+/// condition is TRUE, and otherwise sets it to 0.
+/// @note CSET_CSINC_32_condsel
+/// @param Wd Is the 32-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param cond Is one of the standard conditions, excluding AL and NV, encoded
+/// with its least significant bit inverted.
+void CSET(WReg Wd, Condition cond)
+{
+	assert(cond != Condition::AL);
+	assert(cond != Condition::NV);
+	const Condition invcond = Invert(cond);
+	Emit<"0001101010011111cccc0111111ddddd", "d", "c">(Wd, invcond);
+}
+
+/// @brief CSET - Conditional Set sets the destination register to 1 if the
+/// condition is TRUE, and otherwise sets it to 0.
+/// @note CSET_CSINC_64_condsel
+/// @param Xd Is the 64-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param cond Is one of the standard conditions, excluding AL and NV, encoded
+/// with its least significant bit inverted.
+void CSET(XReg Xd, Condition cond)
+{
+	assert(cond != Condition::AL);
+	assert(cond != Condition::NV);
+	const Condition invcond = Invert(cond);
+	Emit<"1001101010011111cccc0111111ddddd", "d", "c">(Xd, invcond);
+}
+
+/// @brief CSETM - Conditional Set Mask sets all bits of the destination
+/// register to 1 if the condition is TRUE, and otherwise sets all bits to 0.
+/// @note CSETM_CSINV_32_condsel
+/// @param Wd Is the 32-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param cond Is one of the standard conditions, excluding AL and NV, encoded
+/// with its least significant bit inverted.
+void CSETM(WReg Wd, Condition cond)
+{
+	assert(cond != Condition::AL);
+	assert(cond != Condition::NV);
+	const Condition invcond = Invert(cond);
+	Emit<"0101101010011111cccc0011111ddddd", "d", "c">(Wd, invcond);
+}
+
+/// @brief CSETM - Conditional Set Mask sets all bits of the destination
+/// register to 1 if the condition is TRUE, and otherwise sets all bits to 0.
+/// @note CSETM_CSINV_64_condsel
+/// @param Xd Is the 64-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param cond Is one of the standard conditions, excluding AL and NV, encoded
+/// with its least significant bit inverted.
+void CSETM(XReg Xd, Condition cond)
+{
+	assert(cond != Condition::AL);
+	assert(cond != Condition::NV);
+	const Condition invcond = Invert(cond);
+	Emit<"1101101010011111cccc0011111ddddd", "d", "c">(Xd, invcond);
+}
+
+/// @brief CSINC - Conditional Select Increment returns, in the destination
+/// register, the value of the first source register if the condition is TRUE,
+/// and otherwise returns the value of the second source register incremented
+/// by 1.
+/// @note CSINC_32_condsel
+/// @param Wd Is the 32-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Wn Is the 32-bit name of the first general-purpose source register,
+/// encoded in the "Rn" field.
+/// @param Wm Is the 32-bit name of the second general-purpose source register,
+/// encoded in the "Rm" field.
+/// @param cond Is one of the standard conditions.
+void CSINC(WReg Wd, WReg Wn, WReg Wm, Condition cond)
+{
+	Emit<"00011010100mmmmmcccc01nnnnnddddd", "d", "n", "m", "c">(
+		Wd, Wn, Wm, cond
+	);
+}
+
+/// @brief CSINC - Conditional Select Increment returns, in the destination
+/// register, the value of the first source register if the condition is TRUE,
+/// and otherwise returns the value of the second source register incremented
+/// by 1.
+/// @note CSINC_64_condsel
+/// @param Xd Is the 64-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Xn Is the 64-bit name of the first general-purpose source register,
+/// encoded in the "Rn" field.
+/// @param Xm Is the 64-bit name of the second general-purpose source register,
+/// encoded in the "Rm" field.
+/// @param cond Is one of the standard conditions.
+void CSINC(XReg Xd, XReg Xn, XReg Xm, Condition cond)
+{
+	Emit<"10011010100mmmmmcccc01nnnnnddddd", "d", "n", "m", "c">(
+		Xd, Xn, Xm, cond
+	);
+}
+
+/// @brief CSINV - Conditional Select Invert returns, in the destination
+/// register, the value of the first source register if the condition is TRUE,
+/// and otherwise returns the bitwise inversion value of the second source
+/// register.
+/// @note CSINV_32_condsel
+/// @param Wd Is the 32-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Wn Is the 32-bit name of the first general-purpose source register,
+/// encoded in the "Rn" field.
+/// @param Wm Is the 32-bit name of the second general-purpose source register,
+/// encoded in the "Rm" field.
+/// @param cond Is one of the standard conditions.
+void CSINV(WReg Wd, WReg Wn, WReg Wm, Condition cond)
+{
+	Emit<"01011010100mmmmmcccc00nnnnnddddd", "d", "n", "m", "c">(
+		Wd, Wn, Wm, cond
+	);
+}
+
+/// @brief CSINV - Conditional Select Invert returns, in the destination
+/// register, the value of the first source register if the condition is TRUE,
+/// and otherwise returns the bitwise inversion value of the second source
+/// register.
+/// @note CSINV_64_condsel
+/// @param Xd Is the 64-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Xn Is the 64-bit name of the first general-purpose source register,
+/// encoded in the "Rn" field.
+/// @param Xm Is the 64-bit name of the second general-purpose source register,
+/// encoded in the "Rm" field.
+/// @param cond Is one of the standard conditions.
+void CSINV(XReg Xd, XReg Xn, XReg Xm, Condition cond)
+{
+	Emit<"11011010100mmmmmcccc00nnnnnddddd", "d", "n", "m", "c">(
+		Xd, Xn, Xm, cond
+	);
+}
+
+/// @brief CSNEG - Conditional Select Negation returns, in the destination
+/// register, the value of the first source register if the condition is TRUE,
+/// and otherwise returns the negated value of the second source register.
+/// @note CSNEG_32_condsel
+/// @param Wd Is the 32-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Wn Is the 32-bit name of the first general-purpose source register,
+/// encoded in the "Rn" field.
+/// @param Wm Is the 32-bit name of the second general-purpose source register,
+/// encoded in the "Rm" field.
+/// @param cond Is one of the standard conditions.
+void CSNEG(WReg Wd, WReg Wn, WReg Wm, Condition cond)
+{
+	Emit<"01011010100mmmmmcccc01nnnnnddddd", "d", "n", "m", "c">(
+		Wd, Wn, Wm, cond
+	);
+}
+
+/// @brief CSNEG - Conditional Select Negation returns, in the destination
+/// register, the value of the first source register if the condition is TRUE,
+/// and otherwise returns the negated value of the second source register.
+/// @note CSNEG_64_condsel
+/// @param Xd Is the 64-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Xn Is the 64-bit name of the first general-purpose source register,
+/// encoded in the "Rn" field.
+/// @param Xm Is the 64-bit name of the second general-purpose source register,
+/// encoded in the "Rm" field.
+/// @param cond Is one of the standard conditions.
+void CSNEG(XReg Xd, XReg Xn, XReg Xm, Condition cond)
+{
+	Emit<"11011010100mmmmmcccc01nnnnnddddd", "d", "n", "m", "c">(
+		Xd, Xn, Xm, cond
+	);
+}
+
 /// @brief ERET - Exception Return using the ELR and SPSR for the current
 /// Exception level. When executed, the PE restores PSTATE from the SPSR, and
 /// branches to the address held in the ELR. The PE checks the SPSR for the
