@@ -80,6 +80,242 @@ void B(Condition cond, SImm<19, 4> label)
 	Emit<"01010100iiiiiiiiiiiiiiiiiii0cccc", "i", "c">(label, cond);
 }
 
+/// @brief BFI - Bitfield Insert copies a bitfield of <width> bits from the
+/// least significant bits of the source register to bit position <lsb> of the
+/// destination register, leaving the other destination bits unchanged.
+/// @note BFI_BFM_32M_bitfield
+/// @param Wd Is the 32-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Wn Is the 32-bit name of the general-purpose source register, encoded
+/// in the "Rn" field.
+/// @param lsb For the 32-bit variant: is the bit number of the lsb of the
+/// destination bitfield, in the range 0 to 31.
+/// @param width For the 32-bit variant: is the width of the bitfield, in the
+/// range 1 to 32-<lsb>.
+void BFI(WReg Wd, WReg Wn, Imm<5> lsb, Imm<5> width)
+{
+	assert(width.Value > 0);
+	assert(width.Value <= (32 - lsb.Value));
+	// This is just an alias for BFM, remap `imms`
+	const std::uint32_t immr = (~lsb.Value + 1) & 31;
+	const std::uint32_t imms = width.Value - 1;
+	Emit<"0011001100rrrrrrssssssnnnnnddddd", "d", "n", "r", "s">(
+		Wd, Wn, immr, imms
+	);
+}
+
+/// @brief BFI - Bitfield Insert copies a bitfield of <width> bits from the
+/// least significant bits of the source register to bit position <lsb> of the
+/// destination register, leaving the other destination bits unchanged.
+/// @note BFI_BFM_64M_bitfield
+/// @param Xd Is the 64-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Xn Is the 64-bit name of the general-purpose source register, encoded
+/// in the "Rn" field.
+/// @param lsb For the 64-bit variant: is the bit number of the lsb of the
+/// destination bitfield, in the range 0 to 63.
+/// @param width For the 64-bit variant: is the width of the bitfield, in the
+/// range 1 to 64-<lsb>.
+void BFI(XReg Xd, XReg Xn, Imm<6> lsb, Imm<6> width)
+{
+	assert(width.Value > 0);
+	assert(width.Value <= (64 - lsb.Value));
+	// This is just an alias for BFM, remap `imms`
+	const std::uint32_t immr = (~lsb.Value + 1) & 63;
+	const std::uint32_t imms = width.Value - 1;
+	Emit<"1011001101rrrrrrssssssnnnnnddddd", "d", "n", "r", "s">(
+		Xd, Xn, immr, imms
+	);
+}
+
+/// @brief BFM - Bitfield Move is usually accessed via one of its aliases, which
+/// are always preferred for disassembly. If <imms> is greater than or equal to
+/// <immr>, this copies a bitfield of (<imms>-<immr>+1) bits starting from bit
+/// position <immr> in the source register to the least significant bits of the
+/// destination register. If <imms> is less than <immr>, this copies a bitfield
+/// of (<imms>+1) bits from the least significant bits of the source register to
+/// bit position (regsize-<immr>) of the destination register, where regsize is
+/// the destination register size of 32 or 64 bits. In both cases the other bits
+/// of the destination register remain unchanged.
+/// @note BFM_32M_bitfield
+/// @param Wd Is the 32-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Wn Is the 32-bit name of the general-purpose source register, encoded
+/// in the "Rn" field.
+/// @param immr For the 32-bit variant: is the right rotate amount, in the range
+/// 0 to 31, encoded in the "immr" field.
+/// @param imms For the 32-bit variant: is the leftmost bit number to be moved
+/// from the source, in the range 0 to 31, encoded in the "imms" field.
+void BFM(WReg Wd, WReg Wn, Imm<5> immr, Imm<5> imms)
+{
+	Emit<"0011001100rrrrrrssssssnnnnnddddd", "d", "n", "r", "s">(
+		Wd, Wn, immr, imms
+	);
+}
+
+/// @brief BFM - Bitfield Move is usually accessed via one of its aliases, which
+/// are always preferred for disassembly. If <imms> is greater than or equal to
+/// <immr>, this copies a bitfield of (<imms>-<immr>+1) bits starting from bit
+/// position <immr> in the source register to the least significant bits of the
+/// destination register. If <imms> is less than <immr>, this copies a bitfield
+/// of (<imms>+1) bits from the least significant bits of the source register to
+/// bit position (regsize-<immr>) of the destination register, where regsize is
+/// the destination register size of 32 or 64 bits. In both cases the other bits
+/// of the destination register remain unchanged.
+/// @note BFM_64M_bitfield
+/// @param Xd Is the 64-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Xn Is the 64-bit name of the general-purpose source register, encoded
+/// in the "Rn" field.
+/// @param immr For the 64-bit variant: is the right rotate amount, in the range
+/// 0 to 63, encoded in the "immr" field.
+/// @param imms For the 64-bit variant: is the leftmost bit number to be moved
+/// from the source, in the range 0 to 63, encoded in the "imms" field.
+void BFM(XReg Xd, XReg Xn, Imm<6> immr, Imm<6> imms)
+{
+	Emit<"1011001101rrrrrrssssssnnnnnddddd", "d", "n", "r", "s">(
+		Xd, Xn, immr, imms
+	);
+}
+
+/// @brief BFXIL - Bitfield Extract and Insert Low copies a bitfield of <width>
+/// bits starting from bit position <lsb> in the source register to the least
+/// significant bits of the destination register, leaving the other destination
+/// bits unchanged.
+/// @note BFXIL_BFM_32M_bitfield
+/// @param Wd Is the 32-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Wn Is the 32-bit name of the general-purpose source register, encoded
+/// in the "Rn" field.
+/// @param lsb For the 32-bit variant: is the bit number of the lsb of the
+/// source bitfield, in the range 0 to 31.
+/// @param width For the 32-bit variant: is the width of the bitfield, in the
+/// range 1 to 32-<lsb>.
+void BFXIL(WReg Wd, WReg Wn, Imm<5> lsb, Imm<5> width)
+{
+	assert(width.Value > 0);
+	assert(width.Value <= (32 - lsb.Value));
+	// This is just an alias for BFM, remap `imms`
+	const std::uint32_t imms = lsb.Value + width.Value - 1;
+	Emit<"0011001100rrrrrrssssssnnnnnddddd", "d", "n", "r", "s">(
+		Wd, Wn, lsb, imms
+	);
+}
+
+/// @brief BFXIL - Bitfield Extract and Insert Low copies a bitfield of <width>
+/// bits starting from bit position <lsb> in the source register to the least
+/// significant bits of the destination register, leaving the other destination
+/// bits unchanged.
+/// @note BFXIL_BFM_64M_bitfield
+/// @param Xd Is the 64-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Xn Is the 64-bit name of the general-purpose source register, encoded
+/// in the "Rn" field.
+/// @param lsb For the 64-bit variant: is the bit number of the lsb of the
+/// source bitfield, in the range 0 to 63.
+/// @param width For the 64-bit variant: is the width of the bitfield, in the
+/// range 1 to 64-<lsb>.
+void BFXIL(XReg Xd, XReg Xn, Imm<6> lsb, Imm<6> width)
+{
+	assert(width.Value > 0);
+	assert(width.Value <= (64 - lsb.Value));
+	// This is just an alias for BFM, remap `imms`
+	const std::uint32_t imms = lsb.Value + width.Value - 1;
+	Emit<"1011001101rrrrrrssssssnnnnnddddd", "d", "n", "r", "s">(
+		Xd, Xn, lsb, imms
+	);
+}
+
+/// @brief BIC - Bitwise Bit Clear (shifted register) performs a bitwise AND of
+/// a register value and the complement of an optionally-shifted register value,
+/// and writes the result to the destination register.
+/// @note BIC_32_log_shift
+/// @param Wd Is the 32-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Wn Is the 32-bit name of the first general-purpose source register,
+/// encoded in the "Rn" field.
+/// @param Wm Is the 32-bit name of the second general-purpose source register,
+/// encoded in the "Rm" field.
+/// @param shift Is the optional shift to be applied to the final source,
+/// defaulting to LSL.
+/// @param amount For the 32-bit variant: is the shift amount, in the range 0 to
+/// 31, defaulting to 0 and encoded in the "imm6" field.
+void BIC(WReg Wd, WReg Wn, WReg Wm, Shift shift = LSL, Imm<5> amount = 0)
+{
+	assert(shift != ROR);
+	Emit<"00001010ss1mmmmmiiiiiinnnnnddddd", "d", "n", "m", "s", "i">(
+		Wd, Wn, Wm, shift, amount
+	);
+}
+
+/// @brief BIC - Bitwise Bit Clear (shifted register) performs a bitwise AND of
+/// a register value and the complement of an optionally-shifted register value,
+/// and writes the result to the destination register.
+/// @note BIC_64_log_shift
+/// @param Xd Is the 64-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Xn Is the 64-bit name of the first general-purpose source register,
+/// encoded in the "Rn" field.
+/// @param Xm Is the 64-bit name of the second general-purpose source register,
+/// encoded in the "Rm" field.
+/// @param shift Is the optional shift to be applied to the final source,
+/// defaulting to LSL.
+/// @param amount For the 64-bit variant: is the shift amount, in the range 0 to
+/// 63, defaulting to 0 and encoded in the "imm6" field,
+void BIC(XReg Xd, XReg Xn, XReg Xm, Shift shift = LSL, Imm<6> amount = 0)
+{
+	assert(shift != ROR);
+	Emit<"10001010ss1mmmmmiiiiiinnnnnddddd", "d", "n", "m", "s", "i">(
+		Xd, Xn, Xm, shift, amount
+	);
+}
+
+/// @brief BICS - Bitwise Bit Clear (shifted register), setting flags, performs
+/// a bitwise AND of a register value and the complement of an
+/// optionally-shifted register value, and writes the result to the destination
+/// register. It updates the condition flags based on the result.
+/// @note BICS_32_log_shift
+/// @param Wd Is the 32-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Wn Is the 32-bit name of the first general-purpose source register,
+/// encoded in the "Rn" field.
+/// @param Wm Is the 32-bit name of the second general-purpose source register,
+/// encoded in the "Rm" field.
+/// @param shift Is the optional shift to be applied to the final source,
+/// defaulting to LSL.
+/// @param amount For the 32-bit variant: is the shift amount, in the range 0 to
+/// 31, defaulting to 0 and encoded in the "imm6" field.
+void BICS(WReg Wd, WReg Wn, WReg Wm, Shift shift = LSL, Imm<5> amount = 0)
+{
+	assert(shift != ROR);
+	Emit<"01101010ss1mmmmmiiiiiinnnnnddddd", "d", "n", "m", "s", "i">(
+		Wd, Wn, Wm, shift, amount
+	);
+}
+
+/// @brief BICS - Bitwise Bit Clear (shifted register), setting flags, performs
+/// a bitwise AND of a register value and the complement of an
+/// optionally-shifted register value, and writes the result to the destination
+/// register. It updates the condition flags based on the result.
+/// @note BICS_64_log_shift
+/// @param Xd Is the 64-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Xn Is the 64-bit name of the first general-purpose source register,
+/// encoded in the "Rn" field.
+/// @param Xm Is the 64-bit name of the second general-purpose source register,
+/// encoded in the "Rm" field.
+/// @param shift Is the optional shift to be applied to the final source,
+/// defaulting to LSL.
+/// @param amount For the 64-bit variant: is the shift amount, in the range 0 to
+/// 63, defaulting to 0 and encoded in the "imm6" field,
+void BICS(XReg Xd, XReg Xn, XReg Xm, Shift shift = LSL, Imm<6> amount = 0)
+{
+	assert(shift != ROR);
+	Emit<"11101010ss1mmmmmiiiiiinnnnnddddd", "d", "n", "m", "s", "i">(
+		Xd, Xn, Xm, shift, amount
+	);
+}
+
 /// @brief BL - Branch with Link branches to a PC-relative offset, setting the
 /// register X30 to PC+4. It provides a hint that this is a subroutine call.
 /// @note BL_only_branch_imm

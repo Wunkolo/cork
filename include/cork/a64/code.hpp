@@ -82,6 +82,12 @@ static constexpr std::uint32_t BitExpand(std::uint32_t BitValue) noexcept
 // `Encode` function to splat its value across the specified bits.
 
 template<std::uint32_t Splat>
+std::uint32_t Encode(std::uint32_t Value)
+{
+	return BitExpand<Splat>(Value);
+}
+
+template<std::uint32_t Splat>
 std::uint32_t Encode(RReg Value)
 {
 	static_assert(std::popcount(Splat) == 5);
