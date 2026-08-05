@@ -1412,6 +1412,20 @@ void ERET()
 	Emit<"11010110100111110000001111100000">();
 }
 
+/// @brief HINT - Hint instruction is for the instruction set space that is
+/// reserved for architectural hint instructions. Some encodings described here
+/// are not allocated in this revision of the architecture, and behave as NOPs.
+/// These encodings might be allocated to other hint functionality in future
+/// revisions of the architecture and therefore must not be used by software.
+/// @note HINT_HM_hints
+/// @param imm Is a 7-bit unsigned immediate, in the range 0 to 127, encoded
+/// in the "CRm:op2" field.
+void HINT(Imm<7> imm)
+{
+	// TODO: Map out these possible CRm:op2 values into an enum
+	Emit<"11010101000000110010MMMMooo11111", "Mo">(imm);
+}
+
 /// @brief HLT - Halt instruction. An HLT instruction can generate a Halt
 /// Instruction debug event, which causes entry into Debug state. Within a
 /// guarded memory region, while PSTATE.BTYPE != 0b00, a HLT instruction that
