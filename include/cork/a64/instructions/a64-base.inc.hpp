@@ -1629,6 +1629,36 @@ void UDF(Imm<16> imm)
 	Emit<"0000000000000000iiiiiiiiiiiiiiii", "i">(imm);
 }
 
+/// @brief UDIV - Unsigned Divide divides an unsigned integer register value by
+/// another unsigned integer register value, and writes the result to the
+/// destination register. The condition flags are not affected.
+/// @note UDIV_32_dp_2src
+/// @param Wd Is the 32-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Wn Is the 32-bit name of the first general-purpose source register,
+/// encoded in the "Rn" field.
+/// @param Wm Is the 32-bit name of the second general-purpose source register,
+/// encoded in the "Rm" field.
+void UDIV(WReg Wd, WReg Wn, WReg Wm)
+{
+	Emit<"00011010110mmmmm000010nnnnnddddd", "d", "n", "m">(Wd, Wn, Wm);
+}
+
+/// @brief UDIV - Unsigned Divide divides an unsigned integer register value by
+/// another unsigned integer register value, and writes the result to the
+/// destination register. The condition flags are not affected.
+/// @note UDIV_64_dp_2src
+/// @param Xd Is the 64-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Xn Is the 64-bit name of the first general-purpose source register,
+/// encoded in the "Rn" field.
+/// @param Xm Is the 64-bit name of the second general-purpose source register,
+/// encoded in the "Rm" field.
+void UDIV(XReg Xd, XReg Xn, XReg Xm)
+{
+	Emit<"10011010110mmmmm000010nnnnnddddd", "d", "n", "m">(Xd, Xn, Xm);
+}
+
 /// @brief WFE - Wait For Event is a hint instruction that indicates that the PE
 /// can enter a low-power state and remain there until a wakeup event occurs.
 /// Wakeup events include the event signaled as a result of executing the SEV
