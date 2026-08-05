@@ -56,6 +56,7 @@ consteval std::uint32_t SplatMask32()
 template<std::uint32_t BitMask>
 static constexpr std::uint32_t BitExpand(std::uint32_t BitValue) noexcept
 {
+	static_assert(BitMask);
 	// Attempt to detect if this is a continous span of bits
 	constexpr std::uint32_t FirstSetBit    = std::countr_zero(BitMask);
 	constexpr std::uint32_t BitMaskShifted = BitMask >> FirstSetBit;
