@@ -1659,6 +1659,59 @@ void UDIV(XReg Xd, XReg Xn, XReg Xm)
 	Emit<"10011010110mmmmm000010nnnnnddddd", "d", "n", "m">(Xd, Xn, Xm);
 }
 
+/// @brief UMADDL - Unsigned Multiply-Add Long multiplies two 32-bit register
+/// values, adds a 64-bit register value, and writes the result to the 64-bit
+/// destination register.
+/// @note UMADDL_64WA_dp_3src
+/// @param Xd Is the 64-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Wn Is the 32-bit name of the first general-purpose source register
+/// holding the multiplicand, encoded in the "Rn" field.
+/// @param Wm Is the 32-bit name of the second general-purpose source register
+/// holding the multiplier, encoded in the "Rm" field.
+/// @param Xa Is the 64-bit name of the third general-purpose source register
+/// holding the addend, encoded in the "Ra" field.
+void UMADDL(XReg Xd, WReg Wn, WReg Wm, XReg Xa)
+{
+	Emit<"10011011101mmmmm0aaaaannnnnddddd", "d", "n", "m", "a">(
+		Xd, Wn, Wm, Xa
+	);
+}
+
+/// @brief UMNEGL - Unsigned Multiply-Negate Long multiplies two 32-bit register
+/// values, negates the product, and writes the result to the 64-bit destination
+/// register.
+/// @note UMNEGL_UMSUBL_64WA_dp_3src
+/// @param Xd Is the 64-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Wn Is the 32-bit name of the first general-purpose source register
+/// holding the multiplicand, encoded in the "Rn" field.
+/// @param Wm Is the 32-bit name of the second general-purpose source register
+/// holding the multiplier, encoded in the "Rm" field.
+void UMNEGL(XReg Xd, WReg Wn, WReg Wm)
+{
+	Emit<"10011011101mmmmm111111nnnnnddddd", "d", "n", "m">(Xd, Wn, Wm);
+}
+
+/// @brief UMSUBL - Unsigned Multiply-Subtract Long multiplies two 32-bit
+/// register values, subtracts the product from a 64-bit register value, and
+/// writes the result to the 64-bit destination register.
+/// @note UMSUBL_64WA_dp_3src
+/// @param Xd Is the 64-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Wn Is the 32-bit name of the first general-purpose source register
+/// holding the multiplicand, encoded in the "Rn" field.
+/// @param Wm Is the 32-bit name of the second general-purpose source register
+/// holding the multiplier, encoded in the "Rm" field.
+/// @param Xa Is the 64-bit name of the third general-purpose source register
+/// holding the minuend, encoded in the "Ra" field.
+void UMSUBL(XReg Xd, WReg Wn, WReg Wm, XReg Xa)
+{
+	Emit<"10011011101mmmmm1aaaaannnnnddddd", "d", "n", "m", "a">(
+		Xd, Wn, Wm, Xa
+	);
+}
+
 /// @brief UMULH - Unsigned Multiply High multiplies two 64-bit register values,
 /// and writes bits[127:64] of the 128-bit result to the 64-bit destination
 /// register.
