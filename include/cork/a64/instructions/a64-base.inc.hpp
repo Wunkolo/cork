@@ -1682,6 +1682,68 @@ void SXTW(XReg Xd, WReg Wn)
 	Emit<"1001001101000000011111nnnnnddddd", "d", "n">(Xd, Wn);
 }
 
+/// @brief TST - Test bits (immediate), setting the condition flags and
+/// discarding the result.
+/// @note TST_ANDS_32S_log_imm
+/// @param Wn Is the 32-bit name of the general-purpose source register, encoded
+/// in the "Rn" field.
+/// @param imm For the 32-bit variant: is the bitmask immediate, encoded in
+/// "imms:immr".
+void TST(WReg Wn, BitMask32 imm)
+{
+	Emit<"0111001000rrrrrrssssssnnnnn11111", "n", "rs">(Wn, imm);
+}
+
+/// @brief TST - Test bits (immediate), setting the condition flags and
+/// discarding the result.
+/// @note TST_ANDS_64S_log_imm
+/// @param Xn Is the 64-bit name of the general-purpose source register, encoded
+/// in the "Rn" field.
+/// @param imm For the 64-bit variant: is the bitmask immediate, encoded in
+/// "N:imms:immr".
+void TST(XReg Xn, BitMask64 imm)
+{
+	Emit<"111100100Nrrrrrrssssssnnnnn11111", "n", "Nrs">(Xn, imm);
+}
+
+/// @brief TST - Test (shifted register) performs a bitwise AND operation on a
+/// register value and an optionally-shifted register value. It updates the
+/// condition flags based on the result, and discards the result.
+/// @note TST_ANDS_32_log_shift
+/// @param Wn Is the 32-bit name of the first general-purpose source register,
+/// encoded in the "Rn" field.
+/// @param Wm Is the 32-bit name of the second general-purpose source register,
+/// encoded in the "Rm" field.
+/// @param shift Is the optional shift to be applied to the final source,
+/// defaulting to LSL.
+/// @param amount For the 32-bit variant: is the shift amount, in the range 0 to
+/// 31, defaulting to 0 and encoded in the "imm6" field.
+void TST(WReg Wn, WReg Wm, Shift shift = LSL, Imm<5> amount = 0)
+{
+	Emit<"01101010ss0mmmmmiiiiiinnnnn11111", "n", "m", "s", "i">(
+		Wn, Wm, shift, amount
+	);
+}
+
+/// @brief TST - Test (shifted register) performs a bitwise AND operation on a
+/// register value and an optionally-shifted register value. It updates the
+/// condition flags based on the result, and discards the result.
+/// @note TST_ANDS_64_log_shift
+/// @param Xn Is the 64-bit name of the first general-purpose source register,
+/// encoded in the "Rn" field.
+/// @param Xm Is the 64-bit name of the second general-purpose source register,
+/// encoded in the "Rm" field.
+/// @param shift Is the optional shift to be applied to the final source,
+/// defaulting to LSL.
+/// @param amount For the 64-bit variant: is the shift amount, in the range 0 to
+/// 63, defaulting to 0 and encoded in the "imm6" field,
+void TST(XReg Xn, XReg Xm, Shift shift = LSL, Imm<6> amount = 0)
+{
+	Emit<"11101010ss0mmmmmiiiiiinnnnn11111", "n", "m", "s", "i">(
+		Xn, Xm, shift, amount
+	);
+}
+
 /// @brief UDF - Permanently Undefined generates an Undefined Instruction
 /// exception (ESR_ELx.EC = 0b000000). The encodings for UDF used in this
 /// section are defined as permanently UNDEFINED.
