@@ -1,5 +1,6 @@
 #pragma once
 
+#include <array>
 #include <bit>
 #include <cassert>
 #include <cstddef>
@@ -338,5 +339,14 @@ public:
 	}
 };
 
+// Utility-type permitting only `LSL` as a shift, asserting otherwise
+struct LslOnly
+{
+	consteval LslOnly(Shift ShiftValue)
+	{
+		const bool Valid = ShiftValue == Shift::LSL;
+		assert(Valid);
+	}
+};
 
 } // namespace Cork

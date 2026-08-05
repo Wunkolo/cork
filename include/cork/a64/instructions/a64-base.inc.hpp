@@ -476,6 +476,247 @@ void CLZ(XReg Xd, XReg Xn)
 	Emit<"1101101011000000000100nnnnnddddd", "d", "n">(Xd, Xn);
 }
 
+/// @brief CMN - Compare Negative (extended register) adds a register value and
+/// a sign or zero-extended register value, followed by an optional left shift
+/// amount. The argument that is extended from the <Rm> register can be a byte,
+/// halfword, word, or doubleword. It updates the condition flags based on the
+/// result, and discards the result.
+/// @note CMN_ADDS_32S_addsub_ext
+/// @param Wn Is the 32-bit name of the first source general-purpose register or
+/// stack pointer, encoded in the "Rn" field.
+/// @param Wm Is the 32-bit name of the second general-purpose source register,
+/// encoded in the "Rm" field.
+/// @param extend For the 32-bit variant: is the extension to be applied to the
+/// second source operand.
+/// @param amount Is the left shift amount to be applied after extension in the
+/// range 0 to 4, defaulting to 0, encoded in the "imm3" field. It must be
+/// absent when <extend> is absent, is required when <extend> is LSL, and is
+/// optional when <extend> is present but not LSL.
+void CMN(WRegWsp Wn, WReg Wm, RegisterExtension extend, Imm<3> amount = 0)
+{
+	// TODO: Allow "LSL" as extension argument
+	assert(amount.Value <= 4);
+	Emit<"00101011001mmmmmxxxiiinnnnn11111", "n", "m", "x", "i">(
+		Wn, Wm, extend, amount
+	);
+}
+
+/// @brief CMN - Compare Negative (extended register) adds a register value and
+/// a sign or zero-extended register value, followed by an optional left shift
+/// amount. The argument that is extended from the <Rm> register can be a byte,
+/// halfword, word, or doubleword. It updates the condition flags based on the
+/// result, and discards the result.
+/// @note CMN_ADDS_64S_addsub_ext
+/// @param Xn Is the 64-bit name of the first source general-purpose register or
+/// stack pointer, encoded in the "Rn" field.
+/// @param Rm Is the number [0-30] of the second general-purpose source register
+/// or the name ZR (31), encoded in the "Rm" field.
+/// @param extend For the 64-bit variant: is the extension to be applied to the
+/// second source operand.
+/// @param amount Is the left shift amount to be applied after extension in the
+/// range 0 to 4, defaulting to 0, encoded in the "imm3" field. It must be
+/// absent when <extend> is absent, is required when <extend> is LSL, and is
+/// optional when <extend> is present but not LSL.
+void CMN(XRegSp Xn, RReg Rm, RegisterExtension extend, Imm<3> amount = 0)
+{
+	// TODO: Allow "LSL" as extension argument
+	// TODO: Verify extension with Rm width
+	assert(amount.Value <= 4);
+	Emit<"10101011001mmmmmxxxiiinnnnn11111", "n", "m", "x", "i">(
+		Xn, Rm, extend, amount
+	);
+}
+
+/// @brief CMN - Compare Negative (immediate) adds a register value and an
+/// optionally-shifted immediate value. It updates the condition flags based on
+/// the result, and discards the result.
+/// @note CMN_ADDS_32S_addsub_imm
+/// @param Wn Is the 32-bit name of the source general-purpose register or stack
+/// pointer, encoded in the "Rn" field.
+/// @param imm Is an unsigned immediate, in the range 0 to 4095, encoded in the
+/// "imm12" field.
+/// @param shift Is the optional left shift to apply to the immediate,
+/// defaulting to 0.
+void CMN(WRegWsp Wn, Imm<12> imm, LslOnly, ImmChoice<0, 12> shift = 0)
+{
+	Emit<"001100010siiiiiiiiiiiinnnnn11111", "n", "i", "s">(Wn, imm, shift);
+}
+
+/// @brief CMN - Compare Negative (immediate) adds a register value and an
+/// optionally-shifted immediate value. It updates the condition flags based on
+/// the result, and discards the result.
+/// @note CMN_ADDS_64S_addsub_imm
+/// @param Xn Is the 64-bit name of the source general-purpose register or stack
+/// pointer, encoded in the "Rn" field.
+/// @param imm Is an unsigned immediate, in the range 0 to 4095, encoded in the
+/// "imm12" field.
+/// @param shift Is the optional left shift to apply to the immediate,
+/// defaulting to 0.
+void CMN(XRegSp Xn, Imm<12> imm, LslOnly, ImmChoice<0, 12> shift = 0)
+{
+	Emit<"101100010siiiiiiiiiiiinnnnn11111", "n", "i", "s">(Xn, imm, shift);
+}
+
+/// @brief CMN - Compare Negative (shifted register) adds a register value and
+/// an optionally-shifted register value. It updates the condition flags based
+/// on the result, and discards the result.
+/// @note CMN_ADDS_32_addsub_shift
+/// @param Wn Is the 32-bit name of the first general-purpose source register,
+/// encoded in the "Rn" field.
+/// @param Wm Is the 32-bit name of the second general-purpose source register,
+/// encoded in the "Rm" field.
+/// @param shift Is the optional shift type to be applied to the second source
+/// operand, defaulting to LSL.
+/// @param amount For the 32-bit variant: is the shift amount, in the range 0 to
+/// 31, defaulting to 0 and encoded in the "imm6" field.
+void CMN(WReg Wn, WReg Wm, Shift shift = LSL, Imm<6> amount = 0)
+{
+	assert(amount.Value <= 31);
+	Emit<"00101011ss0mmmmmiiiiiinnnnn11111", "n", "m", "s", "i">(
+		Wn, Wm, shift, amount
+	);
+}
+
+/// @brief CMN - Compare Negative (shifted register) adds a register value and
+/// an optionally-shifted register value. It updates the condition flags based
+/// on the result, and discards the result.
+/// @note CMN_ADDS_64_addsub_shift
+/// @param Xn Is the 64-bit name of the first general-purpose source register,
+/// encoded in the "Rn" field.
+/// @param Xm Is the 64-bit name of the second general-purpose source register,
+/// encoded in the "Rm" field.
+/// @param shift Is the optional shift type to be applied to the second source
+/// operand, defaulting to LSL.
+/// @param amount For the 64-bit variant: is the shift amount, in the range 0 to
+/// 63, defaulting to 0 and encoded in the "imm6" field.
+void CMN(XReg Xn, XReg Xm, Shift shift = LSL, Imm<6> amount = 0)
+{
+	Emit<"10101011ss0mmmmmiiiiiinnnnn11111", "n", "m", "s", "i">(
+		Xn, Xm, shift, amount
+	);
+}
+
+/// @brief CMP - Compare (extended register) subtracts a sign or zero-extended
+/// register value, followed by an optional left shift amount, from a register
+/// value. The argument that is extended from the <Rm> register can be a byte,
+/// halfword, word, or doubleword. It updates the condition flags based on the
+/// result, and discards the result.
+/// @note CMP_SUBS_32S_addsub_ext
+/// @param Wn Is the 32-bit name of the first source general-purpose register or
+/// stack pointer, encoded in the "Rn" field.
+/// @param Wm Is the 32-bit name of the second general-purpose source register,
+/// encoded in the "Rm" field.
+/// @param extend For the 32-bit variant: is the extension to be applied to the
+/// second source operand.
+/// @param amount Is the left shift amount to be applied after extension in the
+/// range 0 to 4, defaulting to 0, encoded in the "imm3" field. It must be
+/// absent when <extend> is absent, is required when <extend> is
+/// LSL, and is optional when <extend> is present but not LSL.
+void CMP(WRegWsp Wn, WReg Wm, RegisterExtension extend, Imm<3> amount = 0)
+{
+	// TODO: Allow "LSL" as extension argument
+	assert(amount.Value <= 4);
+	Emit<"01101011001mmmmmxxxiiinnnnn11111", "n", "m", "x", "i">(
+		Wn, Wm, extend, amount
+	);
+}
+
+/// @brief CMP - Compare (extended register) subtracts a sign or zero-extended
+/// register value, followed by an optional left shift amount, from a register
+/// value. The argument that is extended from the <Rm> register can be a byte,
+/// halfword, word, or doubleword. It updates the condition flags based on the
+/// result, and discards the result.
+/// @note CMP_SUBS_64S_addsub_ext
+/// @param Xn Is the 64-bit name of the first source general-purpose register or
+/// stack pointer, encoded in the "Rn" field.
+/// @param Rm Is the number [0-30] of the second general-purpose source register
+/// or the name ZR (31), encoded in the "Rm" field.
+/// @param extend For the 64-bit variant: is the extension to be applied to the
+/// second source operand.
+/// @param amount Is the left shift amount to be applied after extension in the
+/// range 0 to 4, defaulting to 0, encoded in the "imm3" field. It must be
+/// absent when <extend> is absent, is required when <extend> is
+/// LSL, and is optional when <extend> is present but not LSL.
+void CMP(XRegSp Xn, RReg Rm, RegisterExtension extend, Imm<3> amount = 0)
+{
+	// TODO: Allow "LSL" as extension argument
+	// TODO: Verify extension with Rm width
+	assert(amount.Value <= 4);
+	Emit<"11101011001mmmmmxxxiiinnnnn11111", "n", "m", "x", "i">(
+		Xn, Rm, extend, amount
+	);
+}
+
+/// @brief CMP - Compare (immediate) subtracts an optionally-shifted immediate
+/// value from a register value. It updates the condition flags based on the
+/// result, and discards the result.
+/// @note CMP_SUBS_32S_addsub_imm
+/// @param Wn Is the 32-bit name of the source general-purpose register or stack
+/// pointer, encoded in the "Rn" field.
+/// @param imm Is an unsigned immediate, in the range 0 to 4095, encoded in the
+/// "imm12" field.
+/// @param shift Is the optional left shift to apply to the immediate,
+/// defaulting to 0.
+void CMP(WRegWsp Wn, Imm<12> imm, LslOnly, ImmChoice<0, 12> shift = 0)
+{
+	Emit<"011100010siiiiiiiiiiiinnnnn11111", "n", "i", "s">(Wn, imm, shift);
+}
+
+/// @brief CMP - Compare (immediate) subtracts an optionally-shifted immediate
+/// value from a register value. It updates the condition flags based on the
+/// result, and discards the result.
+/// @note CMP_SUBS_64S_addsub_imm
+/// @param Xn Is the 64-bit name of the source general-purpose register or stack
+/// pointer, encoded in the "Rn" field.
+/// @param imm Is an unsigned immediate, in the range 0 to 4095, encoded in the
+/// "imm12" field.
+/// @param shift Is the optional left shift to apply to the immediate,
+/// defaulting to 0.
+void CMP(XRegSp Xn, Imm<12> imm, LslOnly, ImmChoice<0, 12> shift = 0)
+{
+	Emit<"111100010siiiiiiiiiiiinnnnn11111", "n", "i", "s">(Xn, imm, shift);
+}
+
+/// @brief CMP - Compare (shifted register) subtracts an optionally-shifted
+/// register value from a register value. It updates the condition flags based
+/// on the result, and discards the result.
+/// @note CMP_SUBS_32_addsub_shift
+/// @param Wn Is the 32-bit name of the first general-purpose source register,
+/// encoded in the "Rn" field.
+/// @param Wm Is the 32-bit name of the second general-purpose source register,
+/// encoded in the "Rm" field.
+/// @param shift Is the optional shift type to be applied to the second source
+/// operand, defaulting to LSL.
+/// @param amount For the 32-bit variant: is the shift amount, in the range 0 to
+/// 31, defaulting to 0 and encoded in the "imm6" field.
+void CMP(WReg Wn, WReg Wm, Shift shift = LSL, Imm<6> amount = 0)
+{
+	assert(amount.Value <= 31);
+	Emit<"01101011ss0mmmmmiiiiiinnnnn11111", "n", "m", "s", "i">(
+		Wn, Wm, shift, amount
+	);
+}
+
+/// @brief CMP - Compare (shifted register) subtracts an optionally-shifted
+/// register value from a register value. It updates the condition flags based
+/// on the result, and discards the result.
+/// @note CMP_SUBS_64_addsub_shift
+/// @param Xn Is the 64-bit name of the first general-purpose source register,
+/// encoded in the "Rn" field.
+/// @param Xm Is the 64-bit name of the second general-purpose source register,
+/// encoded in the "Rm" field.
+/// @param shift Is the optional shift type to be applied to the second source
+/// operand, defaulting to LSL.
+/// @param amount For the 64-bit variant: is the shift amount, in the range 0 to
+/// 63, defaulting to 0 and encoded in the "imm6" field.
+void CMP(XReg Xn, XReg Xm, Shift shift = LSL, Imm<6> amount = 0)
+{
+	assert(amount.Value <= 63);
+	Emit<"11101011ss0mmmmmiiiiiinnnnn11111", "n", "m", "s", "i">(
+		Xn, Xm, shift, amount
+	);
+}
+
 /// @brief ERET - Exception Return using the ELR and SPSR for the current
 /// Exception level. When executed, the PE restores PSTATE from the SPSR, and
 /// branches to the address held in the ELR. The PE checks the SPSR for the
