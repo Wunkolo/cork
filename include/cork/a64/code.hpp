@@ -144,6 +144,13 @@ std::uint32_t Encode(Shift Value)
 	return BitExpand<Splat>(static_cast<std::uint32_t>(Value));
 }
 
+template<std::uint32_t Splat>
+std::uint32_t Encode(BarrierOperation Value)
+{
+	static_assert(std::popcount(Splat) == 4);
+	return BitExpand<Splat>(static_cast<std::uint32_t>(Value));
+}
+
 template<std::uint32_t Splat, std::size_t BitWidth, std::size_t Alignment>
 std::uint32_t Encode(Imm<BitWidth, Alignment> Value)
 {

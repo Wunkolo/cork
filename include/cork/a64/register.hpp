@@ -230,6 +230,15 @@ inline constexpr RegisterExtension UXTB{RegisterExtension::UXTB},
 inline constexpr Shift LSL{Shift::LSL}, LSR{Shift::LSR}, ASR{Shift::ASR},
 	ROR{Shift::ROR};
 
+// Barrier Operations
+inline constexpr BarrierOperation SY{BarrierOperation::SY},
+	ST{BarrierOperation::ST}, LD{BarrierOperation::LD},
+	ISH{BarrierOperation::ISH}, ISHST{BarrierOperation::ISHST},
+	ISHLD{BarrierOperation::ISHLD}, NSH{BarrierOperation::NSH},
+	NSHST{BarrierOperation::NSHST}, NSHLD{BarrierOperation::NSHLD},
+	OSH{BarrierOperation::OSH}, OSHST{BarrierOperation::OSHST},
+	OSHLD{BarrierOperation::OSHLD};
+
 // Zero register(32-bit)
 inline constexpr WzrReg WZR{};
 // Zero register(64-bit)

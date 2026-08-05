@@ -1016,6 +1016,15 @@ void DCPS3(Imm<16> imm)
 	Emit<"11010100101iiiiiiiiiiiiiiii00011", "i">(imm);
 }
 
+/// @brief DMB - Data Memory Barrier is a memory barrier that ensures the
+/// ordering of observations of memory accesses.
+/// @note DMB_BO_barriers
+/// @param option Specifies the limitation on the barrier operation
+void DMB(BarrierOperation option)
+{
+	Emit<"11010101000000110011MMMM10111111", "M">(option);
+}
+
 /// @brief DRPS - Debug restore PE state using the SPSR for the current
 /// Exception level. When executed, the PE restores PSTATE from the SPSR. The PE
 /// checks the SPSR for the current Exception level for an illegal return event.

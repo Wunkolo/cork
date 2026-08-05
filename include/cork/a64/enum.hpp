@@ -75,4 +75,49 @@ enum class Shift : std::uint8_t
 	ROR = 0b11,
 };
 
+enum class BarrierOperation : std::uint8_t
+{
+	// Full system is the required shareability domain, reads and writes are the
+	// required access types, both before and after the barrier instruction.
+	// This option is referred to as the full system barrier.
+	SY = 0b1111,
+	// Full system is the required shareability domain, writes are the required
+	// access type, both before and after the barrier instruction.
+	ST = 0b1110,
+	// Full system is the required shareability domain, reads are the required
+	// access type before the barrier instruction, and reads and writes are the
+	// required access types after the barrier instruction.
+	LD = 0b1101,
+	// Inner Shareable is the required shareability domain, reads and writes are
+	// the required access types, both before and after the barrier instruction.
+	ISH = 0b1011,
+	// Inner Shareable is the required shareability domain, writes are the
+	// required access type, both before and after the barrier instruction.
+	ISHST = 0b1010,
+	// Inner Shareable is the required shareability domain, reads are the
+	// required access type before the barrier instruction, and reads and writes
+	// are the required access types after the barrier instruction.
+	ISHLD = 0b1001,
+	// Non-shareable is the required shareability domain, reads and writes are
+	// the required access, both before and after the barrier instruction.
+	NSH = 0b0111,
+	// Non-shareable is the required shareability domain, writes are the
+	// required access type, both before and after the barrier instruction.
+	NSHST = 0b0110,
+	// Non-shareable is the required shareability domain, reads are the required
+	// access type before the barrier instruction, and reads and writes are the
+	// required access types after the barrier instruction.
+	NSHLD = 0b0101,
+	// Outer Shareable is the required shareability domain, reads and writes are
+	// the required access types, both before and after the barrier instruction.
+	OSH = 0b0011,
+	// Outer Shareable is the required shareability domain, writes are the
+	// required access type, both before and after the barrier instruction.
+	OSHST = 0b0010,
+	// Outer Shareable is the required shareability domain, reads are the
+	// required access type before the barrier instruction, and reads and writes
+	// are the required access types after the barrier instruction.
+	OSHLD = 0b0001,
+};
+
 } // namespace Cork
