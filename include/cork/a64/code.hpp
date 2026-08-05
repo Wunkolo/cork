@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cork/a64/enum.hpp>
+#include <cork/a64/immediate.hpp>
 #include <cork/a64/register.hpp>
 
 #include <algorithm>
