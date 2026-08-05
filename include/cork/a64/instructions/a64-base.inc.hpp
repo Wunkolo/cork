@@ -1283,6 +1283,124 @@ void DRPS()
 	Emit<"11010110101111110000001111100000">();
 }
 
+/// @brief EON - Bitwise Exclusive-OR NOT (shifted register) performs a bitwise
+/// exclusive-OR NOT of a register value and an optionally-shifted register
+/// value, and writes the result to the destination register.
+/// @note EON_32_log_shift
+/// @param Wd Is the 32-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Wn Is the 32-bit name of the first general-purpose source register,
+/// encoded in the "Rn" field.
+/// @param Wm Is the 32-bit name of the second general-purpose source register,
+/// encoded in the "Rm" field.
+/// @param shift Is the optional shift to be applied to the final source,
+/// defaulting to LSL.
+/// @param amount For the 32-bit variant: is the shift amount, in the range 0 to
+/// 31, defaulting to 0 and encoded in the "imm6" field.
+void EON(WReg Wd, WReg Wn, WReg Wm, Shift shift = LSL, Imm<5> amount = 0)
+{
+	assert(shift != ROR);
+	Emit<"01001010ss1mmmmmiiiiiinnnnnddddd", "d", "n", "m", "s", "i">(
+		Wd, Wn, Wm, shift, amount
+	);
+}
+
+/// @brief EON - Bitwise Exclusive-OR NOT (shifted register) performs a bitwise
+/// exclusive-OR NOT of a register value and an optionally-shifted register
+/// value, and writes the result to the destination register.
+/// @note EON_64_log_shift
+/// @param Xd Is the 64-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Xn Is the 64-bit name of the first general-purpose source register,
+/// encoded in the "Rn" field.
+/// @param Xm Is the 64-bit name of the second general-purpose source register,
+/// encoded in the "Rm" field.
+/// @param shift Is the optional shift to be applied to the final source,
+/// defaulting to LSL.
+/// @param amount For the 64-bit variant: is the shift amount, in the range 0 to
+/// 63, defaulting to 0 and encoded in the "imm6" field,
+void EON(XReg Xd, XReg Xn, XReg Xm, Shift shift = LSL, Imm<6> amount = 0)
+{
+	assert(shift != ROR);
+	Emit<"11001010ss1mmmmmiiiiiinnnnnddddd", "d", "n", "m", "s", "i">(
+		Xd, Xn, Xm, shift, amount
+	);
+}
+
+/// @brief EOR - Bitwise Exclusive-OR (immediate) performs a bitwise
+/// exclusive-OR of a register value and an immediate value, and writes the
+/// result to the destination register.
+/// @note EOR_32_log_imm
+/// @param Wd Is the 32-bit name of the destination general-purpose register or
+/// stack pointer, encoded in the "Rd" field.
+/// @param Wn Is the 32-bit name of the general-purpose source register, encoded
+/// in the "Rn" field.
+/// @param imm For the 32-bit variant: is the bitmask immediate, encoded in
+/// "imms:immr".
+void EOR(WRegWsp Wd, WReg Wn, BitMask32 imm)
+{
+	Emit<"0101001000rrrrrrssssssnnnnnddddd", "d", "n", "rs">(Wd, Wn, imm);
+}
+
+/// @brief EOR - Bitwise Exclusive-OR (immediate) performs a bitwise
+/// exclusive-OR of a register value and an immediate value, and writes the
+/// result to the destination register.
+/// @note EOR_64_log_imm
+/// @param Xd Is the 64-bit name of the destination general-purpose register or
+/// stack pointer, encoded in the "Rd" field.
+/// @param Xn Is the 64-bit name of the general-purpose source register, encoded
+/// in the "Rn" field.
+/// @param imm For the 64-bit variant: is the bitmask immediate, encoded in
+/// "N:imms:immr".
+void EOR(XRegSp Xd, XReg Xn, BitMask64 imm)
+{
+	Emit<"110100100Nrrrrrrssssssnnnnnddddd", "d", "n", "Nrs">(Xd, Xn, imm);
+}
+
+/// @brief EOR - Bitwise Exclusive-OR (shifted register) performs a bitwise
+/// exclusive-OR of a register value and an optionally-shifted register value,
+/// and writes the result to the destination register.
+/// @note EOR_32_log_shift
+/// @param Wd Is the 32-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Wn Is the 32-bit name of the first general-purpose source register,
+/// encoded in the "Rn" field.
+/// @param Wm Is the 32-bit name of the second general-purpose source register,
+/// encoded in the "Rm" field.
+/// @param shift Is the optional shift to be applied to the final source,
+/// defaulting to LSL and
+/// @param amount For the 32-bit variant: is the shift amount, in the range 0 to
+/// 31, defaulting to 0 and encoded in the "imm6" field.
+void EOR(WReg Wd, WReg Wn, WReg Wm, Shift shift = LSL, Imm<5> amount = 0)
+{
+	assert(shift != ROR);
+	Emit<"01001010ss0mmmmmiiiiiinnnnnddddd", "d", "n", "m", "s", "i">(
+		Wd, Wn, Wm, shift, amount
+	);
+}
+
+/// @brief EOR - Bitwise Exclusive-OR (shifted register) performs a bitwise
+/// exclusive-OR of a register value and an optionally-shifted register value,
+/// and writes the result to the destination register.
+/// @note EOR_64_log_shift
+/// @param Xd Is the 64-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Xn Is the 64-bit name of the first general-purpose source register,
+/// encoded in the "Rn" field.
+/// @param Xm Is the 64-bit name of the second general-purpose source register,
+/// encoded in the "Rm" field.
+/// @param shift Is the optional shift to be applied to the final source,
+/// defaulting to LSL and
+/// @param amount For the 64-bit variant: is the shift amount, in the range 0 to
+/// 63, defaulting to 0 and encoded in the "imm6" field,
+void EOR(XReg Xd, XReg Xn, XReg Xm, Shift shift = LSL, Imm<6> amount = 0)
+{
+	assert(shift != ROR);
+	Emit<"11001010ss0mmmmmiiiiiinnnnnddddd", "d", "n", "m", "s", "i">(
+		Xd, Xn, Xm, shift, amount
+	);
+}
+
 /// @brief ERET - Exception Return using the ELR and SPSR for the current
 /// Exception level. When executed, the PE restores PSTATE from the SPSR, and
 /// branches to the address held in the ELR. The PE checks the SPSR for the
