@@ -301,4 +301,42 @@ struct SImm
 	}
 };
 
+template<std::uint8_t... Choices>
+struct ImmChoice
+{
+private:
+	consteval std::uint8_t FindChoiceIndex(std::uint8_t Choice)
+	{
+		// Ensure this is a valid choice among the options
+		const bool ValidChoice = ((Choice == Choices) || ...);
+		assert(ValidChoice);
+
+		// Get the index of the choice
+		constexpr std::array ChoiceArray = {Choices...};
+		for( std::size_t i = 0; i < sizeof...(Choices); ++i )
+		{
+			if( ChoiceArray[i] == Choice )
+			{
+				return i;
+			}
+		}
+
+		// Unreachable
+		return ~std::uint8_t(0);
+	}
+
+public:
+	const std::uint32_t Value;
+
+	// Number of bits required to encode all choices
+	static constexpr std::size_t BitWidth
+		= std::bit_width(sizeof...(Choices) - 1);
+
+	consteval ImmChoice(std::uint8_t ImmValue)
+		: Value(FindChoiceIndex(ImmValue))
+	{
+	}
+};
+
+
 } // namespace Cork

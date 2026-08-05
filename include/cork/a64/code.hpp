@@ -162,6 +162,16 @@ std::uint32_t Encode(SImm<BitWidth, Alignment> Value)
 	);
 }
 
+template<std::uint32_t Splat, std::uint8_t... Choices>
+std::uint32_t Encode(ImmChoice<Choices...> Value)
+{
+	static_assert(
+		std::popcount(Splat) >= ImmChoice<Choices...>::BitWidth,
+		"Not enough bits to encode choices"
+	);
+	return BitExpand<Splat>(static_cast<std::uint32_t>(Value.Value));
+}
+
 // In general, it's expected that CodeGenerator does not hold onto any state
 // and instead is a re-usable buffer for emitting position-independent code,
 // that is then copied over into actual executable memory.
