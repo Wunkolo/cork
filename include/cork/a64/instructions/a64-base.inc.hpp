@@ -757,6 +757,16 @@ void CNEG(XReg Xd, XReg Xn, Condition cond)
 	);
 }
 
+/// @brief CSDB - Consumption of Speculative Data Barrier is a memory barrier
+/// that controls speculative execution arising from data value prediction. For
+/// more information and details of the semantics, see Consumption of
+/// Speculative Data Barrier (CSDB).
+/// @note CSDB_HI_hints
+void CSDB()
+{
+	Emit<"11010101000000110010001010011111">();
+}
+
 /// @brief ERET - Exception Return using the ELR and SPSR for the current
 /// Exception level. When executed, the PE restores PSTATE from the SPSR, and
 /// branches to the address held in the ELR. The PE checks the SPSR for the
