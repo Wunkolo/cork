@@ -717,6 +717,46 @@ void CMP(XReg Xn, XReg Xm, Shift shift = LSL, Imm<6> amount = 0)
 	);
 }
 
+/// @brief CNEG - Conditional Negate returns, in the destination register, the
+/// negated value of the source register if the condition is TRUE, and otherwise
+/// returns the value of the source register.
+/// @note CNEG_CSNEG_32_condsel
+/// @param Wd Is the 32-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Wn Is the 32-bit name of the general-purpose source register, encoded
+/// in the "Rn" and "Rm" fields.
+/// @param cond Is one of the standard conditions, excluding AL and NV,
+/// encoded with its least significant bit inverted.
+void CNEG(WReg Wd, WReg Wn, Condition cond)
+{
+	assert(cond != Condition::AL);
+	assert(cond != Condition::NV);
+	const Condition invcond = Invert(cond);
+	Emit<"01011010100mmmmmcccc01nnnnnddddd", "d", "n", "m", "c">(
+		Wd, Wn, Wn, invcond
+	);
+}
+
+/// @brief CNEG - Conditional Negate returns, in the destination register, the
+/// negated value of the source register if the condition is TRUE, and otherwise
+/// returns the value of the source register.
+/// @note CNEG_CSNEG_64_condsel
+/// @param Xd Is the 64-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Xn Is the 64-bit name of the general-purpose source register, encoded
+/// in the "Rn" and "Rm" fields.
+/// @param cond Is one of the standard conditions, excluding AL and NV,
+/// encoded with its least significant bit inverted.
+void CNEG(XReg Xd, XReg Xn, Condition cond)
+{
+	assert(cond != Condition::AL);
+	assert(cond != Condition::NV);
+	const Condition invcond = Invert(cond);
+	Emit<"11011010100mmmmmcccc01nnnnnddddd", "d", "n", "m", "c">(
+		Xd, Xn, Xn, invcond
+	);
+}
+
 /// @brief ERET - Exception Return using the ELR and SPSR for the current
 /// Exception level. When executed, the PE restores PSTATE from the SPSR, and
 /// branches to the address held in the ELR. The PE checks the SPSR for the
