@@ -57,6 +57,152 @@ void ADCS(XReg Xd, XReg Xn, XReg Xm)
 	Emit<"10111010000mmmmm000000nnnnnddddd", "d", "n", "m">(Xd, Xn, Xm);
 }
 
+/// @brief AND - Bitwise AND (immediate) performs a bitwise AND of a register
+/// value and an immediate value, and writes the result to the destination
+/// register.
+/// @note AND_32_log_imm
+/// @param Wd Is the 32-bit name of the destination general-purpose register or
+/// stack pointer, encoded in the "Rd" field.
+/// @param Wn Is the 32-bit name of the general-purpose source register, encoded
+/// in the "Rn" field.
+/// @param imm For the 32-bit variant: is the bitmask immediate, encoded in
+/// "imms:immr".
+void AND(WRegWsp Wd, WReg Wn, BitMask32 imm)
+{
+	Emit<"0001001000rrrrrrssssssnnnnnddddd", "d", "n", "rs">(Wd, Wn, imm);
+}
+
+/// @brief AND - Bitwise AND (immediate) performs a bitwise AND of a register
+/// value and an immediate value, and writes the result to the destination
+/// register.
+/// @note AND_64_log_imm
+/// @param Xd Is the 64-bit name of the destination general-purpose register or
+/// stack pointer, encoded in the "Rd" field.
+/// @param Xn Is the 64-bit name of the general-purpose source register, encoded
+/// in the "Rn" field.
+/// @param imm For the 64-bit variant: is the bitmask immediate, encoded in
+/// "N:imms:immr".
+void AND(XRegSp Xd, XReg Xn, BitMask64 imm)
+{
+	Emit<"100100100Nrrrrrrssssssnnnnnddddd", "d", "n", "Nrs">(Xd, Xn, imm);
+}
+
+/// @brief AND - Bitwise AND (shifted register) performs a bitwise AND of a
+/// register value and an optionally-shifted register value, and writes the
+/// result to the destination register.
+/// @note AND_32_log_shift
+/// @param Wd Is the 32-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Wn Is the 32-bit name of the first general-purpose source register,
+/// encoded in the "Rn" field.
+/// @param Wm Is the 32-bit name of the second general-purpose source register,
+/// encoded in the "Rm" field.
+/// @param shift Is the optional shift to be applied to the final source,
+/// defaulting to LSL.
+/// @param amount For the 32-bit variant: is the shift amount, in the range 0 to
+/// 31, defaulting to 0 and encoded in the "imm6" field.
+void AND(WReg Wd, WReg Wn, WReg Wm, Shift shift = LSL, Imm<5> amount = 0)
+{
+	Emit<"00001010ss0mmmmmiiiiiinnnnnddddd", "d", "n", "m", "s", "i">(
+		Wd, Wn, Wm, shift, amount
+	);
+}
+
+/// @brief AND - Bitwise AND (shifted register) performs a bitwise AND of a
+/// register value and an optionally-shifted register value, and writes the
+/// result to the destination register.
+/// @note AND_64_log_shift
+/// @param Xd Is the 64-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Xn Is the 64-bit name of the first general-purpose source register,
+/// encoded in the "Rn" field.
+/// @param Xm Is the 64-bit name of the second general-purpose source register,
+/// encoded in the "Rm" field.
+/// @param shift Is the optional shift to be applied to the final source,
+/// defaulting to LSL.
+/// @param amount For the 64-bit variant: is the shift amount, in the range 0 to
+/// 63, defaulting to 0 and encoded in the "imm6" field,
+void AND(XReg Xd, XReg Xn, XReg Xm, Shift shift = LSL, Imm<6> amount = 0)
+{
+	Emit<"10001010ss0mmmmmiiiiiinnnnnddddd", "d", "n", "m", "s", "i">(
+		Xd, Xn, Xm, shift, amount
+	);
+}
+
+/// @brief ANDS - Bitwise AND (immediate), setting flags, performs a bitwise AND
+/// of a register value and an immediate value, and writes the result to the
+/// destination register. It updates the condition flags based on the result.
+/// @note ANDS_32S_log_imm
+/// @param Wd Is the 32-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Wn Is the 32-bit name of the general-purpose source register, encoded
+/// in the "Rn" field.
+/// @param imm For the 32-bit variant: is the bitmask immediate, encoded in
+/// "imms:immr".
+void ANDS(WReg Wd, WReg Wn, BitMask32 imm)
+{
+	Emit<"0111001000rrrrrrssssssnnnnnddddd", "d", "n", "rs">(Wd, Wn, imm);
+}
+
+/// @brief ANDS - Bitwise AND (immediate), setting flags, performs a bitwise AND
+/// of a register value and an immediate value, and writes the result to the
+/// destination register. It updates the condition flags based on the result.
+/// @note ANDS_64S_log_imm
+/// @param Xd Is the 64-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Xn Is the 64-bit name of the general-purpose source register, encoded
+/// in the "Rn" field.
+/// @param imm For the 64-bit variant: is the bitmask immediate, encoded in
+/// "N:imms:immr".
+void ANDS(XReg Xd, XReg Xn, BitMask64 imm)
+{
+	Emit<"111100100Nrrrrrrssssssnnnnnddddd", "d", "n", "Nrs">(Xd, Xn, imm);
+}
+
+/// @brief ANDS - Bitwise AND (shifted register), setting flags, performs a
+/// bitwise AND of a register value and an optionally-shifted register value,
+/// and writes the result to the destination register. It updates the condition
+/// flags based on the result.
+/// @note ANDS_32_log_shift
+/// @param Wd Is the 32-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Wn Is the 32-bit name of the first general-purpose source register,
+/// encoded in the "Rn" field.
+/// @param Wm Is the 32-bit name of the second general-purpose source register,
+/// encoded in the "Rm" field.
+/// @param shift Is the optional shift to be applied to the final source,
+/// defaulting to LSL.
+/// @param amount For the 32-bit variant: is the shift amount, in the range 0 to
+/// 31, defaulting to 0 and encoded in the "imm6" field.
+void ANDS(WReg Wd, WReg Wn, WReg Wm, Shift shift = LSL, Imm<5> amount = 0)
+{
+	Emit<"01101010ss0mmmmmiiiiiinnnnnddddd", "d", "n", "m", "s", "i">(
+		Wd, Wn, Wm, shift, amount
+	);
+}
+
+/// @brief ANDS - Bitwise AND (shifted register), setting flags, performs a
+/// bitwise AND of a register value and an optionally-shifted register value,
+/// and writes the result to the destination register. It updates the condition
+/// flags based on the result.
+/// @note ANDS_64_log_shift
+/// @param Xd Is the 64-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Xn Is the 64-bit name of the first general-purpose source register,
+/// encoded in the "Rn" field.
+/// @param Xm Is the 64-bit name of the second general-purpose source register,
+/// encoded in the "Rm" field.
+/// @param shift Is the optional shift to be applied to the final source,
+/// defaulting to LSL.
+/// @param amount For the 64-bit variant: is the shift amount, in the range 0 to
+/// 63, defaulting to 0 and encoded in the "imm6" field,
+void ANDS(XReg Xd, XReg Xn, XReg Xm, Shift shift = LSL, Imm<6> amount = 0)
+{
+	Emit<"11101010ss0mmmmmiiiiiinnnnnddddd", "d", "n", "m", "s", "i">(
+		Xd, Xn, Xm, shift, amount
+	);
+}
+
 /// @brief ASR - Arithmetic Shift Right (immediate) shifts a register value
 /// right by an immediate number of bits, shifting in copies of the sign bit in
 /// the upper bits and zeros in the lower bits, and writes the result to the
