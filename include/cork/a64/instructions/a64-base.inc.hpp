@@ -2365,6 +2365,25 @@ void SEVL()
 	Emit<"11010101000000110010000010111111">();
 }
 
+/// @brief SMADDL - Signed Multiply-Add Long multiplies two 32-bit register
+/// values, adds a 64-bit register value, and writes the result to the 64-bit
+/// destination register.
+/// @note SMADDL_64WA_dp_3src
+/// @param Xd Is the 64-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Wn Is the 32-bit name of the first general-purpose source register
+/// holding the multiplicand, encoded in the "Rn" field.
+/// @param Wm Is the 32-bit name of the second general-purpose source register
+/// holding the multiplier, encoded in the "Rm" field.
+/// @param Xa Is the 64-bit name of the third general-purpose source register
+/// holding the addend, encoded in the "Ra" field.
+void SMADDL(XReg Xd, WReg Wn, WReg Wm, XReg Xa)
+{
+	Emit<"10011011001mmmmm0aaaaannnnnddddd", "d", "n", "m", "a">(
+		Xd, Wn, Wm, Xa
+	);
+}
+
 /// @brief SMC - Secure Monitor Call causes an exception to EL3. SMC is
 /// available only for software executing at EL1 or higher. It is UNDEFINED in
 /// EL0. If the values of HCR_EL2.TSC and SCR_EL3.SMD are both 0, execution of
