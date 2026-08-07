@@ -2316,6 +2316,25 @@ void SBCS(XReg Xd, XReg Xn, XReg Xm)
 	Emit<"11111010000mmmmm000000nnnnnddddd", "d", "n", "m">(Xd, Xn, Xm);
 }
 
+/// @brief SEV - Send Event is a hint instruction. It causes an event to be
+/// signaled to all PEs in the multiprocessor system. For more information, see
+/// Wait for Event mechanism and Send event.
+/// @note SEV_HI_hints
+void SEV()
+{
+	Emit<"11010101000000110010000010011111">();
+}
+
+/// @brief SEVL - Send Event Local is a hint instruction that causes an event to
+/// be signaled locally without requiring the event to be signaled to other PEs
+/// in the multiprocessor system. It can prime a wait-loop that starts with a
+/// WFE instruction.
+/// @note SEVL_HI_hints
+void SEVL()
+{
+	Emit<"11010101000000110010000010111111">();
+}
+
 /// @brief SMC - Secure Monitor Call causes an exception to EL3. SMC is
 /// available only for software executing at EL1 or higher. It is UNDEFINED in
 /// EL0. If the values of HCR_EL2.TSC and SCR_EL3.SMD are both 0, execution of
