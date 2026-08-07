@@ -2254,6 +2254,68 @@ void RORV(XReg Xd, XReg Xn, XReg Xm)
 	Emit<"10011010110mmmmm001011nnnnnddddd", "d", "n", "m">(Xd, Xn, Xm);
 }
 
+/// @brief SBC - Subtract with Carry subtracts a register value and the value of
+/// NOT (Carry flag) from a register value, and writes the result to the
+/// destination register.
+/// @note SBC_32_addsub_carry
+/// @param Wd Is the 32-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Wn Is the 32-bit name of the first general-purpose source register,
+/// encoded in the "Rn" field.
+/// @param Wm Is the 32-bit name of the second general-purpose source register,
+/// encoded in the "Rm" field.
+void SBC(WReg Wd, WReg Wn, WReg Wm)
+{
+	Emit<"01011010000mmmmm000000nnnnnddddd", "d", "n", "m">(Wd, Wn, Wm);
+}
+
+/// @brief SBC - Subtract with Carry subtracts a register value and the value of
+/// NOT (Carry flag) from a register value, and writes the result to the
+/// destination register.
+/// @note SBC_64_addsub_carry
+/// @param Xd Is the 64-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Xn Is the 64-bit name of the first general-purpose source register,
+/// encoded in the "Rn" field.
+/// @param Xm Is the 64-bit name of the second general-purpose source register,
+/// encoded in the "Rm" field.
+void SBC(XReg Xd, XReg Xn, XReg Xm)
+{
+	Emit<"11011010000mmmmm000000nnnnnddddd", "d", "n", "m">(Xd, Xn, Xm);
+}
+
+/// @brief SBCS - Subtract with Carry, setting flags, subtracts a register value
+/// and the value of NOT (Carry flag) from a register value, and writes the
+/// result to the destination register. It updates the condition flags based on
+/// the result.
+/// @note SBCS_32_addsub_carry
+/// @param Wd Is the 32-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Wn Is the 32-bit name of the first general-purpose source register,
+/// encoded in the "Rn" field.
+/// @param Wm Is the 32-bit name of the second general-purpose source register,
+/// encoded in the "Rm" field.
+void SBCS(WReg Wd, WReg Wn, WReg Wm)
+{
+	Emit<"01111010000mmmmm000000nnnnnddddd", "d", "n", "m">(Wd, Wn, Wm);
+}
+
+/// @brief SBCS - Subtract with Carry, setting flags, subtracts a register value
+/// and the value of NOT (Carry flag) from a register value, and writes the
+/// result to the destination register. It updates the condition flags based on
+/// the result.
+/// @note SBCS_64_addsub_carry
+/// @param Xd Is the 64-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Xn Is the 64-bit name of the first general-purpose source register,
+/// encoded in the "Rn" field.
+/// @param Xm Is the 64-bit name of the second general-purpose source register,
+/// encoded in the "Rm" field.
+void SBCS(XReg Xd, XReg Xn, XReg Xm)
+{
+	Emit<"11111010000mmmmm000000nnnnnddddd", "d", "n", "m">(Xd, Xn, Xm);
+}
+
 /// @brief SMC - Secure Monitor Call causes an exception to EL3. SMC is
 /// available only for software executing at EL1 or higher. It is UNDEFINED in
 /// EL0. If the values of HCR_EL2.TSC and SCR_EL3.SMD are both 0, execution of
