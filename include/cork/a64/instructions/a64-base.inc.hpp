@@ -798,7 +798,7 @@ void BFXIL(XReg Xd, XReg Xn, Imm<6> lsb, Imm<6> width)
 /// 31, defaulting to 0 and encoded in the "imm6" field.
 void BIC(WReg Wd, WReg Wn, WReg Wm, Shift shift = LSL, Imm<5> amount = 0)
 {
-	assert(shift != ROR);
+	assert(shift != Shift::ROR);
 	Emit<"00001010ss1mmmmmiiiiiinnnnnddddd", "d", "n", "m", "s", "i">(
 		Wd, Wn, Wm, shift, amount
 	);
@@ -820,7 +820,7 @@ void BIC(WReg Wd, WReg Wn, WReg Wm, Shift shift = LSL, Imm<5> amount = 0)
 /// 63, defaulting to 0 and encoded in the "imm6" field,
 void BIC(XReg Xd, XReg Xn, XReg Xm, Shift shift = LSL, Imm<6> amount = 0)
 {
-	assert(shift != ROR);
+	assert(shift != Shift::ROR);
 	Emit<"10001010ss1mmmmmiiiiiinnnnnddddd", "d", "n", "m", "s", "i">(
 		Xd, Xn, Xm, shift, amount
 	);
@@ -843,7 +843,7 @@ void BIC(XReg Xd, XReg Xn, XReg Xm, Shift shift = LSL, Imm<6> amount = 0)
 /// 31, defaulting to 0 and encoded in the "imm6" field.
 void BICS(WReg Wd, WReg Wn, WReg Wm, Shift shift = LSL, Imm<5> amount = 0)
 {
-	assert(shift != ROR);
+	assert(shift != Shift::ROR);
 	Emit<"01101010ss1mmmmmiiiiiinnnnnddddd", "d", "n", "m", "s", "i">(
 		Wd, Wn, Wm, shift, amount
 	);
@@ -866,7 +866,7 @@ void BICS(WReg Wd, WReg Wn, WReg Wm, Shift shift = LSL, Imm<5> amount = 0)
 /// 63, defaulting to 0 and encoded in the "imm6" field,
 void BICS(XReg Xd, XReg Xn, XReg Xm, Shift shift = LSL, Imm<6> amount = 0)
 {
-	assert(shift != ROR);
+	assert(shift != Shift::ROR);
 	Emit<"11101010ss1mmmmmiiiiiinnnnnddddd", "d", "n", "m", "s", "i">(
 		Xd, Xn, Xm, shift, amount
 	);
@@ -1855,7 +1855,7 @@ void DRPS()
 /// 31, defaulting to 0 and encoded in the "imm6" field.
 void EON(WReg Wd, WReg Wn, WReg Wm, Shift shift = LSL, Imm<5> amount = 0)
 {
-	assert(shift != ROR);
+	assert(shift != Shift::ROR);
 	Emit<"01001010ss1mmmmmiiiiiinnnnnddddd", "d", "n", "m", "s", "i">(
 		Wd, Wn, Wm, shift, amount
 	);
@@ -1877,7 +1877,7 @@ void EON(WReg Wd, WReg Wn, WReg Wm, Shift shift = LSL, Imm<5> amount = 0)
 /// 63, defaulting to 0 and encoded in the "imm6" field,
 void EON(XReg Xd, XReg Xn, XReg Xm, Shift shift = LSL, Imm<6> amount = 0)
 {
-	assert(shift != ROR);
+	assert(shift != Shift::ROR);
 	Emit<"11001010ss1mmmmmiiiiiinnnnnddddd", "d", "n", "m", "s", "i">(
 		Xd, Xn, Xm, shift, amount
 	);
@@ -1929,7 +1929,7 @@ void EOR(XRegSp Xd, XReg Xn, BitMask64 imm)
 /// 31, defaulting to 0 and encoded in the "imm6" field.
 void EOR(WReg Wd, WReg Wn, WReg Wm, Shift shift = LSL, Imm<5> amount = 0)
 {
-	assert(shift != ROR);
+	assert(shift != Shift::ROR);
 	Emit<"01001010ss0mmmmmiiiiiinnnnnddddd", "d", "n", "m", "s", "i">(
 		Wd, Wn, Wm, shift, amount
 	);
@@ -1951,7 +1951,7 @@ void EOR(WReg Wd, WReg Wn, WReg Wm, Shift shift = LSL, Imm<5> amount = 0)
 /// 63, defaulting to 0 and encoded in the "imm6" field,
 void EOR(XReg Xd, XReg Xn, XReg Xm, Shift shift = LSL, Imm<6> amount = 0)
 {
-	assert(shift != ROR);
+	assert(shift != Shift::ROR);
 	Emit<"11001010ss0mmmmmiiiiiinnnnnddddd", "d", "n", "m", "s", "i">(
 		Xd, Xn, Xm, shift, amount
 	);
@@ -2142,6 +2142,116 @@ void REV32(XReg Xd, XReg Xn)
 void REV64(XReg Xd, XReg Xn)
 {
 	Emit<"1101101011000000000011nnnnnddddd", "d", "n">(Xd, Xn);
+}
+
+/// @brief ROR - Rotate right (immediate) provides the value of the contents of
+/// a register rotated by a variable number of bits. The bits that are rotated
+/// off the right end are inserted into the vacated bit positions on the left.
+/// @note ROR_EXTR_32_extract
+/// @param Wd Is the 32-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Ws Is the 32-bit name of the general-purpose source register, encoded
+/// in the "Rn" and "Rm" fields.
+/// @param shift For the 32-bit variant: is the amount by which to rotate, in
+/// the range 0 to 31, encoded in the "imms" field.
+void ROR(WReg Wd, WReg Ws, Imm<5> shift)
+{
+	Emit<"00010011100mmmmm0sssssnnnnnddddd", "d", "n", "m", "s">(
+		Wd, Ws, Ws, shift
+	);
+}
+
+/// @brief ROR - Rotate right (immediate) provides the value of the contents of
+/// a register rotated by a variable number of bits. The bits that are rotated
+/// off the right end are inserted into the vacated bit positions on the left.
+/// @note ROR_EXTR_64_extract
+/// @param Xd Is the 64-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Xs Is the 64-bit name of the general-purpose source register, encoded
+/// in the "Rn" and "Rm" fields.
+/// @param shift For the 64-bit variant: is the amount by which to rotate, in
+/// the range 0 to 63, encoded in the "imms" field.
+void ROR(XReg Xd, XReg Xs, Imm<6> shift)
+{
+	Emit<"10010011110mmmmmssssssnnnnnddddd", "d", "n", "m", "s">(
+		Xd, Xs, Xs, shift
+	);
+}
+
+/// @brief ROR - Rotate Right (register) provides the value of the contents of a
+/// register rotated by a variable number of bits. The bits that are rotated off
+/// the right end are inserted into the vacated bit positions on the left. The
+/// remainder obtained by dividing the second source register by the data size
+/// defines the number of bits by which the first source register is
+/// right-shifted.
+/// @note ROR_RORV_32_dp_2src
+/// @param Wd Is the 32-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Wn Is the 32-bit name of the first general-purpose source register,
+/// encoded in the "Rn" field.
+/// @param Wm Is the 32-bit name of the second general-purpose source register
+/// holding a shift amount from 0 to 31 in its bottom 5 bits, encoded in the
+/// "Rm" field.
+void ROR(WReg Wd, WReg Wn, WReg Wm)
+{
+	Emit<"00011010110mmmmm001011nnnnnddddd", "d", "n", "m">(Wd, Wn, Wm);
+}
+
+/// @brief ROR - Rotate Right (register) provides the value of the contents of a
+/// register rotated by a variable number of bits. The bits that are rotated off
+/// the right end are inserted into the vacated bit positions on the left. The
+/// remainder obtained by dividing the second source register by the data size
+/// defines the number of bits by which the first source register is
+/// right-shifted.
+/// @note ROR_RORV_64_dp_2src
+/// @param Xd Is the 64-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Xn Is the 64-bit name of the first general-purpose source register,
+/// encoded in the "Rn" field.
+/// @param Xm Is the 64-bit name of the second general-purpose source register
+/// holding a shift amount from 0 to 63 in its bottom 6 bits, encoded in the
+/// "Rm" field.
+void ROR(XReg Xd, XReg Xn, XReg Xm)
+{
+	Emit<"10011010110mmmmm001011nnnnnddddd", "d", "n", "m">(Xd, Xn, Xm);
+}
+
+/// @brief RORV - Rotate Right Variable provides the value of the contents of a
+/// register rotated by a variable number of bits. The bits that are rotated off
+/// the right end are inserted into the vacated bit positions on the left. The
+/// remainder obtained by dividing the second source register by the data size
+/// defines the number of bits by which the first source register is
+/// right-shifted.
+/// @note RORV_32_dp_2src
+/// @param Wd Is the 32-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Wn Is the 32-bit name of the first general-purpose source register,
+/// encoded in the "Rn" field.
+/// @param Wm Is the 32-bit name of the second general-purpose source register
+/// holding a shift amount from 0 to 31 in its bottom 5 bits, encoded in the
+/// "Rm" field.
+void RORV(WReg Wd, WReg Wn, WReg Wm)
+{
+	Emit<"00011010110mmmmm001011nnnnnddddd", "d", "n", "m">(Wd, Wn, Wm);
+}
+
+/// @brief RORV - Rotate Right Variable provides the value of the contents of a
+/// register rotated by a variable number of bits. The bits that are rotated off
+/// the right end are inserted into the vacated bit positions on the left. The
+/// remainder obtained by dividing the second source register by the data size
+/// defines the number of bits by which the first source register is
+/// right-shifted.
+/// @note RORV_64_dp_2src
+/// @param Xd Is the 64-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Xn Is the 64-bit name of the first general-purpose source register,
+/// encoded in the "Rn" field.
+/// @param Xm Is the 64-bit name of the second general-purpose source register
+/// holding a shift amount from 0 to 63 in its bottom 6 bits, encoded in the
+/// "Rm" field.
+void RORV(XReg Xd, XReg Xn, XReg Xm)
+{
+	Emit<"10011010110mmmmm001011nnnnnddddd", "d", "n", "m">(Xd, Xn, Xm);
 }
 
 /// @brief SMC - Secure Monitor Call causes an exception to EL3. SMC is
