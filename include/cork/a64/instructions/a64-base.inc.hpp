@@ -1682,6 +1682,44 @@ void SXTW(XReg Xd, WReg Wn)
 	Emit<"1001001101000000011111nnnnnddddd", "d", "n">(Xd, Wn);
 }
 
+/// @brief SYS - System instruction.
+/// @note SYS_CR_systeminstrs
+/// @param op1 Is a 3-bit unsigned immediate, in the range 0 to 7, encoded in
+/// the "op1" field.
+/// @param Cn Is a name 'Cn', with 'n' in the range 0 to 15, encoded in the
+/// "CRn" field.
+/// @param Cm Is a name 'Cm', with 'm' in the range 0 to 15, encoded in the
+/// "CRm" field.
+/// @param op2 Is a 3-bit unsigned immediate, in the range 0 to 7, encoded in
+/// the "op2" field.
+/// @param Xt Is the 64-bit name of the optional general-purpose source
+/// register, defaulting to '11111', encoded in the "Rt" field.
+void SYS(Imm<3> op1, Imm<4> Cn, Imm<4> Cm, Imm<3> op2, XReg Xt)
+{
+	Emit<"1101010100001oooNNNNMMMMOOOttttt", "o", "N", "M", "O", "t">(
+		op1, Cn, Cm, op2, Xt
+	);
+}
+
+/// @brief SYSL - System instruction with result.
+/// @note SYSL_RC_systeminstrs
+/// @param Xt Is the 64-bit name of the general-purpose destination register,
+/// encoded in the "Rt" field.
+/// @param op1 Is a 3-bit unsigned immediate, in the range 0 to 7, encoded in
+/// the "op1" field.
+/// @param Cn Is a name 'Cn', with 'n' in the range 0 to 15, encoded in the
+/// "CRn" field.
+/// @param Cm Is a name 'Cm', with 'm' in the range 0 to 15, encoded in the
+/// "CRm" field.
+/// @param op2 Is a 3-bit unsigned immediate, in the range 0 to 7, encoded in
+/// the "op2" field.
+void SYSL(XReg Xt, Imm<3> op1, Imm<4> Cn, Imm<4> Cm, Imm<3> op2)
+{
+	Emit<"1101010100101oooNNNNMMMMOOOttttt", "t", "o", "N", "M", "O">(
+		Xt, op1, Cn, Cm, op2
+	);
+}
+
 /// @brief TBNZ - Test bit and Branch if Nonzero compares the value of a bit in
 /// a general-purpose register with zero, and conditionally branches to a label
 /// at a PC-relative offset if the comparison is not equal. It provides a hint
