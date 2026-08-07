@@ -2316,6 +2316,36 @@ void SBCS(XReg Xd, XReg Xn, XReg Xm)
 	Emit<"11111010000mmmmm000000nnnnnddddd", "d", "n", "m">(Xd, Xn, Xm);
 }
 
+/// @brief SDIV - Signed Divide divides a signed integer register value by
+/// another signed integer register value, and writes the result to the
+/// destination register. The condition flags are not affected.
+/// @note SDIV_32_dp_2src
+/// @param Wd Is the 32-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Wn Is the 32-bit name of the first general-purpose source register,
+/// encoded in the "Rn" field.
+/// @param Wm Is the 32-bit name of the second general-purpose source register,
+/// encoded in the "Rm" field.
+void SDIV(WReg Wd, WReg Wn, WReg Wm)
+{
+	Emit<"00011010110mmmmm000011nnnnnddddd", "d", "n", "m">(Wd, Wn, Wm);
+}
+
+/// @brief SDIV - Signed Divide divides a signed integer register value by
+/// another signed integer register value, and writes the result to the
+/// destination register. The condition flags are not affected.
+/// @note SDIV_64_dp_2src
+/// @param Xd Is the 64-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Xn Is the 64-bit name of the first general-purpose source register,
+/// encoded in the "Rn" field.
+/// @param Xm Is the 64-bit name of the second general-purpose source register,
+/// encoded in the "Rm" field.
+void SDIV(XReg Xd, XReg Xn, XReg Xm)
+{
+	Emit<"10011010110mmmmm000011nnnnnddddd", "d", "n", "m">(Xd, Xn, Xm);
+}
+
 /// @brief SEV - Send Event is a hint instruction. It causes an event to be
 /// signaled to all PEs in the multiprocessor system. For more information, see
 /// Wait for Event mechanism and Send event.
