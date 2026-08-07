@@ -18,12 +18,12 @@ struct Imm
 		"Alignment must be a positive power of two"
 	);
 
-	static constexpr std::uint32_t AlignmentMask = Alignment - 1;
-	static constexpr std::uint32_t AlignmentBits = std::popcount(AlignmentMask);
-	static constexpr std::uint32_t Mask          = (1 << BitSize) - 1;
-	const std::uint32_t            Value;
+	static constexpr std::uint64_t AlignmentMask = Alignment - 1;
+	static constexpr std::uint64_t AlignmentBits = std::popcount(AlignmentMask);
+	static constexpr std::uint64_t Mask          = (1 << BitSize) - 1;
+	const std::uint64_t            Value;
 
-	constexpr Imm(std::uint32_t ImmValue) : Value(ImmValue)
+	constexpr Imm(std::uint64_t ImmValue) : Value(ImmValue)
 	{
 		// Ensure value can be encoded, maybe do this at encode-time and not in
 		// the ctor?
@@ -45,22 +45,22 @@ struct SImm
 		"Alignment must be positive power of two"
 	);
 
-	static constexpr std::uint32_t AlignmentMask = Alignment - 1;
-	static constexpr std::uint32_t AlignmentBits = std::popcount(AlignmentMask);
-	static constexpr std::uint32_t Mask          = (1 << BitSize) - 1;
-	const std::int32_t             Value;
+	static constexpr std::uint64_t AlignmentMask = Alignment - 1;
+	static constexpr std::uint64_t AlignmentBits = std::popcount(AlignmentMask);
+	static constexpr std::uint64_t Mask          = (1 << BitSize) - 1;
+	const std::int64_t             Value;
 
-	constexpr SImm(std::int32_t ImmValue) : Value(ImmValue)
+	constexpr SImm(std::int64_t ImmValue) : Value(ImmValue)
 	{
 		const struct
 		{
-			std::int32_t i32 : (BitSize + AlignmentBits);
-		} SignExtended{.i32 = ImmValue};
-		static_assert(sizeof(SignExtended) == sizeof(std::uint32_t));
+			std::int64_t i64 : (BitSize + AlignmentBits);
+		} SignExtended{.i64 = ImmValue};
+		static_assert(sizeof(SignExtended) == sizeof(std::uint64_t));
 		// Ensure value can be encoded, maybe do this at encode-time and not in
 		// the ctor?
 		assert(
-			static_cast<std::uint32_t>(SignExtended.i32)
+			static_cast<std::uint32_t>(SignExtended.i64)
 			== static_cast<std::uint32_t>(ImmValue)
 		);
 
