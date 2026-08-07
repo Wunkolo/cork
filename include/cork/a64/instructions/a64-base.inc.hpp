@@ -1682,6 +1682,43 @@ void SXTW(XReg Xd, WReg Wn)
 	Emit<"1001001101000000011111nnnnnddddd", "d", "n">(Xd, Wn);
 }
 
+/// @brief TBNZ - Test bit and Branch if Nonzero compares the value of a bit in
+/// a general-purpose register with zero, and conditionally branches to a label
+/// at a PC-relative offset if the comparison is not equal. It provides a hint
+/// that this is not a subroutine call or return. This instruction does not
+/// affect condition flags.
+/// @note TBNZ_only_testbranch
+/// @param Rt Is the number [0-30] of the general-purpose register to be tested
+/// or the name ZR (31), encoded in the "Rt" field.
+/// @param imm Is the bit number to be tested, in the range 0 to 63, encoded in
+/// "b5:b40".
+/// @param label Is the program label to be conditionally branched to. Its
+/// offset from the address of this instruction, in the range +/-32KB, is
+/// encoded as "imm14" times 4.
+void TBNZ(RReg Rt, Imm<6> imm, SImm<14, 4> label)
+{
+	assert(imm.Value < RegisterBits(Rt.Width));
+	Emit<"b0110111bbbbbiiiiiiiiiiiiiittttt", "t", "b", "i">(Rt, imm, label);
+}
+
+/// @brief TBZ - Test bit and Branch if Zero compares the value of a test bit
+/// with zero, and conditionally branches to a label at a PC-relative offset if
+/// the comparison is equal. It provides a hint that this is not a subroutine
+/// call or return. This instruction does not affect condition flags.
+/// @note TBZ_only_testbranch
+/// @param Rt Is the number [0-30] of the general-purpose register to be tested
+/// or the name ZR (31), encoded in the "Rt" field.
+/// @param imm Is the bit number to be tested, in the range 0 to 63, encoded in
+/// "b5:b40".
+/// @param label Is the program label to be conditionally branched to. Its
+/// offset from the address of this instruction, in the range +/-32KB, is
+/// encoded as "imm14" times 4.
+void TBZ(RReg Rt, Imm<6> imm, SImm<14, 4> label)
+{
+	assert(imm.Value < RegisterBits(Rt.Width));
+	Emit<"b0110110bbbbbiiiiiiiiiiiiiittttt", "t", "b", "i">(Rt, imm, label);
+}
+
 /// @brief TST - Test bits (immediate), setting the condition flags and
 /// discarding the result.
 /// @note TST_ANDS_32S_log_imm
