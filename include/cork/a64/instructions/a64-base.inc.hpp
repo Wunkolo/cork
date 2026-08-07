@@ -57,6 +57,110 @@ void ADCS(XReg Xd, XReg Xn, XReg Xm)
 	Emit<"10111010000mmmmm000000nnnnnddddd", "d", "n", "m">(Xd, Xn, Xm);
 }
 
+/// @brief ASR - Arithmetic Shift Right (immediate) shifts a register value
+/// right by an immediate number of bits, shifting in copies of the sign bit in
+/// the upper bits and zeros in the lower bits, and writes the result to the
+/// destination register.
+/// @note ASR_SBFM_32M_bitfield
+/// @param Wd Is the 32-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Wn Is the 32-bit name of the general-purpose source register, encoded
+/// in the "Rn" field.
+/// @param shift For the 32-bit variant: is the shift amount, in the range 0 to
+/// 31, encoded in the "immr" field.
+void ASR(WReg Wd, WReg Wn, Imm<5> shift)
+{
+	Emit<"0001001100rrrrrr011111nnnnnddddd", "d", "n", "r">(Wd, Wn, shift);
+}
+
+/// @brief ASR - Arithmetic Shift Right (immediate) shifts a register value
+/// right by an immediate number of bits, shifting in copies of the sign bit in
+/// the upper bits and zeros in the lower bits, and writes the result to the
+/// destination register.
+/// @note ASR_SBFM_64M_bitfield
+/// @param Xd Is the 64-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Xn Is the 64-bit name of the general-purpose source register, encoded
+/// in the "Rn" field.
+/// @param shift For the 64-bit variant: is the shift amount, in the range 0 to
+/// 63, encoded in the "immr" field.
+void ASR(XReg Xd, XReg Xn, Imm<6> shift)
+{
+	Emit<"1001001101rrrrrr111111nnnnnddddd", "d", "n", "r">(Xd, Xn, shift);
+}
+
+/// @brief ASR - Arithmetic Shift Right (register) shifts a register value right
+/// by a variable number of bits, shifting in copies of its sign bit, and writes
+/// the result to the destination register. The remainder obtained by dividing
+/// the second source register by the data size defines the number of bits by
+/// which the first source register is right-shifted.
+/// @note ASR_ASRV_32_dp_2src
+/// @param Wd Is the 32-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Wn Is the 32-bit name of the first general-purpose source register,
+/// encoded in the "Rn" field.
+/// @param Wm Is the 32-bit name of the second general-purpose source register
+/// holding a shift amount from 0 to 31 in its bottom 5 bits, encoded in the
+/// "Rm" field.
+void ASR(WReg Wd, WReg Wn, WReg Wm)
+{
+	Emit<"00011010110mmmmm001010nnnnnddddd", "d", "n", "m">(Wd, Wn, Wm);
+}
+
+/// @brief ASR - Arithmetic Shift Right (register) shifts a register value right
+/// by a variable number of bits, shifting in copies of its sign bit, and writes
+/// the result to the destination register. The remainder obtained by dividing
+/// the second source register by the data size defines the number of bits by
+/// which the first source register is right-shifted.
+/// @note ASR_ASRV_64_dp_2src
+/// @param Xd Is the 64-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Xn Is the 64-bit name of the first general-purpose source register,
+/// encoded in the "Rn" field.
+/// @param Xm Is the 64-bit name of the second general-purpose source register
+/// holding a shift amount from 0 to 63 in its bottom 6 bits, encoded in the
+/// "Rm" field.
+void ASR(XReg Xd, XReg Xn, XReg Xm)
+{
+	Emit<"10011010110mmmmm001010nnnnnddddd", "d", "n", "m">(Xd, Xn, Xm);
+}
+
+/// @brief ASRV - Arithmetic Shift Right Variable shifts a register value right
+/// by a variable number of bits, shifting in copies of its sign bit, and writes
+/// the result to the destination register. The remainder obtained by dividing
+/// the second source register by the data size defines the number of bits by
+/// which the first source register is right-shifted.
+/// @note ASRV_32_dp_2src
+/// @param Wd Is the 32-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Wn Is the 32-bit name of the first general-purpose source register,
+/// encoded in the "Rn" field.
+/// @param Wm Is the 32-bit name of the second general-purpose source register
+/// holding a shift amount from 0 to 31 in its bottom 5 bits, encoded in the
+/// "Rm" field.
+void ASRV(WReg Wd, WReg Wn, WReg Wm)
+{
+	Emit<"00011010110mmmmm001010nnnnnddddd", "d", "n", "m">(Wd, Wn, Wm);
+}
+
+/// @brief ASRV - Arithmetic Shift Right Variable shifts a register value right
+/// by a variable number of bits, shifting in copies of its sign bit, and writes
+/// the result to the destination register. The remainder obtained by dividing
+/// the second source register by the data size defines the number of bits by
+/// which the first source register is right-shifted.
+/// @note ASRV_64_dp_2src
+/// @param Xd Is the 64-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Xn Is the 64-bit name of the first general-purpose source register,
+/// encoded in the "Rn" field.
+/// @param Xm Is the 64-bit name of the second general-purpose source register
+/// holding a shift amount from 0 to 63 in its bottom 6 bits, encoded in the
+/// "Rm" field.
+void ASRV(XReg Xd, XReg Xn, XReg Xm)
+{
+	Emit<"10011010110mmmmm001010nnnnnddddd", "d", "n", "m">(Xd, Xn, Xm);
+}
+
 /// @brief B - Branch causes an unconditional branch to a label at a PC-relative
 /// offset, with a hint that this is not a subroutine call or return.
 /// @note B_only_branch_imm
