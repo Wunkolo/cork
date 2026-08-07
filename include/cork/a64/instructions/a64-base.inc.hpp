@@ -57,6 +57,35 @@ void ADCS(XReg Xd, XReg Xn, XReg Xm)
 	Emit<"10111010000mmmmm000000nnnnnddddd", "d", "n", "m">(Xd, Xn, Xm);
 }
 
+/// @brief ADR - Form PC-relative address adds an immediate value to the PC
+/// value to form a PC-relative address, and writes the result to the
+/// destination register.
+/// @note ADR_only_pcreladdr
+/// @param Xd Is the 64-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param label Is the program label whose address is to be calculated. Its
+/// offset from the address of this instruction, in the range +/-1MB, is encoded
+/// in "immhi:immlo".
+void ADR(XReg Xd, SImm<21> label)
+{
+	Emit<"0ii10000iiiiiiiiiiiiiiiiiiiddddd", "d", "i">(Xd, label.AdrOffset());
+}
+
+/// @brief ADRP - Form PC-relative address to 4KB page adds an immediate value
+/// that is shifted left by 12 bits, to the PC value to form a PC-relative
+/// address, with the bottom 12 bits masked out, and writes the result to the
+/// destination register.
+/// @note ADRP_only_pcreladdr
+/// @param Xd Is the 64-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param label Is the program label whose 4KB page address is to be
+/// calculated. Its offset from the page address of this instruction, in the
+/// range +/-4GB, is encoded as "immhi:immlo" times 4096.
+void ADRP(XReg Xd, SImm<21, 4096> label)
+{
+	Emit<"1ii10000iiiiiiiiiiiiiiiiiiiddddd", "d", "i">(Xd, label.AdrOffset());
+}
+
 /// @brief AND - Bitwise AND (immediate) performs a bitwise AND of a register
 /// value and an immediate value, and writes the result to the destination
 /// register.

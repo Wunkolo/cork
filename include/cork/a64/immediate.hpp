@@ -70,6 +70,17 @@ struct SImm
 			assert((ImmValue & AlignmentMask) == 0);
 		}
 	}
+
+	// Removes alignment bits and rotates bits to the right by 2 for encoding
+	// into `ADR{P,}` instructions
+	constexpr std::uint32_t AdrOffset() const
+	{
+		constexpr std::uint64_t Rotate   = 2;
+		const std::uint64_t     Packed   = (Value >> AlignmentBits) & Mask;
+		const std::uint64_t     NewUpper = (Packed) & ((1 << Rotate) - 1);
+		const std::uint64_t     NewLower = (Packed) >> Rotate;
+		return (NewUpper << (21 - Rotate)) | NewLower;
+	}
 };
 
 template<std::uint8_t... Choices>
