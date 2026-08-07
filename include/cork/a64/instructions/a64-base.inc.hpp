@@ -57,6 +57,283 @@ void ADCS(XReg Xd, XReg Xn, XReg Xm)
 	Emit<"10111010000mmmmm000000nnnnnddddd", "d", "n", "m">(Xd, Xn, Xm);
 }
 
+/// @brief ADD - Add (extended register) adds a register value and a sign or
+/// zero-extended register value, followed by an optional left shift amount, and
+/// writes the result to the destination register. The argument that is extended
+/// from the <Rm> register can be a byte, halfword, word, or doubleword.
+/// @note ADD_32_addsub_ext
+/// @param Wd Is the 32-bit name of the destination general-purpose register or
+/// stack pointer, encoded in the "Rd" field.
+/// @param Wn Is the 32-bit name of the first source general-purpose register or
+/// stack pointer, encoded in the "Rn" field.
+/// @param Wm Is the 32-bit name of the second general-purpose source register,
+/// encoded in the "Rm" field.
+/// @param extend For the 32-bit variant: is the extension to be applied to the
+/// second source operand.
+/// @param amount Is the left shift amount to be applied after extension in the
+/// range 0 to 4, defaulting to 0, encoded in the "imm3" field. It must be
+/// absent when <extend> is absent, is required when <extend> is
+/// LSL, and is optional when <extend> is present but not LSL.
+void ADD(
+	WRegWsp Wd, WRegWsp Wn, WReg Wm, RegisterExtension extend, Imm<3> amount = 0
+)
+{
+	// TODO: Allow "LSL" as extension argument
+	assert(amount.Value <= 4);
+	Emit<"00001011001mmmmmxxxiiinnnnnddddd", "d", "n", "m", "x", "i">(
+		Wd, Wn, Wm, extend, amount
+	);
+}
+
+/// @brief ADD - Add (extended register) adds a register value and a sign or
+/// zero-extended register value, followed by an optional left shift amount, and
+/// writes the result to the destination register. The argument that is extended
+/// from the <Rm> register can be a byte, halfword, word, or doubleword.
+/// @note ADD_64_addsub_ext
+/// @param Xd Is the 64-bit name of the destination general-purpose register or
+/// stack pointer, encoded in the "Rd" field.
+/// @param Xn Is the 64-bit name of the first source general-purpose register or
+/// stack pointer, encoded in the "Rn" field.
+/// @param Rm Is the number [0-30] of the second general-purpose source register
+/// or the name ZR (31), encoded in the "Rm" field.
+/// @param extend For the 64-bit variant: is the extension to be applied to the
+/// second source operand.
+/// @param amount Is the left shift amount to be applied after extension in the
+/// range 0 to 4, defaulting to 0, encoded in the "imm3" field. It must be
+/// absent when <extend> is absent, is required when <extend> is
+/// LSL, and is optional when <extend> is present but not LSL.
+void ADD(
+	XRegSp Xd, XRegSp Xn, RReg Rm, RegisterExtension extend, Imm<3> amount = 0
+)
+{
+	// TODO: Allow "LSL" as extension argument
+	assert(amount.Value <= 4);
+	Emit<"10001011001mmmmmxxxiiinnnnnddddd", "d", "n", "m", "x", "i">(
+		Xd, Xn, Rm, extend, amount
+	);
+}
+
+/// @brief ADD - Add (immediate) adds a register value and an optionally-shifted
+/// immediate value, and writes the result to the destination register.
+/// @note ADD_32_addsub_imm
+/// @param Wd Is the 32-bit name of the destination general-purpose register or
+/// stack pointer, encoded in the "Rd" field.
+/// @param Wn Is the 32-bit name of the source general-purpose register or stack
+/// pointer, encoded in the "Rn" field.
+/// @param imm Is an unsigned immediate, in the range 0 to 4095, encoded in the
+/// "imm12" field.
+/// @param shift Is the optional left shift to apply to the immediate,
+/// defaulting to LSL #0.
+void ADD(
+	WRegWsp Wd, WRegWsp Wn, Imm<12> imm, LslOnly = LSL,
+	ImmChoice<0, 12> shift = 0
+)
+{
+	Emit<"000100010siiiiiiiiiiiinnnnnddddd", "d", "n", "i", "s">(
+		Wd, Wn, imm, shift
+	);
+}
+
+/// @brief ADD - Add (immediate) adds a register value and an optionally-shifted
+/// immediate value, and writes the result to the destination register.
+/// @note ADD_64_addsub_imm
+/// @param Xd Is the 64-bit name of the destination general-purpose register or
+/// stack pointer, encoded in the "Rd" field.
+/// @param Xn Is the 64-bit name of the source general-purpose register or stack
+/// pointer, encoded in the "Rn" field.
+/// @param imm Is an unsigned immediate, in the range 0 to 4095, encoded in the
+/// "imm12" field.
+/// @param shift Is the optional left shift to apply to the immediate,
+/// defaulting to 0.
+void ADD(
+	XRegSp Xd, XRegSp Xn, Imm<12> imm, LslOnly = LSL, ImmChoice<0, 12> shift = 0
+)
+{
+	Emit<"100100010siiiiiiiiiiiinnnnnddddd", "d", "n", "i", "s">(
+		Xd, Xn, imm, shift
+	);
+}
+
+/// @brief ADD - Add (shifted register) adds a register value and an
+/// optionally-shifted register value, and writes the result to the destination
+/// register.
+/// @note ADD_32_addsub_shift
+/// @param Wd Is the 32-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Wn Is the 32-bit name of the first general-purpose source register,
+/// encoded in the "Rn" field.
+/// @param Wm Is the 32-bit name of the second general-purpose source register,
+/// encoded in the "Rm" field.
+/// @param shift Is the optional shift type to be applied to the second source
+/// operand, defaulting to LSL.
+/// @param amount For the 32-bit variant: is the shift amount, in the range 0 to
+/// 31, defaulting to 0 and encoded in the "imm6" field.
+void ADD(WReg Wd, WReg Wn, WReg Wm, Shift shift = LSL, Imm<5> amount = 0)
+{
+	Emit<"00001011ss0mmmmmiiiiiinnnnnddddd", "d", "n", "m", "s", "i">(
+		Wd, Wn, Wm, shift, amount
+	);
+}
+
+/// @brief ADD - Add (shifted register) adds a register value and an
+/// optionally-shifted register value, and writes the result to the destination
+/// register.
+/// @note ADD_64_addsub_shift
+/// @param Xd Is the 64-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Xn Is the 64-bit name of the first general-purpose source register,
+/// encoded in the "Rn" field.
+/// @param Xm Is the 64-bit name of the second general-purpose source register,
+/// encoded in the "Rm" field.
+/// @param shift Is the optional shift type to be applied to the second source
+/// operand, defaulting to LSL.
+/// @param amount For the 64-bit variant: is the shift amount, in the range 0 to
+/// 63, defaulting to 0 and encoded in the "imm6" field.
+void ADD(XReg Xd, XReg Xn, XReg Xm, Shift shift = LSL, Imm<6> amount = 0)
+{
+	Emit<"10001011ss0mmmmmiiiiiinnnnnddddd", "d", "n", "m", "s", "i">(
+		Xd, Xn, Xm, shift, amount
+	);
+}
+
+/// @brief ADDS - Add (extended register), setting flags, adds a register value
+/// and a sign or zero-extended register value, followed by an optional left
+/// shift amount, and writes the result to the destination register. The
+/// argument that is extended from the <Rm> register can be a byte, halfword,
+/// word, or doubleword. It updates the condition flags based on the result.
+/// @note ADDS_32S_addsub_ext
+/// @param Wd Is the 32-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Wn Is the 32-bit name of the first source general-purpose register or
+/// stack pointer, encoded in the "Rn" field.
+/// @param Wm Is the 32-bit name of the second general-purpose source register,
+/// encoded in the "Rm" field.
+/// @param extend For the 32-bit variant: is the extension to be applied to the
+/// second source operand.
+/// @param amount Is the left shift amount to be applied after extension in the
+/// range 0 to 4, defaulting to 0, encoded in the "imm3" field. It must be
+/// absent when <extend> is absent, is required when <extend> is
+/// LSL, and is optional when <extend> is present but not LSL.
+void ADDS(
+	WReg Wd, WRegWsp Wn, WReg Wm, RegisterExtension extend, Imm<3> amount = 0
+)
+{
+	// TODO: Allow "LSL" as extension argument
+	assert(amount.Value <= 4);
+	Emit<"00101011001mmmmmxxxiiinnnnnddddd", "d", "n", "m", "x", "i">(
+		Wd, Wn, Wm, extend, amount
+	);
+}
+
+/// @brief ADDS - Add (extended register), setting flags, adds a register value
+/// and a sign or zero-extended register value, followed by an optional left
+/// shift amount, and writes the result to the destination register. The
+/// argument that is extended from the <Rm> register can be a byte, halfword,
+/// word, or doubleword. It updates the condition flags based on the result.
+/// @note ADDS_64S_addsub_ext
+/// @param Xd Is the 64-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Xn Is the 64-bit name of the first source general-purpose register or
+/// stack pointer, encoded in the "Rn" field.
+/// @param Rm Is the number [0-30] of the second general-purpose source register
+/// or the name ZR (31), encoded in the "Rm" field.
+/// @param extend For the 64-bit variant: is the extension to be applied to the
+/// second source operand.
+/// @param amount Is the left shift amount to be applied after extension in the
+/// range 0 to 4, defaulting to 0, encoded in the "imm3" field. It must be
+/// absent when <extend> is absent, is required when <extend> is
+/// LSL, and is optional when <extend> is present but not LSL.
+void ADDS(
+	XReg Xd, XRegSp Xn, RReg Rm, RegisterExtension extend, Imm<3> amount = 0
+)
+{
+	// TODO: Allow "LSL" as extension argument
+	assert(amount.Value <= 4);
+	Emit<"10101011001mmmmmxxxiiinnnnnddddd", "d", "n", "m", "x", "i">(
+		Xd, Xn, Rm, extend, amount
+	);
+}
+
+/// @brief ADDS - Add (immediate), setting flags, adds a register value and an
+/// optionally-shifted immediate value, and writes the result to the destination
+/// register. It updates the condition flags based on the result.
+/// @note ADDS_32S_addsub_imm
+/// @param Wd Is the 32-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Wn Is the 32-bit name of the source general-purpose register or stack
+/// pointer, encoded in the "Rn" field.
+/// @param imm Is an unsigned immediate, in the range 0 to 4095, encoded in the
+/// "imm12" field.
+/// @param shift Is the optional left shift to apply to the immediate,
+/// defaulting to 0.
+void ADDS(WReg Wd, WRegWsp Wn, Imm<12> imm, LslOnly, ImmChoice<0, 12> shift = 0)
+{
+	Emit<"001100010siiiiiiiiiiiinnnnnddddd", "d", "n", "i", "s">(
+		Wd, Wn, imm, shift
+	);
+}
+
+/// @brief ADDS - Add (immediate), setting flags, adds a register value and an
+/// optionally-shifted immediate value, and writes the result to the destination
+/// register. It updates the condition flags based on the result.
+/// @note ADDS_64S_addsub_imm
+/// @param Xd Is the 64-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Xn Is the 64-bit name of the source general-purpose register or stack
+/// pointer, encoded in the "Rn" field.
+/// @param imm Is an unsigned immediate, in the range 0 to 4095, encoded in the
+/// "imm12" field.
+/// @param shift Is the optional left shift to apply to the immediate,
+/// defaulting to 0.
+void ADDS(XReg Xd, XRegSp Xn, Imm<12> imm, LslOnly, ImmChoice<0, 12> shift = 0)
+{
+	Emit<"101100010siiiiiiiiiiiinnnnnddddd", "d", "n", "i", "s">(
+		Xd, Xn, imm, shift
+	);
+}
+
+/// @brief ADDS - Add (shifted register), setting flags, adds a register value
+/// and an optionally-shifted register value, and writes the result to the
+/// destination register. It updates the condition flags based on the result.
+/// @note ADDS_32_addsub_shift
+/// @param Wd Is the 32-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Wn Is the 32-bit name of the first general-purpose source register,
+/// encoded in the "Rn" field.
+/// @param Wm Is the 32-bit name of the second general-purpose source register,
+/// encoded in the "Rm" field.
+/// @param shift Is the optional shift type to be applied to the second source
+/// operand, defaulting to LSL.
+/// @param amount For the 32-bit variant: is the shift amount, in the range 0 to
+/// 31, defaulting to 0 and encoded in the "imm6" field.
+void ADDS(WReg Wd, WReg Wn, WReg Wm, Shift shift = LSL, Imm<5> amount = 0)
+{
+	Emit<"00101011ss0mmmmmiiiiiinnnnnddddd", "d", "n", "m", "s", "i">(
+		Wd, Wn, Wm, shift, amount
+	);
+}
+
+/// @brief ADDS - Add (shifted register), setting flags, adds a register value
+/// and an optionally-shifted register value, and writes the result to the
+/// destination register. It updates the condition flags based on the result.
+/// @note ADDS_64_addsub_shift
+/// @param Xd Is the 64-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Xn Is the 64-bit name of the first general-purpose source register,
+/// encoded in the "Rn" field.
+/// @param Xm Is the 64-bit name of the second general-purpose source register,
+/// encoded in the "Rm" field.
+/// @param shift Is the optional shift type to be applied to the second source
+/// operand, defaulting to LSL.
+/// @param amount For the 64-bit variant: is the shift amount, in the range 0 to
+/// 63, defaulting to 0 and encoded in the "imm6" field.
+void ADDS(XReg Xd, XReg Xn, XReg Xm, Shift shift = LSL, Imm<6> amount = 0)
+{
+	Emit<"10101011ss0mmmmmiiiiiinnnnnddddd", "d", "n", "m", "s", "i">(
+		Xd, Xn, Xm, shift, amount
+	);
+}
+
 /// @brief ADR - Form PC-relative address adds an immediate value to the PC
 /// value to form a PC-relative address, and writes the result to the
 /// destination register.
@@ -1647,7 +1924,7 @@ void EOR(XRegSp Xd, XReg Xn, BitMask64 imm)
 /// @param Wm Is the 32-bit name of the second general-purpose source register,
 /// encoded in the "Rm" field.
 /// @param shift Is the optional shift to be applied to the final source,
-/// defaulting to LSL and
+/// defaulting to LSL.
 /// @param amount For the 32-bit variant: is the shift amount, in the range 0 to
 /// 31, defaulting to 0 and encoded in the "imm6" field.
 void EOR(WReg Wd, WReg Wn, WReg Wm, Shift shift = LSL, Imm<5> amount = 0)
@@ -1669,7 +1946,7 @@ void EOR(WReg Wd, WReg Wn, WReg Wm, Shift shift = LSL, Imm<5> amount = 0)
 /// @param Xm Is the 64-bit name of the second general-purpose source register,
 /// encoded in the "Rm" field.
 /// @param shift Is the optional shift to be applied to the final source,
-/// defaulting to LSL and
+/// defaulting to LSL.
 /// @param amount For the 64-bit variant: is the shift amount, in the range 0 to
 /// 63, defaulting to 0 and encoded in the "imm6" field,
 void EOR(XReg Xd, XReg Xn, XReg Xm, Shift shift = LSL, Imm<6> amount = 0)
