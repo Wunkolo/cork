@@ -2316,6 +2316,160 @@ void SBCS(XReg Xd, XReg Xn, XReg Xm)
 	Emit<"11111010000mmmmm000000nnnnnddddd", "d", "n", "m">(Xd, Xn, Xm);
 }
 
+/// @brief SBFIZ - Signed Bitfield Insert in Zeros copies a bitfield of <width>
+/// bits from the least significant bits of the source register to bit position
+/// <lsb> of the destination register, setting the destination bits below the
+/// bitfield to zero, and the bits above the bitfield to a copy of the most
+/// significant bit of the bitfield.
+/// @note SBFIZ_SBFM_32M_bitfield
+/// @param Wd Is the 32-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Wn Is the 32-bit name of the general-purpose source register, encoded
+/// in the "Rn" field.
+/// @param lsb For the 32-bit variant: is the bit number of the lsb of the
+/// destination bitfield, in the range 0 to 31.
+/// @param width For the 32-bit variant: is the width of the bitfield, in the
+/// range 1 to 32-<lsb>.
+void SBFIZ(WReg Wd, WReg Wn, Imm<5> lsb, Imm<5> width)
+{
+	assert(width.Value > 0);
+	assert(width.Value <= (32 - lsb.Value));
+	// This is just an alias for SBFM
+	const std::uint32_t immr = (~lsb.Value + 1) & 31;
+	const std::uint32_t imms = width.Value - 1;
+	Emit<"0001001100rrrrrrssssssnnnnnddddd", "d", "n", "r", "s">(
+		Wd, Wn, immr, imms
+	);
+}
+
+/// @brief SBFIZ - Signed Bitfield Insert in Zeros copies a bitfield of <width>
+/// bits from the least significant bits of the source register to bit position
+/// <lsb> of the destination register, setting the destination bits below the
+/// bitfield to zero, and the bits above the bitfield to a copy of the most
+/// significant bit of the bitfield.
+/// @note SBFIZ_SBFM_64M_bitfield
+/// @param Xd Is the 64-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Xn Is the 64-bit name of the general-purpose source register, encoded
+/// in the "Rn" field.
+/// @param lsb For the 64-bit variant: is the bit number of the lsb of the
+/// destination bitfield, in the range 0 to 63.
+/// @param width For the 64-bit variant: is the width of the bitfield, in the
+/// range 1 to 64-<lsb>.
+void SBFIZ(XReg Xd, XReg Xn, Imm<6> lsb, Imm<6> width)
+{
+	assert(width.Value > 0);
+	assert(width.Value <= (64 - lsb.Value));
+	// This is just an alias for SBFM
+	const std::uint32_t immr = (~lsb.Value + 1) & 63;
+	const std::uint32_t imms = width.Value - 1;
+	Emit<"1001001101rrrrrrssssssnnnnnddddd", "d", "n", "r", "s">(
+		Xd, Xn, immr, imms
+	);
+}
+
+/// @brief SBFM - Signed Bitfield Move is usually accessed via one of its
+/// aliases, which are always preferred for disassembly. If <imms> is greater
+/// than or equal to <immr>, this copies a bitfield of (<imms>-<immr>+1) bits
+/// starting from bit position <immr> in the source register to the least
+/// significant bits of the destination register. If <imms> is less than <immr>,
+/// this copies a bitfield of (<imms>+1) bits from the least significant bits of
+/// the source register to bit position (regsize-<immr>) of the destination
+/// register, where regsize is the destination register size of 32 or 64 bits.
+/// In both cases the destination bits below the bitfield are set to zero, and
+/// the bits above the bitfield are set to a copy of the most significant bit of
+/// the bitfield.
+/// @note SBFM_32M_bitfield
+/// @param Wd Is the 32-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Wn Is the 32-bit name of the general-purpose source register, encoded
+/// in the "Rn" field.
+/// @param immr For the 32-bit variant: is the right rotate amount, in the range
+/// 0 to 31, encoded in the "immr" field.
+/// @param imms For the 32-bit variant: is the leftmost bit number to be moved
+/// from the source, in the range 0 to 31, encoded in the "imms" field.
+void SBFM(WReg Wd, WReg Wn, Imm<5> immr, Imm<5> imms)
+{
+	Emit<"0001001100rrrrrrssssssnnnnnddddd", "d", "n", "r", "s">(
+		Wd, Wn, immr, imms
+	);
+}
+
+/// @brief SBFM - Signed Bitfield Move is usually accessed via one of its
+/// aliases, which are always preferred for disassembly. If <imms> is greater
+/// than or equal to <immr>, this copies a bitfield of (<imms>-<immr>+1) bits
+/// starting from bit position <immr> in the source register to the least
+/// significant bits of the destination register. If <imms> is less than <immr>,
+/// this copies a bitfield of (<imms>+1) bits from the least significant bits of
+/// the source register to bit position (regsize-<immr>) of the destination
+/// register, where regsize is the destination register size of 32 or 64 bits.
+/// In both cases the destination bits below the bitfield are set to zero, and
+/// the bits above the bitfield are set to a copy of the most significant bit of
+/// the bitfield.
+/// @note SBFM_64M_bitfield
+/// @param Xd Is the 64-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Xn Is the 64-bit name of the general-purpose source register, encoded
+/// in the "Rn" field.
+/// @param immr For the 64-bit variant: is the right rotate amount, in the range
+/// 0 to 63, encoded in the "immr" field.
+/// @param imms For the 64-bit variant: is the leftmost bit number to be moved
+/// from the source, in the range 0 to 63, encoded in the "imms" field.
+void SBFM(XReg Xd, XReg Xn, Imm<6> immr, Imm<6> imms)
+{
+	Emit<"1001001101rrrrrrssssssnnnnnddddd", "d", "n", "r", "s">(
+		Xd, Xn, immr, imms
+	);
+}
+
+/// @brief SBFX - Signed Bitfield Extract copies a bitfield of <width> bits
+/// starting from bit position <lsb> in the source register to the least
+/// significant bits of the destination register, and sets destination bits
+/// above the bitfield to a copy of the most significant bit of the bitfield.
+/// @note SBFX_SBFM_32M_bitfield
+/// @param Wd Is the 32-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Wn Is the 32-bit name of the general-purpose source register, encoded
+/// in the "Rn" field.
+/// @param lsb For the 32-bit variant: is the bit number of the lsb of the
+/// source bitfield, in the range 0 to 31.
+/// @param width For the 32-bit variant: is the width of the bitfield, in the
+/// range 1 to 32-<lsb>.
+void SBFX(WReg Wd, WReg Wn, Imm<5> lsb, Imm<5> width)
+{
+	assert(width.Value > 0);
+	assert(width.Value <= (32 - lsb.Value));
+	// This is just an alias for SBFM
+	const std::uint32_t imms = lsb.Value + width.Value - 1;
+	Emit<"0001001100rrrrrrssssssnnnnnddddd", "d", "n", "r", "s">(
+		Wd, Wn, lsb, imms
+	);
+}
+
+/// @brief SBFX - Signed Bitfield Extract copies a bitfield of <width> bits
+/// starting from bit position <lsb> in the source register to the least
+/// significant bits of the destination register, and sets destination bits
+/// above the bitfield to a copy of the most significant bit of the bitfield.
+/// @note SBFX_SBFM_64M_bitfield
+/// @param Xd Is the 64-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Xn Is the 64-bit name of the general-purpose source register, encoded
+/// in the "Rn" field.
+/// @param lsb For the 64-bit variant: is the bit number of the lsb of the
+/// source bitfield, in the range 0 to 63.
+/// @param width For the 64-bit variant: is the width of the bitfield, in the
+/// range 1 to 64-<lsb>.
+void SBFX(XReg Xd, XReg Xn, Imm<6> lsb, Imm<6> width)
+{
+	assert(width.Value > 0);
+	assert(width.Value <= (64 - lsb.Value));
+	// This is just an alias for SBFM
+	const std::uint32_t imms = lsb.Value + width.Value - 1;
+	Emit<"1001001101rrrrrrssssssnnnnnddddd", "d", "n", "r", "s">(
+		Xd, Xn, lsb, imms
+	);
+}
+
 /// @brief SDIV - Signed Divide divides a signed integer register value by
 /// another signed integer register value, and writes the result to the
 /// destination register. The condition flags are not affected.
