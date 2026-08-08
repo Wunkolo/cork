@@ -2291,6 +2291,70 @@ void LSRV(XReg Xd, XReg Xn, XReg Xm)
 	Emit<"10011010110mmmmm001001nnnnnddddd", "d", "n", "m">(Xd, Xn, Xm);
 }
 
+/// @brief MADD - Multiply-Add multiplies two register values, adds a third
+/// register value, and writes the result to the destination register.
+/// @note MADD_32A_dp_3src
+/// @param Wd Is the 32-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Wn Is the 32-bit name of the first general-purpose source register
+/// holding the multiplicand, encoded in the "Rn" field.
+/// @param Wm Is the 32-bit name of the second general-purpose source register
+/// holding the multiplier, encoded in the "Rm" field.
+/// @param Wa Is the 32-bit name of the third general-purpose source register
+/// holding the addend, encoded in the "Ra" field.
+void MADD(WReg Wd, WReg Wn, WReg Wm, WReg Wa)
+{
+	Emit<"00011011000mmmmm0aaaaannnnnddddd", "d", "n", "m", "a">(
+		Wd, Wn, Wm, Wa
+	);
+}
+
+/// @brief MADD - Multiply-Add multiplies two register values, adds a third
+/// register value, and writes the result to the destination register.
+/// @note MADD_64A_dp_3src
+/// @param Xd Is the 64-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Xn Is the 64-bit name of the first general-purpose source register
+/// holding the multiplicand, encoded in the "Rn" field.
+/// @param Xm Is the 64-bit name of the second general-purpose source register
+/// holding the multiplier, encoded in the "Rm" field.
+/// @param Xa Is the 64-bit name of the third general-purpose source register
+/// holding the addend, encoded in the "Ra" field.
+void MADD(XReg Xd, XReg Xn, XReg Xm, XReg Xa)
+{
+	Emit<"10011011000mmmmm0aaaaannnnnddddd", "d", "n", "m", "a">(
+		Xd, Xn, Xm, Xa
+	);
+}
+
+/// @brief MNEG - Multiply-Negate multiplies two register values, negates the
+/// product, and writes the result to the destination register.
+/// @note MNEG_MSUB_32A_dp_3src
+/// @param Wd Is the 32-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Wn Is the 32-bit name of the first general-purpose source register
+/// holding the multiplicand, encoded in the "Rn" field.
+/// @param Wm Is the 32-bit name of the second general-purpose source register
+/// holding the multiplier, encoded in the "Rm" field.
+void MNEG(WReg Wd, WReg Wn, WReg Wm)
+{
+	Emit<"00011011000mmmmm111111nnnnnddddd", "d", "n", "m">(Wd, Wn, Wm);
+}
+
+/// @brief MNEG - Multiply-Negate multiplies two register values, negates the
+/// product, and writes the result to the destination register.
+/// @note MNEG_MSUB_64A_dp_3src
+/// @param Xd Is the 64-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Xn Is the 64-bit name of the first general-purpose source register
+/// holding the multiplicand, encoded in the "Rn" field.
+/// @param Xm Is the 64-bit name of the second general-purpose source register
+/// holding the multiplier, encoded in the "Rm" field.
+void MNEG(XReg Xd, XReg Xn, XReg Xm)
+{
+	Emit<"10011011000mmmmm111111nnnnnddddd", "d", "n", "m">(Xd, Xn, Xm);
+}
+
 /// @brief NOP - No Operation does nothing, other than advance the value of the
 /// program counter by 4. This instruction can be used for instruction alignment
 /// purposes.
