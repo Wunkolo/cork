@@ -3419,6 +3419,34 @@ void SMC(Imm<16> imm)
 	Emit<"11010100000iiiiiiiiiiiiiiii00011", "i">(imm);
 }
 
+/// @brief STLRB - Store-Release Register Byte stores a byte from a 32-bit
+/// register to a memory location. The instruction also has memory ordering
+/// semantics as described in Load-Acquire, Store-Release. For information about
+/// addressing modes, see Load/Store addressing modes.
+/// @note STLRB_SL32_ldstord
+/// @param Wt Is the 32-bit name of the general-purpose register to be
+/// transferred, encoded in the "Rt" field.
+/// @param Xn Is the 64-bit name of the general-purpose base register or stack
+/// pointer, encoded in the "Rn" field.
+void STLRB(WReg Wt, XRegSp Xn)
+{
+	Emit<"0000100010011111111111nnnnnttttt", "t", "n">(Wt, Xn);
+}
+
+/// @brief STLRH - Store-Release Register Halfword stores a halfword from a
+/// 32-bit register to a memory location. The instruction also has memory
+/// ordering semantics as described in Load-Acquire, Store-Release. For
+/// information about addressing modes, see Load/Store addressing modes.
+/// @note STLRH_SL32_ldstord
+/// @param Wt Is the 32-bit name of the general-purpose register to be
+/// transferred, encoded in the "Rt" field.
+/// @param Xn Is the 64-bit name of the general-purpose base register or stack
+/// pointer, encoded in the "Rn" field.
+void STLRH(WReg Wt, XRegSp Xn)
+{
+	Emit<"0100100010011111111111nnnnnttttt", "t", "n">(Wt, Xn);
+}
+
 /// @brief SUB - Subtract (extended register) subtracts a sign or zero-extended
 /// register value, followed by an optional left shift amount, from a register
 /// value, and writes the result to the destination register. The argument that
