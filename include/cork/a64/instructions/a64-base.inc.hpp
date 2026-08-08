@@ -2563,6 +2563,42 @@ void MUL(XReg Xd, XReg Xn, XReg Xm)
 	Emit<"10011011000mmmmm011111nnnnnddddd", "d", "n", "m">(Xd, Xn, Xm);
 }
 
+/// @brief MVN - Bitwise NOT writes the bitwise inverse of a register value to
+/// the destination register.
+/// @note MVN_ORN_32_log_shift
+/// @param Wd Is the 32-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Wm Is the 32-bit name of the general-purpose source register, encoded
+/// in the "Rm" field.
+/// @param shift Is the optional shift to be applied to the final source,
+/// defaulting to LSL and
+/// @param amount For the 32-bit variant: is the shift amount, in the range 0 to
+/// 31, defaulting to 0 and encoded in the "imm6" field.
+void MVN(WReg Wd, WReg Wm, Shift shift = Shift::LSL, Imm<5> amount = 0)
+{
+	Emit<"00101010ss1mmmmmiiiiii11111ddddd", "d", "m", "s", "i">(
+		Wd, Wm, shift, amount
+	);
+}
+
+/// @brief MVN - Bitwise NOT writes the bitwise inverse of a register value to
+/// the destination register.
+/// @note MVN_ORN_64_log_shift
+/// @param Xd Is the 64-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Xm Is the 64-bit name of the general-purpose source register, encoded
+/// in the "Rm" field.
+/// @param shift Is the optional shift to be applied to the final source,
+/// defaulting to LSL and
+/// @param amount For the 64-bit variant: is the shift amount, in the range 0 to
+/// 63, defaulting to 0 and encoded in the "imm6" field,
+void MVN(XReg Xd, XReg Xm, Shift shift = Shift::LSL, Imm<6> amount = 0)
+{
+	Emit<"10101010ss1mmmmmiiiiii11111ddddd", "d", "m", "s", "i">(
+		Xd, Xm, shift, amount
+	);
+}
+
 /// @brief NEG - Negate (shifted register) negates an optionally-shifted
 /// register value, and writes the result to the destination register.
 /// @note NEG_SUB_32_addsub_shift
