@@ -2497,6 +2497,45 @@ void MOVZ(
 	Emit<"110100101hhiiiiiiiiiiiiiiiiddddd", "d", "i", "h">(Xd, imm, shift);
 }
 
+/// @brief MSUB - Multiply-Subtract multiplies two register values, subtracts
+/// the product from a third register value, and writes the result to the
+/// destination register.
+/// @note MSUB_32A_dp_3src
+/// @param Wd Is the 32-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Wn Is the 32-bit name of the first general-purpose source register
+/// holding the multiplicand, encoded in the "Rn" field.
+/// @param Wm Is the 32-bit name of the second general-purpose source register
+/// holding the multiplier, encoded in the "Rm" field.
+/// @param Wa Is the 32-bit name of the third general-purpose source register
+/// holding the minuend, encoded in the "Ra" field.
+void MSUB(WReg Wd, WReg Wn, WReg Wm, WReg Wa)
+{
+	Emit<"00011011000mmmmm1aaaaannnnnddddd", "d", "n", "m", "a">(
+		Wd, Wn, Wm, Wa
+	);
+}
+
+/// @brief MSUB - Multiply-Subtract multiplies two register values, subtracts
+/// the product from a third register value, and writes the result to the
+/// destination register.
+/// @note MSUB_64A_dp_3src
+/// @param Xd Is the 64-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Xn Is the 64-bit name of the first general-purpose source register
+/// holding the multiplicand, encoded in the "Rn" field.
+/// @param Xm Is the 64-bit name of the second general-purpose source register
+/// holding the multiplier, encoded in the "Rm" field.
+/// @param Xa Is the 64-bit name of the third general-purpose source register
+/// holding the minuend, encoded in the "Ra" field.
+void MSUB(XReg Xd, XReg Xn, XReg Xm, XReg Xa)
+{
+	Emit<"10011011000mmmmm1aaaaannnnnddddd", "d", "n", "m", "a">(
+		Xd, Xn, Xm, Xa
+	);
+}
+
+
 /// @brief NEG - Negate (shifted register) negates an optionally-shifted
 /// register value, and writes the result to the destination register.
 /// @note NEG_SUB_32_addsub_shift
