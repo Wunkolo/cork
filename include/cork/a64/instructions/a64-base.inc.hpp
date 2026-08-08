@@ -2593,7 +2593,7 @@ void MUL(XReg Xd, XReg Xn, XReg Xm)
 /// @param Wm Is the 32-bit name of the general-purpose source register, encoded
 /// in the "Rm" field.
 /// @param shift Is the optional shift to be applied to the final source,
-/// defaulting to LSL and
+/// defaulting to LSL.
 /// @param amount For the 32-bit variant: is the shift amount, in the range 0 to
 /// 31, defaulting to 0 and encoded in the "imm6" field.
 void MVN(WReg Wd, WReg Wm, Shift shift = Shift::LSL, Imm<5> amount = 0)
@@ -2611,7 +2611,7 @@ void MVN(WReg Wd, WReg Wm, Shift shift = Shift::LSL, Imm<5> amount = 0)
 /// @param Xm Is the 64-bit name of the general-purpose source register, encoded
 /// in the "Rm" field.
 /// @param shift Is the optional shift to be applied to the final source,
-/// defaulting to LSL and
+/// defaulting to LSL.
 /// @param amount For the 64-bit variant: is the shift amount, in the range 0 to
 /// 63, defaulting to 0 and encoded in the "imm6" field,
 void MVN(XReg Xd, XReg Xm, Shift shift = Shift::LSL, Imm<6> amount = 0)
@@ -2629,7 +2629,7 @@ void MVN(XReg Xd, XReg Xm, Shift shift = Shift::LSL, Imm<6> amount = 0)
 /// @param Wm Is the 32-bit name of the general-purpose source register, encoded
 /// in the "Rm" field.
 /// @param shift Is the optional shift type to be applied to the second source
-/// operand, defaulting to LSL and
+/// operand, defaulting to LSL.
 /// @param amount For the 32-bit variant: is the shift amount, in the range 0 to
 /// 31, defaulting to 0 and encoded in the "imm6" field.
 void NEG(WReg Wd, WReg Wm, Shift shift = Shift::LSL, Imm<5> amount = 0)
@@ -2647,7 +2647,7 @@ void NEG(WReg Wd, WReg Wm, Shift shift = Shift::LSL, Imm<5> amount = 0)
 /// @param Xm Is the 64-bit name of the general-purpose source register, encoded
 /// in the "Rm" field.
 /// @param shift Is the optional shift type to be applied to the second source
-/// operand, defaulting to LSL and
+/// operand, defaulting to LSL.
 /// @param amount For the 64-bit variant: is the shift amount, in the range 0 to
 /// 63, defaulting to 0 and encoded in the "imm6" field.
 void NEG(XReg Xd, XReg Xm, Shift shift = Shift::LSL, Imm<6> amount = 0)
@@ -2756,6 +2756,122 @@ void NGCS(XReg Xd, XReg Xm)
 void NOP()
 {
 	Emit<"11010101000000110010000000011111">();
+}
+
+/// @brief ORN - Bitwise OR NOT (shifted register) performs a bitwise
+/// (inclusive) OR of a register value and the complement of an
+/// optionally-shifted register value, and writes the result to the destination
+/// register.
+/// @note ORN_32_log_shift
+/// @param Wd Is the 32-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Wn Is the 32-bit name of the first general-purpose source register,
+/// encoded in the "Rn" field.
+/// @param Wm Is the 32-bit name of the second general-purpose source register,
+/// encoded in the "Rm" field.
+/// @param shift Is the optional shift to be applied to the final source,
+/// defaulting to LSL.
+/// @param amount For the 32-bit variant: is the shift amount, in the range 0 to
+/// 31, defaulting to 0 and encoded in the "imm6" field.
+void ORN(WReg Wd, WReg Wn, WReg Wm, Shift shift = Shift::LSL, Imm<5> amount = 0)
+{
+	Emit<"00101010ss1mmmmmiiiiiinnnnnddddd", "d", "n", "m", "s", "i">(
+		Wd, Wn, Wm, shift, amount
+	);
+}
+
+/// @brief ORN - Bitwise OR NOT (shifted register) performs a bitwise
+/// (inclusive) OR of a register value and the complement of an
+/// optionally-shifted register value, and writes the result to the destination
+/// register.
+/// @note ORN_64_log_shift
+/// @param Xd Is the 64-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Xn Is the 64-bit name of the first general-purpose source register,
+/// encoded in the "Rn" field.
+/// @param Xm Is the 64-bit name of the second general-purpose source register,
+/// encoded in the "Rm" field.
+/// @param shift Is the optional shift to be applied to the final source,
+/// defaulting to LSL.
+/// @param amount For the 64-bit variant: is the shift amount, in the range 0 to
+/// 63, defaulting to 0 and encoded in the "imm6" field,
+void ORN(XReg Xd, XReg Xn, XReg Xm, Shift shift = Shift::LSL, Imm<6> amount = 0)
+{
+	Emit<"10101010ss1mmmmmiiiiiinnnnnddddd", "d", "n", "m", "s", "i">(
+		Xd, Xn, Xm, shift, amount
+	);
+}
+
+/// @brief ORR - Bitwise OR (immediate) performs a bitwise (inclusive) OR of a
+/// register value and an immediate register value, and writes the result to the
+/// destination register.
+/// @note ORR_32_log_imm
+/// @param Wd Is the 32-bit name of the destination general-purpose register or
+/// stack pointer, encoded in the "Rd" field.
+/// @param Wn Is the 32-bit name of the general-purpose source register, encoded
+/// in the "Rn" field.
+/// @param imm For the 32-bit variant: is the bitmask immediate, encoded in
+/// "imms:immr".
+void ORR(WRegWsp Wd, WReg Wn, BitMask32 imm)
+{
+	Emit<"0011001000rrrrrrssssssnnnnnddddd", "d", "n", "rs">(Wd, Wn, imm);
+}
+
+/// @brief ORR - Bitwise OR (immediate) performs a bitwise (inclusive) OR of a
+/// register value and an immediate register value, and writes the result to the
+/// destination register.
+/// @note ORR_64_log_imm
+/// @param Xd Is the 64-bit name of the destination general-purpose register or
+/// stack pointer, encoded in the "Rd" field.
+/// @param Xn Is the 64-bit name of the general-purpose source register, encoded
+/// in the "Rn" field.
+/// @param imm For the 64-bit variant: is the bitmask immediate, encoded in
+/// "N:imms:immr".
+void ORR(XRegSp Xd, XReg Xn, BitMask64 imm)
+{
+	Emit<"101100100Nrrrrrrssssssnnnnnddddd", "d", "n", "Nrs">(Xd, Xn, imm);
+}
+
+/// @brief ORR - Bitwise OR (shifted register) performs a bitwise (inclusive) OR
+/// of a register value and an optionally-shifted register value, and writes the
+/// result to the destination register.
+/// @note ORR_32_log_shift
+/// @param Wd Is the 32-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Wn Is the 32-bit name of the first general-purpose source register,
+/// encoded in the "Rn" field.
+/// @param Wm Is the 32-bit name of the second general-purpose source register,
+/// encoded in the "Rm" field.
+/// @param shift Is the optional shift to be applied to the final source,
+/// defaulting to LSL.
+/// @param amount For the 32-bit variant: is the shift amount, in the range 0 to
+/// 31, defaulting to 0 and encoded in the "imm6" field.
+void ORR(WReg Wd, WReg Wn, WReg Wm, Shift shift = Shift::LSL, Imm<5> amount = 0)
+{
+	Emit<"00101010ss0mmmmmiiiiiinnnnnddddd", "d", "n", "m", "s", "i">(
+		Wd, Wn, Wm, shift, amount
+	);
+}
+
+/// @brief ORR - Bitwise OR (shifted register) performs a bitwise (inclusive) OR
+/// of a register value and an optionally-shifted register value, and writes the
+/// result to the destination register.
+/// @note ORR_64_log_shift
+/// @param Xd Is the 64-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Xn Is the 64-bit name of the first general-purpose source register,
+/// encoded in the "Rn" field.
+/// @param Xm Is the 64-bit name of the second general-purpose source register,
+/// encoded in the "Rm" field.
+/// @param shift Is the optional shift to be applied to the final source,
+/// defaulting to LSL.
+/// @param amount For the 64-bit variant: is the shift amount, in the range 0 to
+/// 63, defaulting to 0 and encoded in the "imm6" field,
+void ORR(XReg Xd, XReg Xn, XReg Xm, Shift shift = Shift::LSL, Imm<6> amount = 0)
+{
+	Emit<"10101010ss0mmmmmiiiiiinnnnnddddd", "d", "n", "m", "s", "i">(
+		Xd, Xn, Xm, shift, amount
+	);
 }
 
 /// @brief RBIT - Reverse Bits reverses the bit order in a register.
