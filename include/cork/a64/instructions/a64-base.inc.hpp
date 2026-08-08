@@ -3419,6 +3419,35 @@ void SMC(Imm<16> imm)
 	Emit<"11010100000iiiiiiiiiiiiiiii00011", "i">(imm);
 }
 
+/// @brief SMULH - Signed Multiply High multiplies two 64-bit register values,
+/// and writes bits[127:64] of the 128-bit result to the 64-bit destination
+/// register.
+/// @note SMULH_64_dp_3src
+/// @param Xd Is the 64-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Xn Is the 64-bit name of the first general-purpose source register
+/// holding the multiplicand, encoded in the "Rn" field.
+/// @param Xm Is the 64-bit name of the second general-purpose source register
+/// holding the multiplier, encoded in the "Rm" field.
+void SMULH(XReg Xd, XReg Xn, XReg Xm)
+{
+	Emit<"10011011010mmmmm011111nnnnnddddd", "d", "n", "m">(Xd, Xn, Xm);
+}
+
+/// @brief SMULL - Signed Multiply Long multiplies two 32-bit register values,
+/// and writes the result to the 64-bit destination register.
+/// @note SMULL_SMADDL_64WA_dp_3src
+/// @param Xd Is the 64-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Wn Is the 32-bit name of the first general-purpose source register
+/// holding the multiplicand, encoded in the "Rn" field.
+/// @param Wm Is the 32-bit name of the second general-purpose source register
+/// holding the multiplier, encoded in the "Rm" field.
+void SMULL(XReg Xd, WReg Wn, WReg Wm)
+{
+	Emit<"10011011001mmmmm011111nnnnnddddd", "d", "n", "m">(Xd, Wn, Wm);
+}
+
 /// @brief SSBB - Speculative Store Bypass Barrier is a memory barrier that
 /// prevents speculative loads from bypassing earlier stores to the same virtual
 /// address under certain conditions. For more information and details of the
