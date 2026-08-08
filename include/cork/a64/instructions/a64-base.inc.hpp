@@ -125,7 +125,7 @@ void ADD(
 /// @param shift Is the optional left shift to apply to the immediate,
 /// defaulting to LSL #0.
 void ADD(
-	WRegWsp Wd, WRegWsp Wn, Imm<12> imm, LslOnly = LSL,
+	WRegWsp Wd, WRegWsp Wn, Imm<12> imm, LslOnly = Shift::LSL,
 	ImmChoice<0, 12> shift = 0
 )
 {
@@ -146,7 +146,8 @@ void ADD(
 /// @param shift Is the optional left shift to apply to the immediate,
 /// defaulting to 0.
 void ADD(
-	XRegSp Xd, XRegSp Xn, Imm<12> imm, LslOnly = LSL, ImmChoice<0, 12> shift = 0
+	XRegSp Xd, XRegSp Xn, Imm<12> imm, LslOnly = Shift::LSL,
+	ImmChoice<0, 12> shift = 0
 )
 {
 	Emit<"100100010siiiiiiiiiiiinnnnnddddd", "d", "n", "i", "s">(
@@ -168,7 +169,7 @@ void ADD(
 /// operand, defaulting to LSL.
 /// @param amount For the 32-bit variant: is the shift amount, in the range 0 to
 /// 31, defaulting to 0 and encoded in the "imm6" field.
-void ADD(WReg Wd, WReg Wn, WReg Wm, Shift shift = LSL, Imm<5> amount = 0)
+void ADD(WReg Wd, WReg Wn, WReg Wm, Shift shift = Shift::LSL, Imm<5> amount = 0)
 {
 	Emit<"00001011ss0mmmmmiiiiiinnnnnddddd", "d", "n", "m", "s", "i">(
 		Wd, Wn, Wm, shift, amount
@@ -189,7 +190,7 @@ void ADD(WReg Wd, WReg Wn, WReg Wm, Shift shift = LSL, Imm<5> amount = 0)
 /// operand, defaulting to LSL.
 /// @param amount For the 64-bit variant: is the shift amount, in the range 0 to
 /// 63, defaulting to 0 and encoded in the "imm6" field.
-void ADD(XReg Xd, XReg Xn, XReg Xm, Shift shift = LSL, Imm<6> amount = 0)
+void ADD(XReg Xd, XReg Xn, XReg Xm, Shift shift = Shift::LSL, Imm<6> amount = 0)
 {
 	Emit<"10001011ss0mmmmmiiiiiinnnnnddddd", "d", "n", "m", "s", "i">(
 		Xd, Xn, Xm, shift, amount
@@ -306,7 +307,9 @@ void ADDS(XReg Xd, XRegSp Xn, Imm<12> imm, LslOnly, ImmChoice<0, 12> shift = 0)
 /// operand, defaulting to LSL.
 /// @param amount For the 32-bit variant: is the shift amount, in the range 0 to
 /// 31, defaulting to 0 and encoded in the "imm6" field.
-void ADDS(WReg Wd, WReg Wn, WReg Wm, Shift shift = LSL, Imm<5> amount = 0)
+void ADDS(
+	WReg Wd, WReg Wn, WReg Wm, Shift shift = Shift::LSL, Imm<5> amount = 0
+)
 {
 	Emit<"00101011ss0mmmmmiiiiiinnnnnddddd", "d", "n", "m", "s", "i">(
 		Wd, Wn, Wm, shift, amount
@@ -327,7 +330,9 @@ void ADDS(WReg Wd, WReg Wn, WReg Wm, Shift shift = LSL, Imm<5> amount = 0)
 /// operand, defaulting to LSL.
 /// @param amount For the 64-bit variant: is the shift amount, in the range 0 to
 /// 63, defaulting to 0 and encoded in the "imm6" field.
-void ADDS(XReg Xd, XReg Xn, XReg Xm, Shift shift = LSL, Imm<6> amount = 0)
+void ADDS(
+	XReg Xd, XReg Xn, XReg Xm, Shift shift = Shift::LSL, Imm<6> amount = 0
+)
 {
 	Emit<"10101011ss0mmmmmiiiiiinnnnnddddd", "d", "n", "m", "s", "i">(
 		Xd, Xn, Xm, shift, amount
@@ -407,7 +412,7 @@ void AND(XRegSp Xd, XReg Xn, BitMask64 imm)
 /// defaulting to LSL.
 /// @param amount For the 32-bit variant: is the shift amount, in the range 0 to
 /// 31, defaulting to 0 and encoded in the "imm6" field.
-void AND(WReg Wd, WReg Wn, WReg Wm, Shift shift = LSL, Imm<5> amount = 0)
+void AND(WReg Wd, WReg Wn, WReg Wm, Shift shift = Shift::LSL, Imm<5> amount = 0)
 {
 	Emit<"00001010ss0mmmmmiiiiiinnnnnddddd", "d", "n", "m", "s", "i">(
 		Wd, Wn, Wm, shift, amount
@@ -428,7 +433,7 @@ void AND(WReg Wd, WReg Wn, WReg Wm, Shift shift = LSL, Imm<5> amount = 0)
 /// defaulting to LSL.
 /// @param amount For the 64-bit variant: is the shift amount, in the range 0 to
 /// 63, defaulting to 0 and encoded in the "imm6" field,
-void AND(XReg Xd, XReg Xn, XReg Xm, Shift shift = LSL, Imm<6> amount = 0)
+void AND(XReg Xd, XReg Xn, XReg Xm, Shift shift = Shift::LSL, Imm<6> amount = 0)
 {
 	Emit<"10001010ss0mmmmmiiiiiinnnnnddddd", "d", "n", "m", "s", "i">(
 		Xd, Xn, Xm, shift, amount
@@ -480,7 +485,9 @@ void ANDS(XReg Xd, XReg Xn, BitMask64 imm)
 /// defaulting to LSL.
 /// @param amount For the 32-bit variant: is the shift amount, in the range 0 to
 /// 31, defaulting to 0 and encoded in the "imm6" field.
-void ANDS(WReg Wd, WReg Wn, WReg Wm, Shift shift = LSL, Imm<5> amount = 0)
+void ANDS(
+	WReg Wd, WReg Wn, WReg Wm, Shift shift = Shift::LSL, Imm<5> amount = 0
+)
 {
 	Emit<"01101010ss0mmmmmiiiiiinnnnnddddd", "d", "n", "m", "s", "i">(
 		Wd, Wn, Wm, shift, amount
@@ -502,7 +509,9 @@ void ANDS(WReg Wd, WReg Wn, WReg Wm, Shift shift = LSL, Imm<5> amount = 0)
 /// defaulting to LSL.
 /// @param amount For the 64-bit variant: is the shift amount, in the range 0 to
 /// 63, defaulting to 0 and encoded in the "imm6" field,
-void ANDS(XReg Xd, XReg Xn, XReg Xm, Shift shift = LSL, Imm<6> amount = 0)
+void ANDS(
+	XReg Xd, XReg Xn, XReg Xm, Shift shift = Shift::LSL, Imm<6> amount = 0
+)
 {
 	Emit<"11101010ss0mmmmmiiiiiinnnnnddddd", "d", "n", "m", "s", "i">(
 		Xd, Xn, Xm, shift, amount
@@ -796,7 +805,7 @@ void BFXIL(XReg Xd, XReg Xn, Imm<6> lsb, Imm<6> width)
 /// defaulting to LSL.
 /// @param amount For the 32-bit variant: is the shift amount, in the range 0 to
 /// 31, defaulting to 0 and encoded in the "imm6" field.
-void BIC(WReg Wd, WReg Wn, WReg Wm, Shift shift = LSL, Imm<5> amount = 0)
+void BIC(WReg Wd, WReg Wn, WReg Wm, Shift shift = Shift::LSL, Imm<5> amount = 0)
 {
 	assert(shift != Shift::ROR);
 	Emit<"00001010ss1mmmmmiiiiiinnnnnddddd", "d", "n", "m", "s", "i">(
@@ -818,7 +827,7 @@ void BIC(WReg Wd, WReg Wn, WReg Wm, Shift shift = LSL, Imm<5> amount = 0)
 /// defaulting to LSL.
 /// @param amount For the 64-bit variant: is the shift amount, in the range 0 to
 /// 63, defaulting to 0 and encoded in the "imm6" field,
-void BIC(XReg Xd, XReg Xn, XReg Xm, Shift shift = LSL, Imm<6> amount = 0)
+void BIC(XReg Xd, XReg Xn, XReg Xm, Shift shift = Shift::LSL, Imm<6> amount = 0)
 {
 	assert(shift != Shift::ROR);
 	Emit<"10001010ss1mmmmmiiiiiinnnnnddddd", "d", "n", "m", "s", "i">(
@@ -841,7 +850,9 @@ void BIC(XReg Xd, XReg Xn, XReg Xm, Shift shift = LSL, Imm<6> amount = 0)
 /// defaulting to LSL.
 /// @param amount For the 32-bit variant: is the shift amount, in the range 0 to
 /// 31, defaulting to 0 and encoded in the "imm6" field.
-void BICS(WReg Wd, WReg Wn, WReg Wm, Shift shift = LSL, Imm<5> amount = 0)
+void BICS(
+	WReg Wd, WReg Wn, WReg Wm, Shift shift = Shift::LSL, Imm<5> amount = 0
+)
 {
 	assert(shift != Shift::ROR);
 	Emit<"01101010ss1mmmmmiiiiiinnnnnddddd", "d", "n", "m", "s", "i">(
@@ -864,7 +875,9 @@ void BICS(WReg Wd, WReg Wn, WReg Wm, Shift shift = LSL, Imm<5> amount = 0)
 /// defaulting to LSL.
 /// @param amount For the 64-bit variant: is the shift amount, in the range 0 to
 /// 63, defaulting to 0 and encoded in the "imm6" field,
-void BICS(XReg Xd, XReg Xn, XReg Xm, Shift shift = LSL, Imm<6> amount = 0)
+void BICS(
+	XReg Xd, XReg Xn, XReg Xm, Shift shift = Shift::LSL, Imm<6> amount = 0
+)
 {
 	assert(shift != Shift::ROR);
 	Emit<"11101010ss1mmmmmiiiiiinnnnnddddd", "d", "n", "m", "s", "i">(
@@ -1372,7 +1385,7 @@ void CMN(XRegSp Xn, Imm<12> imm, LslOnly, ImmChoice<0, 12> shift = 0)
 /// operand, defaulting to LSL.
 /// @param amount For the 32-bit variant: is the shift amount, in the range 0 to
 /// 31, defaulting to 0 and encoded in the "imm6" field.
-void CMN(WReg Wn, WReg Wm, Shift shift = LSL, Imm<6> amount = 0)
+void CMN(WReg Wn, WReg Wm, Shift shift = Shift::LSL, Imm<6> amount = 0)
 {
 	assert(amount.Value <= 31);
 	Emit<"00101011ss0mmmmmiiiiiinnnnn11111", "n", "m", "s", "i">(
@@ -1392,7 +1405,7 @@ void CMN(WReg Wn, WReg Wm, Shift shift = LSL, Imm<6> amount = 0)
 /// operand, defaulting to LSL.
 /// @param amount For the 64-bit variant: is the shift amount, in the range 0 to
 /// 63, defaulting to 0 and encoded in the "imm6" field.
-void CMN(XReg Xn, XReg Xm, Shift shift = LSL, Imm<6> amount = 0)
+void CMN(XReg Xn, XReg Xm, Shift shift = Shift::LSL, Imm<6> amount = 0)
 {
 	Emit<"10101011ss0mmmmmiiiiiinnnnn11111", "n", "m", "s", "i">(
 		Xn, Xm, shift, amount
@@ -1492,7 +1505,7 @@ void CMP(XRegSp Xn, Imm<12> imm, LslOnly, ImmChoice<0, 12> shift = 0)
 /// operand, defaulting to LSL.
 /// @param amount For the 32-bit variant: is the shift amount, in the range 0 to
 /// 31, defaulting to 0 and encoded in the "imm6" field.
-void CMP(WReg Wn, WReg Wm, Shift shift = LSL, Imm<6> amount = 0)
+void CMP(WReg Wn, WReg Wm, Shift shift = Shift::LSL, Imm<6> amount = 0)
 {
 	assert(amount.Value <= 31);
 	Emit<"01101011ss0mmmmmiiiiiinnnnn11111", "n", "m", "s", "i">(
@@ -1512,7 +1525,7 @@ void CMP(WReg Wn, WReg Wm, Shift shift = LSL, Imm<6> amount = 0)
 /// operand, defaulting to LSL.
 /// @param amount For the 64-bit variant: is the shift amount, in the range 0 to
 /// 63, defaulting to 0 and encoded in the "imm6" field.
-void CMP(XReg Xn, XReg Xm, Shift shift = LSL, Imm<6> amount = 0)
+void CMP(XReg Xn, XReg Xm, Shift shift = Shift::LSL, Imm<6> amount = 0)
 {
 	assert(amount.Value <= 63);
 	Emit<"11101011ss0mmmmmiiiiiinnnnn11111", "n", "m", "s", "i">(
@@ -1853,7 +1866,7 @@ void DRPS()
 /// defaulting to LSL.
 /// @param amount For the 32-bit variant: is the shift amount, in the range 0 to
 /// 31, defaulting to 0 and encoded in the "imm6" field.
-void EON(WReg Wd, WReg Wn, WReg Wm, Shift shift = LSL, Imm<5> amount = 0)
+void EON(WReg Wd, WReg Wn, WReg Wm, Shift shift = Shift::LSL, Imm<5> amount = 0)
 {
 	assert(shift != Shift::ROR);
 	Emit<"01001010ss1mmmmmiiiiiinnnnnddddd", "d", "n", "m", "s", "i">(
@@ -1875,7 +1888,7 @@ void EON(WReg Wd, WReg Wn, WReg Wm, Shift shift = LSL, Imm<5> amount = 0)
 /// defaulting to LSL.
 /// @param amount For the 64-bit variant: is the shift amount, in the range 0 to
 /// 63, defaulting to 0 and encoded in the "imm6" field,
-void EON(XReg Xd, XReg Xn, XReg Xm, Shift shift = LSL, Imm<6> amount = 0)
+void EON(XReg Xd, XReg Xn, XReg Xm, Shift shift = Shift::LSL, Imm<6> amount = 0)
 {
 	assert(shift != Shift::ROR);
 	Emit<"11001010ss1mmmmmiiiiiinnnnnddddd", "d", "n", "m", "s", "i">(
@@ -1927,7 +1940,7 @@ void EOR(XRegSp Xd, XReg Xn, BitMask64 imm)
 /// defaulting to LSL.
 /// @param amount For the 32-bit variant: is the shift amount, in the range 0 to
 /// 31, defaulting to 0 and encoded in the "imm6" field.
-void EOR(WReg Wd, WReg Wn, WReg Wm, Shift shift = LSL, Imm<5> amount = 0)
+void EOR(WReg Wd, WReg Wn, WReg Wm, Shift shift = Shift::LSL, Imm<5> amount = 0)
 {
 	assert(shift != Shift::ROR);
 	Emit<"01001010ss0mmmmmiiiiiinnnnnddddd", "d", "n", "m", "s", "i">(
@@ -1949,7 +1962,7 @@ void EOR(WReg Wd, WReg Wn, WReg Wm, Shift shift = LSL, Imm<5> amount = 0)
 /// defaulting to LSL.
 /// @param amount For the 64-bit variant: is the shift amount, in the range 0 to
 /// 63, defaulting to 0 and encoded in the "imm6" field,
-void EOR(XReg Xd, XReg Xn, XReg Xm, Shift shift = LSL, Imm<6> amount = 0)
+void EOR(XReg Xd, XReg Xn, XReg Xm, Shift shift = Shift::LSL, Imm<6> amount = 0)
 {
 	assert(shift != Shift::ROR);
 	Emit<"11001010ss0mmmmmiiiiiinnnnnddddd", "d", "n", "m", "s", "i">(
@@ -2061,6 +2074,221 @@ void IC(InstructionCacheOperation ic, XReg Xt = XZR)
 void ISB(BarrierOperation option = BarrierOperation::SY)
 {
 	Emit<"11010101000000110011MMMM11011111", "M">(option);
+}
+
+/// @brief LSL - Logical Shift Left (immediate) shifts a register value left by
+/// an immediate number of bits, shifting in zeros, and writes the result to the
+/// destination register.
+/// @note LSL_UBFM_32M_bitfield
+/// @param Wd Is the 32-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Wn Is the 32-bit name of the general-purpose source register, encoded
+/// in the "Rn" field.
+/// @param shift For the 32-bit variant: is the shift amount, in the range 0
+/// to 31.
+void LSL(WReg Wd, WReg Wn, Imm<5> shift)
+{
+	// This is just an alias for UBFM
+	const std::uint32_t immr = -shift.Value & 31;
+	const std::uint32_t imms = 32 - shift.Value - 1;
+	Emit<"0101001100rrrrrrssssssnnnnnddddd", "d", "n", "r", "s">(
+		Wd, Wn, immr, imms
+	);
+}
+
+/// @brief LSL - Logical Shift Left (immediate) shifts a register value left by
+/// an immediate number of bits, shifting in zeros, and writes the result to the
+/// destination register.
+/// @note LSL_UBFM_64M_bitfield
+/// @param Xd Is the 64-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Xn Is the 64-bit name of the general-purpose source register, encoded
+/// in the "Rn" field.
+/// @param shift For the 64-bit variant: is the shift amount, in the range 0
+/// to 63.
+void LSL(XReg Xd, XReg Xn, Imm<6> shift)
+{
+	// This is just an alias for UBFM
+	const std::uint32_t immr = -shift.Value & 63;
+	const std::uint32_t imms = 64 - shift.Value - 1;
+	Emit<"1101001101rrrrrrssssssnnnnnddddd", "d", "n", "r", "s">(
+		Xd, Xn, immr, imms
+	);
+}
+
+/// @brief LSL - Logical Shift Left (register) shifts a register value left by a
+/// variable number of bits, shifting in zeros, and writes the result to the
+/// destination register. The remainder obtained by dividing the second source
+/// register by the data size defines the number of bits by which the first
+/// source register is left-shifted.
+/// @note LSL_LSLV_32_dp_2src
+/// @param Wd Is the 32-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Wn Is the 32-bit name of the first general-purpose source register,
+/// encoded in the "Rn" field.
+/// @param Wm Is the 32-bit name of the second general-purpose source register
+/// holding a shift amount from 0 to 31 in its bottom 5 bits, encoded in the
+/// "Rm" field.
+void LSL(WReg Wd, WReg Wn, WReg Wm)
+{
+	Emit<"00011010110mmmmm001000nnnnnddddd", "d", "n", "m">(Wd, Wn, Wm);
+}
+
+/// @brief LSL - Logical Shift Left (register) shifts a register value left by a
+/// variable number of bits, shifting in zeros, and writes the result to the
+/// destination register. The remainder obtained by dividing the second source
+/// register by the data size defines the number of bits by which the first
+/// source register is left-shifted.
+/// @note LSL_LSLV_64_dp_2src
+/// @param Xd Is the 64-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Xn Is the 64-bit name of the first general-purpose source register,
+/// encoded in the "Rn" field.
+/// @param Xm Is the 64-bit name of the second general-purpose source register
+/// holding a shift amount from 0 to 63 in its bottom 6 bits, encoded in the
+/// "Rm" field.
+void LSL(XReg Xd, XReg Xn, XReg Xm)
+{
+	Emit<"10011010110mmmmm001000nnnnnddddd", "d", "n", "m">(Xd, Xn, Xm);
+}
+
+/// @brief LSLV - Logical Shift Left Variable shifts a register value left by a
+/// variable number of bits, shifting in zeros, and writes the result to the
+/// destination register. The remainder obtained by dividing the second source
+/// register by the data size defines the number of bits by which the first
+/// source register is left-shifted.
+/// @note LSLV_32_dp_2src
+/// @param Wd Is the 32-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Wn Is the 32-bit name of the first general-purpose source register,
+/// encoded in the "Rn" field.
+/// @param Wm Is the 32-bit name of the second general-purpose source register
+/// holding a shift amount from 0 to 31 in its bottom 5 bits, encoded in the
+/// "Rm" field.
+void LSLV(WReg Wd, WReg Wn, WReg Wm)
+{
+	Emit<"00011010110mmmmm001000nnnnnddddd", "d", "n", "m">(Wd, Wn, Wm);
+}
+
+/// @brief LSLV - Logical Shift Left Variable shifts a register value left by a
+/// variable number of bits, shifting in zeros, and writes the result to the
+/// destination register. The remainder obtained by dividing the second source
+/// register by the data size defines the number of bits by which the first
+/// source register is left-shifted.
+/// @note LSLV_64_dp_2src
+/// @param Xd Is the 64-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Xn Is the 64-bit name of the first general-purpose source register,
+/// encoded in the "Rn" field.
+/// @param Xm Is the 64-bit name of the second general-purpose source register
+/// holding a shift amount from 0 to 63 in its bottom 6 bits, encoded in the
+/// "Rm" field.
+void LSLV(XReg Xd, XReg Xn, XReg Xm)
+{
+	Emit<"10011010110mmmmm001000nnnnnddddd", "d", "n", "m">(Xd, Xn, Xm);
+}
+
+/// @brief LSR - Logical Shift Right (immediate) shifts a register value right
+/// by an immediate number of bits, shifting in zeros, and writes the result to
+/// the destination register.
+/// @note LSR_UBFM_32M_bitfield
+/// @param Wd Is the 32-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Wn Is the 32-bit name of the general-purpose source register, encoded
+/// in the "Rn" field.
+/// @param shift For the 32-bit variant: is the shift amount, in the range 0 to
+/// 31, encoded in the "immr" field.
+void LSR(WReg Wd, WReg Wn, Imm<5> shift)
+{
+	// This is just an alias for UBFM
+	Emit<"0101001100rrrrrr011111nnnnnddddd", "d", "n", "r">(Wd, Wn, shift);
+}
+
+/// @brief LSR - Logical Shift Right (immediate) shifts a register value right
+/// by an immediate number of bits, shifting in zeros, and writes the result to
+/// the destination register.
+/// @note LSR_UBFM_64M_bitfield
+/// @param Xd Is the 64-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Xn Is the 64-bit name of the general-purpose source register, encoded
+/// in the "Rn" field.
+/// @param shift For the 64-bit variant: is the shift amount, in the range 0 to
+/// 63, encoded in the "immr" field.
+void LSR(XReg Xd, XReg Xn, Imm<6> shift)
+{
+	Emit<"1101001101rrrrrr111111nnnnnddddd", "d", "n", "r">(Xd, Xn, shift);
+}
+
+/// @brief LSR - Logical Shift Right (register) shifts a register value right by
+/// a variable number of bits, shifting in zeros, and writes the result to the
+/// destination register. The remainder obtained by dividing the second source
+/// register by the data size defines the number of bits by which the first
+/// source register is right-shifted.
+/// @note LSR_LSRV_32_dp_2src
+/// @param Wd Is the 32-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Wn Is the 32-bit name of the first general-purpose source register,
+/// encoded in the "Rn" field.
+/// @param Wm Is the 32-bit name of the second general-purpose source register
+/// holding a shift amount from 0 to 31 in its bottom 5 bits, encoded in the
+/// "Rm" field.
+void LSR(WReg Wd, WReg Wn, WReg Wm)
+{
+	Emit<"00011010110mmmmm001001nnnnnddddd", "d", "n", "m">(Wd, Wn, Wm);
+}
+
+/// @brief LSR - Logical Shift Right (register) shifts a register value right by
+/// a variable number of bits, shifting in zeros, and writes the result to the
+/// destination register. The remainder obtained by dividing the second source
+/// register by the data size defines the number of bits by which the first
+/// source register is right-shifted.
+/// @note LSR_LSRV_64_dp_2src
+/// @param Xd Is the 64-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Xn Is the 64-bit name of the first general-purpose source register,
+/// encoded in the "Rn" field.
+/// @param Xm Is the 64-bit name of the second general-purpose source register
+/// holding a shift amount from 0 to 63 in its bottom 6 bits, encoded in the
+/// "Rm" field.
+void LSR(XReg Xd, XReg Xn, XReg Xm)
+{
+	Emit<"10011010110mmmmm001001nnnnnddddd", "d", "n", "m">(Xd, Xn, Xm);
+}
+
+/// @brief LSRV - Logical Shift Right Variable shifts a register value right by
+/// a variable number of bits, shifting in zeros, and writes the result to the
+/// destination register. The remainder obtained by dividing the second source
+/// register by the data size defines the number of bits by which the first
+/// source register is right-shifted.
+/// @note LSRV_32_dp_2src
+/// @param Wd Is the 32-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Wn Is the 32-bit name of the first general-purpose source register,
+/// encoded in the "Rn" field.
+/// @param Wm Is the 32-bit name of the second general-purpose source register
+/// holding a shift amount from 0 to 31 in its bottom 5 bits, encoded in the
+/// "Rm" field.
+void LSRV(WReg Wd, WReg Wn, WReg Wm)
+{
+	Emit<"00011010110mmmmm001001nnnnnddddd", "d", "n", "m">(Wd, Wn, Wm);
+}
+
+/// @brief LSRV - Logical Shift Right Variable shifts a register value right by
+/// a variable number of bits, shifting in zeros, and writes the result to the
+/// destination register. The remainder obtained by dividing the second source
+/// register by the data size defines the number of bits by which the first
+/// source register is right-shifted.
+/// @note LSRV_64_dp_2src
+/// @param Xd Is the 64-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Xn Is the 64-bit name of the first general-purpose source register,
+/// encoded in the "Rn" field.
+/// @param Xm Is the 64-bit name of the second general-purpose source register
+/// holding a shift amount from 0 to 63 in its bottom 6 bits, encoded in the
+/// "Rm" field.
+void LSRV(XReg Xd, XReg Xn, XReg Xm)
+{
+	Emit<"10011010110mmmmm001001nnnnnddddd", "d", "n", "m">(Xd, Xn, Xm);
 }
 
 /// @brief NOP - No Operation does nothing, other than advance the value of the
@@ -2777,7 +3005,7 @@ void TST(XReg Xn, BitMask64 imm)
 /// defaulting to LSL.
 /// @param amount For the 32-bit variant: is the shift amount, in the range 0 to
 /// 31, defaulting to 0 and encoded in the "imm6" field.
-void TST(WReg Wn, WReg Wm, Shift shift = LSL, Imm<5> amount = 0)
+void TST(WReg Wn, WReg Wm, Shift shift = Shift::LSL, Imm<5> amount = 0)
 {
 	Emit<"01101010ss0mmmmmiiiiiinnnnn11111", "n", "m", "s", "i">(
 		Wn, Wm, shift, amount
@@ -2796,7 +3024,7 @@ void TST(WReg Wn, WReg Wm, Shift shift = LSL, Imm<5> amount = 0)
 /// defaulting to LSL.
 /// @param amount For the 64-bit variant: is the shift amount, in the range 0 to
 /// 63, defaulting to 0 and encoded in the "imm6" field,
-void TST(XReg Xn, XReg Xm, Shift shift = LSL, Imm<6> amount = 0)
+void TST(XReg Xn, XReg Xm, Shift shift = Shift::LSL, Imm<6> amount = 0)
 {
 	Emit<"11101010ss0mmmmmiiiiiinnnnn11111", "n", "m", "s", "i">(
 		Xn, Xm, shift, amount
