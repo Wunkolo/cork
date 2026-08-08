@@ -13,7 +13,6 @@ set( CMAKE_EXPORT_COMPILE_COMMANDS ON )
 
 ### Cork
 option( CORK_BUILD_TESTING "" ${cork_IS_TOP_LEVEL} )
-option( CORK_BUILD_TOOLS "" ${cork_IS_TOP_LEVEL} )
 
 set(
 	CORK_HEADER_FILES
@@ -37,33 +36,6 @@ target_include_directories( cork PUBLIC
     $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
 )
 target_compile_features( cork INTERFACE cxx_std_20 )
-
-### Tools
-if( CORK_BUILD_TOOLS )
-
-# PugiXML
-find_package( PugiXML 1.15)
-if( NOT TARGET pugixml::pugixml )
-	message( WARNING "pugixml not found. Using embedded submodule")
-	add_subdirectory( externals/pugixml EXCLUDE_FROM_ALL )
-endif()
-
-# fmt
-find_package( fmt 11.1.4)
-if( NOT TARGET fmt::fmt )
-	message( WARNING "fmt not found. Using embedded submodule")
-	add_subdirectory( externals/fmt EXCLUDE_FROM_ALL )
-endif()
-
-
-add_executable( generate
-	tools/generate.cpp
-)
-target_include_directories( generate PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/tests )
-target_link_libraries( generate PRIVATE pugixml::pugixml fmt::fmt )
-
-endif()
-
 
 ### Tests
 if( CORK_BUILD_TESTING )
