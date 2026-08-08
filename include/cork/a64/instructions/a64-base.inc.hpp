@@ -1968,6 +1968,40 @@ void ERET()
 	Emit<"11010110100111110000001111100000">();
 }
 
+/// @brief EXTR - Extract register extracts a register from a pair of registers.
+/// @note EXTR_32_extract
+/// @param Wd Is the 32-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Wn Is the 32-bit name of the first general-purpose source register,
+/// encoded in the "Rn" field.
+/// @param Wm Is the 32-bit name of the second general-purpose source register,
+/// encoded in the "Rm" field.
+/// @param lsb For the 32-bit variant: is the least significant bit position
+/// from which to extract, in the range 0 to 31, encoded in the "imms" field.
+void EXTR(WReg Wd, WReg Wn, WReg Wm, Imm<5> lsb)
+{
+	Emit<"00010011100mmmmm0sssssnnnnnddddd", "d", "n", "m", "s">(
+		Wd, Wn, Wm, lsb
+	);
+}
+
+/// @brief EXTR - Extract register extracts a register from a pair of registers.
+/// @note EXTR_64_extract
+/// @param Xd Is the 64-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Xn Is the 64-bit name of the first general-purpose source register,
+/// encoded in the "Rn" field.
+/// @param Xm Is the 64-bit name of the second general-purpose source register,
+/// encoded in the "Rm" field.
+/// @param lsb For the 64-bit variant: is the least significant bit position
+/// from which to extract, in the range 0 to 63, encoded in the "imms" field.
+void EXTR(XReg Xd, XReg Xn, XReg Xm, Imm<6> lsb)
+{
+	Emit<"10010011110mmmmmssssssnnnnnddddd", "d", "n", "m", "s">(
+		Xd, Xn, Xm, lsb
+	);
+}
+
 /// @brief HINT - Hint instruction is for the instruction set space that is
 /// reserved for architectural hint instructions. Some encodings described here
 /// are not allocated in this revision of the architecture, and behave as NOPs.
