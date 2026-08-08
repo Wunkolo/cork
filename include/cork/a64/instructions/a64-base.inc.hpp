@@ -2497,6 +2497,28 @@ void MOVZ(
 	Emit<"110100101hhiiiiiiiiiiiiiiiiddddd", "d", "i", "h">(Xd, imm, shift);
 }
 
+/// @brief MRS - Move System Register to general-purpose register allows the PE
+/// to read an AArch64 System register into a general-purpose register.
+/// @note MRS_RS_systemmove
+/// @param Xt Is the 64-bit name of the general-purpose destination register,
+/// encoded in the "Rt" field.
+/// @param systemreg Is a System register name, encoded in "o0:op1:CRn:CRm:op2".
+void MRS(XReg Xt, std::uint16_t SystemReg)
+{
+	Emit<"110101010011ooooNNNNMMMMooottttt", "t", "oNMo">(Xt, SystemReg);
+}
+
+/// @brief MSR - Move general-purpose register to System Register allows the PE
+/// to write an AArch64 System register from a general-purpose register.
+/// @note MSR_SR_systemmove
+/// @param systemreg Is a System register name, encoded in "o0:op1:CRn:CRm:op2".
+/// @param Xt Is the 64-bit name of the general-purpose source register, encoded
+/// in the "Rt" field.
+void MSR(std::uint16_t SystemReg, XReg Xt)
+{
+	Emit<"110101010001ooooNNNNMMMMooottttt", "oNMo", "t">(SystemReg, Xt);
+}
+
 /// @brief MSUB - Multiply-Subtract multiplies two register values, subtracts
 /// the product from a third register value, and writes the result to the
 /// destination register.
