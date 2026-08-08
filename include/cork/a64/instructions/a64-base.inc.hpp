@@ -2535,6 +2535,33 @@ void MSUB(XReg Xd, XReg Xn, XReg Xm, XReg Xa)
 	);
 }
 
+/// @brief MUL - This instruction multiplies two register values and writes the
+/// result to the destination register.
+/// @note MUL_MADD_32A_dp_3src
+/// @param Wd Is the 32-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Wn Is the 32-bit name of the first general-purpose source register
+/// holding the multiplicand, encoded in the "Rn" field.
+/// @param Wm Is the 32-bit name of the second general-purpose source register
+/// holding the multiplier, encoded in the "Rm" field.
+void MUL(WReg Wd, WReg Wn, WReg Wm)
+{
+	Emit<"00011011000mmmmm011111nnnnnddddd", "d", "n", "m">(Wd, Wn, Wm);
+}
+
+/// @brief MUL - This instruction multiplies two register values and writes the
+/// result to the destination register.
+/// @note MUL_MADD_64A_dp_3src
+/// @param Xd Is the 64-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Xn Is the 64-bit name of the first general-purpose source register
+/// holding the multiplicand, encoded in the "Rn" field.
+/// @param Xm Is the 64-bit name of the second general-purpose source register
+/// holding the multiplier, encoded in the "Rm" field.
+void MUL(XReg Xd, XReg Xn, XReg Xm)
+{
+	Emit<"10011011000mmmmm011111nnnnnddddd", "d", "n", "m">(Xd, Xn, Xm);
+}
 
 /// @brief NEG - Negate (shifted register) negates an optionally-shifted
 /// register value, and writes the result to the destination register.
