@@ -2874,6 +2874,33 @@ void ORR(XReg Xd, XReg Xn, XReg Xm, Shift shift = Shift::LSL, Imm<6> amount = 0)
 	);
 }
 
+/// @brief PRFUM - Prefetch Memory (unscaled offset) signals the memory system
+/// that data memory accesses from a specified address are likely to occur in
+/// the near future. The memory system can respond by taking actions that are
+/// expected to speed up the memory accesses when they do occur, such as
+/// preloading the cache line containing the specified address into one or more
+/// caches. The effect of a PRFUM instruction is IMPLEMENTATION DEFINED.
+/// @note PRFUM_P_ldst_unscaled
+/// @param imm Is the prefetch operation encoding as an immediate, in the range
+/// 0 to 31, encoded in the "Rt" field.
+/// @param Xn Is the 64-bit name of the general-purpose base register or stack
+/// pointer, encoded in the "Rn" field.
+/// @param simm Is the optional signed immediate byte offset, in the range -256
+/// to 255, defaulting to 0 and encoded in the "imm9" field.
+void PRFUM(Imm<5> imm, XRegSp Xn, SImm<9> simm = 0)
+{
+	Emit<"11111000100iiiiiiiii00nnnnnttttt", "t", "n", "i">(imm, Xn, simm);
+}
+
+/// @brief PSSBB - Physical Speculative Store Bypass Barrier is a memory barrier
+/// that prevents speculative loads from bypassing earlier stores to the same
+/// physical address under certain conditions.
+/// @note PSSBB_DSB_BO_barriers
+void PSSBB()
+{
+	Emit<"11010101000000110011010010011111">();
+}
+
 /// @brief RBIT - Reverse Bits reverses the bit order in a register.
 /// @note RBIT_32_dp_1src
 /// @param Wd Is the 32-bit name of the general-purpose destination register,
