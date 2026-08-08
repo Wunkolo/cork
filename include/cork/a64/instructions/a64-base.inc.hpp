@@ -3419,6 +3419,305 @@ void SMC(Imm<16> imm)
 	Emit<"11010100000iiiiiiiiiiiiiiii00011", "i">(imm);
 }
 
+/// @brief SUB - Subtract (extended register) subtracts a sign or zero-extended
+/// register value, followed by an optional left shift amount, from a register
+/// value, and writes the result to the destination register. The argument that
+/// is extended from the <Rm> register can be a byte, halfword, word, or
+/// doubleword.
+/// @note SUB_32_addsub_ext
+/// @param Wd Is the 32-bit name of the destination general-purpose register or
+/// stack pointer, encoded in the "Rd" field.
+/// @param Wn Is the 32-bit name of the first source general-purpose register or
+/// stack pointer, encoded in the "Rn" field.
+/// @param Wm Is the 32-bit name of the second general-purpose source register,
+/// encoded in the "Rm" field.
+/// @param extend For the 32-bit variant: is the extension to be applied to the
+/// second source operand,
+/// @param amount Is the left shift amount to be applied after extension in the
+/// range 0 to 4, defaulting to 0, encoded in the "imm3" field. It must be
+/// absent when <extend> is absent, is required when <extend> is
+/// LSL, and is optional when <extend> is present but not LSL.
+void SUB(
+	WRegWsp Wd, WRegWsp Wn, WReg Wm, RegisterExtension extend, Imm<3> amount = 0
+)
+{
+	// TODO: Allow "LSL" as extension argument
+	assert(amount.Value <= 4);
+	Emit<"01001011001mmmmmxxxiiinnnnnddddd", "d", "n", "m", "x", "i">(
+		Wd, Wn, Wm, extend, amount
+	);
+}
+
+/// @brief SUB - Subtract (extended register) subtracts a sign or zero-extended
+/// register value, followed by an optional left shift amount, from a register
+/// value, and writes the result to the destination register. The argument that
+/// is extended from the <Rm> register can be a byte, halfword, word, or
+/// doubleword.
+/// @note SUB_64_addsub_ext
+/// @param Xd Is the 64-bit name of the destination general-purpose register or
+/// stack pointer, encoded in the "Rd" field.
+/// @param Xn Is the 64-bit name of the first source general-purpose register or
+/// stack pointer, encoded in the "Rn" field.
+/// @param Rm Is the number [0-30] of the second general-purpose source register
+/// or the name ZR (31), encoded in the "Rm" field.
+/// @param extend For the 64-bit variant: is the extension to be applied to the
+/// second source operand,
+/// @param amount Is the left shift amount to be applied after extension in the
+/// range 0 to 4, defaulting to 0, encoded in the "imm3" field. It must be
+/// absent when <extend> is absent, is required when <extend> is
+/// LSL, and is optional when <extend> is present but not LSL.
+void SUB(
+	XRegSp Xd, XRegSp Xn, RReg Rm, RegisterExtension extend, Imm<3> amount = 0
+)
+{
+	// TODO: Allow "LSL" as extension argument
+	assert(amount.Value <= 4);
+	Emit<"11001011001mmmmmxxxiiinnnnnddddd", "d", "n", "m", "x", "i">(
+		Xd, Xn, Rm, extend, amount
+	);
+}
+
+/// @brief SUB - Subtract (immediate) subtracts an optionally-shifted immediate
+/// value from a register value, and writes the result to the destination
+/// register.
+/// @note SUB_32_addsub_imm
+/// @param Wd Is the 32-bit name of the destination general-purpose register or
+/// stack pointer, encoded in the "Rd" field.
+/// @param Wn Is the 32-bit name of the source general-purpose register or stack
+/// pointer, encoded in the "Rn" field.
+/// @param imm Is an unsigned immediate, in the range 0 to 4095, encoded in the
+/// "imm12" field.
+/// @param shift Is the optional left shift to apply to the immediate,
+/// defaulting to 0.
+void SUB(
+	WRegWsp Wd, WRegWsp Wn, Imm<12> imm, LslOnly = Shift::LSL,
+	ImmChoice<0, 12> shift = 0
+)
+{
+	Emit<"010100010siiiiiiiiiiiinnnnnddddd", "d", "n", "i", "s">(
+		Wd, Wn, imm, shift
+	);
+}
+
+/// @brief SUB - Subtract (immediate) subtracts an optionally-shifted immediate
+/// value from a register value, and writes the result to the destination
+/// register.
+/// @note SUB_64_addsub_imm
+/// @param Xd Is the 64-bit name of the destination general-purpose register or
+/// stack pointer, encoded in the "Rd" field.
+/// @param Xn Is the 64-bit name of the source general-purpose register or stack
+/// pointer, encoded in the "Rn" field.
+/// @param imm Is an unsigned immediate, in the range 0 to 4095, encoded in the
+/// "imm12" field.
+/// @param shift Is the optional left shift to apply to the immediate,
+/// defaulting to 0.
+void SUB(
+	XRegSp Xd, XRegSp Xn, Imm<12> imm, LslOnly = Shift::LSL,
+	ImmChoice<0, 12> shift = 0
+)
+{
+	Emit<"110100010siiiiiiiiiiiinnnnnddddd", "d", "n", "i", "s">(
+		Xd, Xn, imm, shift
+	);
+}
+
+/// @brief SUB - Subtract (shifted register) subtracts an optionally-shifted
+/// register value from a register value, and writes the result to the
+/// destination register.
+/// @note SUB_32_addsub_shift
+/// @param Wd Is the 32-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Wn Is the 32-bit name of the first general-purpose source register,
+/// encoded in the "Rn" field.
+/// @param Wm Is the 32-bit name of the second general-purpose source register,
+/// encoded in the "Rm" field.
+/// @param shift Is the optional shift type to be applied to the second source
+/// operand, defaulting to LSL and
+/// @param amount For the 32-bit variant: is the shift amount, in the range 0 to
+/// 31, defaulting to 0 and encoded in the "imm6" field.
+void SUB(WReg Wd, WReg Wn, WReg Wm, Shift shift = Shift::LSL, Imm<5> amount = 0)
+{
+	Emit<"01001011ss0mmmmmiiiiiinnnnnddddd", "d", "n", "m", "s", "i">(
+		Wd, Wn, Wm, shift, amount
+	);
+}
+
+/// @brief SUB - Subtract (shifted register) subtracts an optionally-shifted
+/// register value from a register value, and writes the result to the
+/// destination register.
+/// @note SUB_64_addsub_shift
+/// @param Xd Is the 64-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Xn Is the 64-bit name of the first general-purpose source register,
+/// encoded in the "Rn" field.
+/// @param Xm Is the 64-bit name of the second general-purpose source register,
+/// encoded in the "Rm" field.
+/// @param shift Is the optional shift type to be applied to the second source
+/// operand, defaulting to LSL and
+/// @param amount For the 64-bit variant: is the shift amount, in the range 0 to
+/// 63, defaulting to 0 and encoded in the "imm6" field.
+void SUB(XReg Xd, XReg Xn, XReg Xm, Shift shift = Shift::LSL, Imm<6> amount = 0)
+{
+	Emit<"11001011ss0mmmmmiiiiiinnnnnddddd", "d", "n", "m", "s", "i">(
+		Xd, Xn, Xm, shift, amount
+	);
+}
+
+/// @brief SUBS - Subtract (extended register), setting flags, subtracts a sign
+/// or zero-extended register value, followed by an optional left shift amount,
+/// from a register value, and writes the result to the destination register.
+/// The argument that is extended from the <Rm> register can be a byte,
+/// halfword, word, or doubleword. It updates the condition flags based on the
+/// result.
+/// @note SUBS_32S_addsub_ext
+/// @param Wd Is the 32-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Wn Is the 32-bit name of the first source general-purpose register or
+/// stack pointer, encoded in the "Rn" field.
+/// @param Wm Is the 32-bit name of the second general-purpose source register,
+/// encoded in the "Rm" field.
+/// @param extend For the 32-bit variant: is the extension to be applied to the
+/// second source operand,
+/// @param amount Is the left shift amount to be applied after extension in the
+/// range 0 to 4, defaulting to 0, encoded in the "imm3" field. It must be
+/// absent when <extend> is absent, is required when <extend> is
+/// LSL, and is optional when <extend> is present but not LSL.
+void SUBS(
+	WReg Wd, WRegWsp Wn, WReg Wm, RegisterExtension extend, Imm<3> amount = 0
+)
+{
+	// TODO: Allow "LSL" as extension argument
+	assert(amount.Value <= 4);
+	Emit<"01101011001mmmmmxxxiiinnnnnddddd", "d", "n", "m", "x", "i">(
+		Wd, Wn, Wm, extend, amount
+	);
+}
+
+/// @brief SUBS - Subtract (extended register), setting flags, subtracts a sign
+/// or zero-extended register value, followed by an optional left shift amount,
+/// from a register value, and writes the result to the destination register.
+/// The argument that is extended from the <Rm> register can be a byte,
+/// halfword, word, or doubleword. It updates the condition flags based on the
+/// result.
+/// @note SUBS_64S_addsub_ext
+/// @param Xd Is the 64-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Xn Is the 64-bit name of the first source general-purpose register or
+/// stack pointer, encoded in the "Rn" field.
+/// @param R Is a width specifier,
+/// @param m Is the number [0-30] of the second general-purpose source register
+/// or the name ZR (31), encoded in the "Rm" field.
+/// @param extend For the 64-bit variant: is the extension to be applied to the
+/// second source operand,
+/// @param amount Is the left shift amount to be applied after extension in the
+/// range 0 to 4, defaulting to 0, encoded in the "imm3" field. It must be
+/// absent when <extend> is absent, is required when <extend> is
+/// LSL, and is optional when <extend> is present but not LSL.
+void SUBS(
+	XReg Xd, XRegSp Xn, RReg Rm, RegisterExtension extend, Imm<3> amount = 0
+)
+{
+	// TODO: Allow "LSL" as extension argument
+	assert(amount.Value <= 4);
+	Emit<"11101011001mmmmmxxxiiinnnnnddddd", "d", "n", "m", "x", "i">(
+		Xd, Xn, Rm, extend, amount
+	);
+}
+
+/// @brief SUBS - Subtract (immediate), setting flags, subtracts an
+/// optionally-shifted immediate value from a register value, and writes the
+/// result to the destination register. It updates the condition flags based on
+/// the result.
+/// @note SUBS_32S_addsub_imm
+/// @param Wd Is the 32-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Wn Is the 32-bit name of the source general-purpose register or stack
+/// pointer, encoded in the "Rn" field.
+/// @param imm Is an unsigned immediate, in the range 0 to 4095, encoded in the
+/// "imm12" field.
+/// @param shift Is the optional left shift to apply to the immediate,
+/// defaulting to 0.
+void SUBS(
+	WReg Wd, WRegWsp Wn, Imm<12> imm, LslOnly = Shift::LSL,
+	ImmChoice<0, 12> shift = 0
+)
+{
+	Emit<"011100010siiiiiiiiiiiinnnnnddddd", "d", "n", "i", "s">(
+		Wd, Wn, imm, shift
+	);
+}
+
+/// @brief SUBS - Subtract (immediate), setting flags, subtracts an
+/// optionally-shifted immediate value from a register value, and writes the
+/// result to the destination register. It updates the condition flags based on
+/// the result.
+/// @note SUBS_64S_addsub_imm
+/// @param Xd Is the 64-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Xn Is the 64-bit name of the source general-purpose register or stack
+/// pointer, encoded in the "Rn" field.
+/// @param imm Is an unsigned immediate, in the range 0 to 4095, encoded in the
+/// "imm12" field.
+/// @param shift Is the optional left shift to apply to the immediate,
+/// defaulting to 0.
+void SUBS(
+	XReg Xd, XRegSp Xn, Imm<12> imm, LslOnly = Shift::LSL,
+	ImmChoice<0, 12> shift = 0
+)
+{
+	Emit<"111100010siiiiiiiiiiiinnnnnddddd", "d", "n", "i", "s">(
+		Xd, Xn, imm, shift
+	);
+}
+
+/// @brief SUBS - Subtract (shifted register), setting flags, subtracts an
+/// optionally-shifted register value from a register value, and writes the
+/// result to the destination register. It updates the condition flags based on
+/// the result.
+/// @note SUBS_32_addsub_shift
+/// @param Wd Is the 32-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Wn Is the 32-bit name of the first general-purpose source register,
+/// encoded in the "Rn" field.
+/// @param Wm Is the 32-bit name of the second general-purpose source register,
+/// encoded in the "Rm" field.
+/// @param shift Is the optional shift type to be applied to the second source
+/// operand, defaulting to LSL and
+/// @param amount For the 32-bit variant: is the shift amount, in the range 0 to
+/// 31, defaulting to 0 and encoded in the "imm6" field.
+void SUBS(
+	WReg Wd, WReg Wn, WReg Wm, Shift shift = Shift::LSL, Imm<5> amount = 0
+)
+{
+	Emit<"01101011ss0mmmmmiiiiiinnnnnddddd", "d", "n", "m", "s", "i">(
+		Wd, Wn, Wm, shift, amount
+	);
+}
+
+/// @brief SUBS - Subtract (shifted register), setting flags, subtracts an
+/// optionally-shifted register value from a register value, and writes the
+/// result to the destination register. It updates the condition flags based on
+/// the result.
+/// @note SUBS_64_addsub_shift
+/// @param Xd Is the 64-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Xn Is the 64-bit name of the first general-purpose source register,
+/// encoded in the "Rn" field.
+/// @param Xm Is the 64-bit name of the second general-purpose source register,
+/// encoded in the "Rm" field.
+/// @param shift Is the optional shift type to be applied to the second source
+/// operand, defaulting to LSL and
+/// @param amount For the 64-bit variant: is the shift amount, in the range 0 to
+/// 63, defaulting to 0 and encoded in the "imm6" field.
+void SUBS(
+	XReg Xd, XReg Xn, XReg Xm, Shift shift = Shift::LSL, Imm<6> amount = 0
+)
+{
+	Emit<"11101011ss0mmmmmiiiiiinnnnnddddd", "d", "n", "m", "s", "i">(
+		Xd, Xn, Xm, shift, amount
+	);
+}
+
 /// @brief SVC - Supervisor Call causes an exception to be taken to EL1. On
 /// executing an SVC instruction, the PE records the exception as a Supervisor
 /// Call exception in ESR_ELx, using the EC value 0x15, and the value of the
