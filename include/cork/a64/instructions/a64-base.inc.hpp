@@ -2497,6 +2497,134 @@ void MOVZ(
 	Emit<"110100101hhiiiiiiiiiiiiiiiiddddd", "d", "i", "h">(Xd, imm, shift);
 }
 
+/// @brief NEG - Negate (shifted register) negates an optionally-shifted
+/// register value, and writes the result to the destination register.
+/// @note NEG_SUB_32_addsub_shift
+/// @param Wd Is the 32-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Wm Is the 32-bit name of the general-purpose source register, encoded
+/// in the "Rm" field.
+/// @param shift Is the optional shift type to be applied to the second source
+/// operand, defaulting to LSL and
+/// @param amount For the 32-bit variant: is the shift amount, in the range 0 to
+/// 31, defaulting to 0 and encoded in the "imm6" field.
+void NEG(WReg Wd, WReg Wm, Shift shift = Shift::LSL, Imm<5> amount = 0)
+{
+	Emit<"01001011ss0mmmmmiiiiii11111ddddd", "d", "m", "s", "i">(
+		Wd, Wm, shift, amount
+	);
+}
+
+/// @brief NEG - Negate (shifted register) negates an optionally-shifted
+/// register value, and writes the result to the destination register.
+/// @note NEG_SUB_64_addsub_shift
+/// @param Xd Is the 64-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Xm Is the 64-bit name of the general-purpose source register, encoded
+/// in the "Rm" field.
+/// @param shift Is the optional shift type to be applied to the second source
+/// operand, defaulting to LSL and
+/// @param amount For the 64-bit variant: is the shift amount, in the range 0 to
+/// 63, defaulting to 0 and encoded in the "imm6" field.
+void NEG(XReg Xd, XReg Xm, Shift shift = Shift::LSL, Imm<6> amount = 0)
+{
+	Emit<"11001011ss0mmmmmiiiiii11111ddddd", "d", "m", "s", "i">(
+		Xd, Xm, shift, amount
+	);
+}
+
+/// @brief NEGS - Negate, setting flags, negates an optionally-shifted register
+/// value, and writes the result to the destination register. It updates the
+/// condition flags based on the result.
+/// @note NEGS_SUBS_32_addsub_shift
+/// @param Wd Is the 32-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Wm Is the 32-bit name of the general-purpose source register, encoded
+/// in the "Rm" field.
+/// @param shift Is the optional shift type to be applied to the second source
+/// operand, defaulting to LSL.
+/// @param amount For the 32-bit variant: is the shift amount, in the range 0 to
+/// 31, defaulting to 0 and encoded in the "imm6" field.
+void NEGS(WReg Wd, WReg Wm, Shift shift = Shift::LSL, Imm<5> amount = 0)
+{
+	Emit<"01101011ss0mmmmmiiiiii11111ddddd", "d", "m", "s", "i">(
+		Wd, Wm, shift, amount
+	);
+}
+
+/// @brief NEGS - Negate, setting flags, negates an optionally-shifted register
+/// value, and writes the result to the destination register. It updates the
+/// condition flags based on the result.
+/// @note NEGS_SUBS_64_addsub_shift
+/// @param Xd Is the 64-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Xm Is the 64-bit name of the general-purpose source register, encoded
+/// in the "Rm" field.
+/// @param shift Is the optional shift type to be applied to the second source
+/// operand, defaulting to LSL.
+/// @param amount For the 64-bit variant: is the shift amount, in the range 0 to
+/// 63, defaulting to 0 and encoded in the "imm6" field.
+void NEGS(XReg Xd, XReg Xm, Shift shift = Shift::LSL, Imm<6> amount = 0)
+{
+	Emit<"11101011ss0mmmmmiiiiii11111ddddd", "d", "m", "s", "i">(
+		Xd, Xm, shift, amount
+	);
+}
+
+/// @brief NGC - Negate with Carry negates the sum of a register value and the
+/// value of NOT (Carry flag), and writes the result to the destination
+/// register.
+/// @note NGC_SBC_32_addsub_carry
+/// @param Wd Is the 32-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Wm Is the 32-bit name of the general-purpose source register, encoded
+/// in the "Rm" field.
+void NGC(WReg Wd, WReg Wm)
+{
+	Emit<"01011010000mmmmm00000011111ddddd", "d", "m">(Wd, Wm);
+}
+
+/// @brief NGC - Negate with Carry negates the sum of a register value and the
+/// value of NOT (Carry flag), and writes the result to the destination
+/// register.
+/// @note NGC_SBC_64_addsub_carry
+/// @param Xd Is the 64-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Xm Is the 64-bit name of the general-purpose source register, encoded
+/// in the "Rm" field.
+void NGC(XReg Xd, XReg Xm)
+{
+	Emit<"11011010000mmmmm00000011111ddddd", "d", "m">(Xd, Xm);
+}
+
+/// @brief NGCS - Negate with Carry, setting flags, negates the sum of a
+/// register value and the value of NOT (Carry flag), and writes the result to
+/// the destination register. It updates the condition flags based on the
+/// result.
+/// @note NGCS_SBCS_32_addsub_carry
+/// @param Wd Is the 32-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Wm Is the 32-bit name of the general-purpose source register, encoded
+/// in the "Rm" field.
+void NGCS(WReg Wd, WReg Wm)
+{
+	Emit<"01111010000mmmmm00000011111ddddd", "d", "m">(Wd, Wm);
+}
+
+/// @brief NGCS - Negate with Carry, setting flags, negates the sum of a
+/// register value and the value of NOT (Carry flag), and writes the result to
+/// the destination register. It updates the condition flags based on the
+/// result.
+/// @note NGCS_SBCS_64_addsub_carry
+/// @param Xd Is the 64-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Xm Is the 64-bit name of the general-purpose source register, encoded
+/// in the "Rm" field.
+void NGCS(XReg Xd, XReg Xm)
+{
+	Emit<"11111010000mmmmm00000011111ddddd", "d", "m">(Xd, Xm);
+}
+
 /// @brief NOP - No Operation does nothing, other than advance the value of the
 /// program counter by 4. This instruction can be used for instruction alignment
 /// purposes.
