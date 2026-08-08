@@ -3419,6 +3419,16 @@ void SMC(Imm<16> imm)
 	Emit<"11010100000iiiiiiiiiiiiiiii00011", "i">(imm);
 }
 
+/// @brief SSBB - Speculative Store Bypass Barrier is a memory barrier that
+/// prevents speculative loads from bypassing earlier stores to the same virtual
+/// address under certain conditions. For more information and details of the
+/// semantics, see Speculative Store Bypass Barrier (SSBB).
+/// @note SSBB_DSB_BO_barriers
+void SSBB()
+{
+	Emit<"11010101000000110011000010011111">();
+}
+
 /// @brief STLRB - Store-Release Register Byte stores a byte from a 32-bit
 /// register to a memory location. The instruction also has memory ordering
 /// semantics as described in Load-Acquire, Store-Release. For information about
