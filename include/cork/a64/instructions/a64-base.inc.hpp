@@ -2355,6 +2355,148 @@ void MNEG(XReg Xd, XReg Xn, XReg Xm)
 	Emit<"10011011000mmmmm111111nnnnnddddd", "d", "n", "m">(Xd, Xn, Xm);
 }
 
+// Many `MOV Xn, (immediate)` instructions are just aliases. Rather than
+// implement all of the aliases, a different MOV utility-function will be
+// implemented that will figure out the best way to generate the immediate
+// These are all the immediate encodings that have been removed:
+// MOV_ORR_32_log_imm
+// MOV_ORR_64_log_imm
+// MOV_MOVN_32_movewide
+// MOV_MOVN_64_movewide
+// MOV_ORR_32_log_shift
+// MOV_ORR_64_log_shift
+// MOV_MOVZ_32_movewide
+// MOV_MOVZ_64_movewide
+
+/// @brief MOV - Move (to/from SP) copies the value of a register to or from the
+/// stack pointer.
+/// @note MOV_ADD_32_addsub_imm
+/// @param Wd Is the 32-bit name of the destination general-purpose register or
+/// stack pointer, encoded in the "Rd" field.
+/// @param Wn Is the 32-bit name of the source general-purpose register or stack
+/// pointer, encoded in the "Rn" field.
+void MOV(WRegWsp Wd, WRegWsp Wn)
+{
+	Emit<"0001000100000000000000nnnnnddddd", "d", "n">(Wd, Wn);
+}
+
+/// @brief MOV - Move (to/from SP) copies the value of a register to or from the
+/// stack pointer.
+/// @note MOV_ADD_64_addsub_imm
+/// @param Xd Is the 64-bit name of the destination general-purpose register or
+/// stack pointer, encoded in the "Rd" field.
+/// @param Xn Is the 64-bit name of the source general-purpose register or stack
+/// pointer, encoded in the "Rn" field.
+void MOV(XRegSp Xd, XRegSp Xn)
+{
+	Emit<"1001000100000000000000nnnnnddddd", "d", "n">(Xd, Xn);
+}
+
+/// @brief MOVK - Move wide with keep moves an optionally-shifted 16-bit
+/// immediate value into a register, keeping other bits unchanged.
+/// @note MOVK_32_movewide
+/// @param Wd Is the 32-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param imm Is the 16-bit unsigned immediate, in the range 0 to 65535,
+/// encoded in the "imm16" field.
+/// @param shift For the 32-bit variant: is the amount by which to shift the
+/// immediate left, either 0 (the default) or 16, encoded in the "hw" field as
+/// <shift>/16.
+void MOVK(
+	WReg Wd, Imm<16> imm, LslOnly = Shift::LSL, ImmChoice<0, 16> shift = 0
+)
+{
+	Emit<"0111001010hiiiiiiiiiiiiiiiiddddd", "d", "i", "h">(Wd, imm, shift);
+}
+
+/// @brief MOVK - Move wide with keep moves an optionally-shifted 16-bit
+/// immediate value into a register, keeping other bits unchanged.
+/// @note MOVK_64_movewide
+/// @param Xd Is the 64-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param imm Is the 16-bit unsigned immediate, in the range 0 to 65535,
+/// encoded in the "imm16" field.
+/// @param shift For the 64-bit variant: is the amount by which to shift the
+/// immediate left, either 0 (the default), 16, 32 or 48, encoded in the "hw"
+/// field as <shift>/16.
+void MOVK(
+	XReg Xd, Imm<16> imm, LslOnly = Shift::LSL,
+	ImmChoice<0, 16, 32, 48> shift = 0
+)
+{
+	Emit<"111100101hhiiiiiiiiiiiiiiiiddddd", "d", "i", "h">(Xd, imm, shift);
+}
+
+/// @brief MOVN - Move wide with NOT moves the inverse of an optionally-shifted
+/// 16-bit immediate value to a register.
+/// @note MOVN_32_movewide
+/// @param Wd Is the 32-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param imm Is the 16-bit unsigned immediate, in the range 0 to 65535,
+/// encoded in the "imm16" field.
+/// @param shift For the 32-bit variant: is the amount by which to shift the
+/// immediate left, either 0 (the default) or 16, encoded in the "hw" field as
+/// <shift>/16.
+void MOVN(
+	WReg Wd, Imm<16> imm, LslOnly = Shift::LSL, ImmChoice<0, 16> shift = 0
+)
+{
+	Emit<"0001001010hiiiiiiiiiiiiiiiiddddd", "d", "i", "h">(Wd, imm, shift);
+}
+
+/// @brief MOVN - Move wide with NOT moves the inverse of an optionally-shifted
+/// 16-bit immediate value to a register.
+/// @note MOVN_64_movewide
+/// @param Xd Is the 64-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param imm Is the 16-bit unsigned immediate, in the range 0 to 65535,
+/// encoded in the "imm16" field.
+/// @param shift For the 64-bit variant: is the amount by which to shift the
+/// immediate left, either 0 (the default), 16, 32 or 48, encoded in the "hw"
+/// field as <shift>/16.
+void MOVN(
+	XReg Xd, Imm<16> imm, LslOnly = Shift::LSL,
+	ImmChoice<0, 16, 32, 48> shift = 0
+)
+{
+	Emit<"100100101hhiiiiiiiiiiiiiiiiddddd", "d", "i", "h">(Xd, imm, shift);
+}
+
+/// @brief MOVZ - Move wide with zero moves an optionally-shifted 16-bit
+/// immediate value to a register.
+/// @note MOVZ_32_movewide
+/// @param Wd Is the 32-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param imm Is the 16-bit unsigned immediate, in the range 0 to 65535,
+/// encoded in the "imm16" field.
+/// @param shift For the 32-bit variant: is the amount by which to shift the
+/// immediate left, either 0 (the default) or 16, encoded in the "hw" field as
+/// <shift>/16.
+void MOVZ(
+	WReg Wd, Imm<16> imm, LslOnly = Shift::LSL, ImmChoice<0, 16> shift = 0
+)
+{
+	Emit<"0101001010hiiiiiiiiiiiiiiiiddddd", "d", "i", "h">(Wd, imm, shift);
+}
+
+/// @brief MOVZ - Move wide with zero moves an optionally-shifted 16-bit
+/// immediate value to a register.
+/// @note MOVZ_64_movewide
+/// @param Xd Is the 64-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param imm Is the 16-bit unsigned immediate, in the range 0 to 65535,
+/// encoded in the "imm16" field.
+/// @param shift For the 64-bit variant: is the amount by which to shift the
+/// immediate left, either 0 (the default), 16, 32 or 48, encoded in the "hw"
+/// field as <shift>/16.
+void MOVZ(
+	XReg Xd, Imm<16> imm, LslOnly = Shift::LSL,
+	ImmChoice<0, 16, 32, 48> shift = 0
+)
+{
+	Emit<"110100101hhiiiiiiiiiiiiiiiiddddd", "d", "i", "h">(Xd, imm, shift);
+}
+
 /// @brief NOP - No Operation does nothing, other than advance the value of the
 /// program counter by 4. This instruction can be used for instruction alignment
 /// purposes.
