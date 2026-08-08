@@ -3419,6 +3419,40 @@ void SMC(Imm<16> imm)
 	Emit<"11010100000iiiiiiiiiiiiiiii00011", "i">(imm);
 }
 
+/// @brief SMNEGL - Signed Multiply-Negate Long multiplies two 32-bit register
+/// values, negates the product, and writes the result to the 64-bit destination
+/// register.
+/// @note SMNEGL_SMSUBL_64WA_dp_3src
+/// @param Xd Is the 64-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Wn Is the 32-bit name of the first general-purpose source register
+/// holding the multiplicand, encoded in the "Rn" field.
+/// @param Wm Is the 32-bit name of the second general-purpose source register
+/// holding the multiplier, encoded in the "Rm" field.
+void SMNEGL(XReg Xd, WReg Wn, WReg Wm)
+{
+	Emit<"10011011001mmmmm111111nnnnnddddd", "d", "n", "m">(Xd, Wn, Wm);
+}
+
+/// @brief SMSUBL - Signed Multiply-Subtract Long multiplies two 32-bit register
+/// values, subtracts the product from a 64-bit register value, and writes the
+/// result to the 64-bit destination register.
+/// @note SMSUBL_64WA_dp_3src
+/// @param Xd Is the 64-bit name of the general-purpose destination register,
+/// encoded in the "Rd" field.
+/// @param Wn Is the 32-bit name of the first general-purpose source register
+/// holding the multiplicand, encoded in the "Rn" field.
+/// @param Wm Is the 32-bit name of the second general-purpose source register
+/// holding the multiplier, encoded in the "Rm" field.
+/// @param Xa Is the 64-bit name of the third general-purpose source register
+/// holding the minuend, encoded in the "Ra" field.
+void SMSUBL(XReg Xd, WReg Wn, WReg Wm, XReg Xa)
+{
+	Emit<"10011011001mmmmm1aaaaannnnnddddd", "d", "n", "m", "a">(
+		Xd, Wn, Wm, Xa
+	);
+}
+
 /// @brief SMULH - Signed Multiply High multiplies two 64-bit register values,
 /// and writes bits[127:64] of the 128-bit result to the 64-bit destination
 /// register.
