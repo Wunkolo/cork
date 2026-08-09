@@ -79,7 +79,7 @@ struct SImm
 		const std::uint64_t     Packed   = (Value >> AlignmentBits) & Mask;
 		const std::uint64_t     NewUpper = (Packed) & ((1 << Rotate) - 1);
 		const std::uint64_t     NewLower = (Packed) >> Rotate;
-		return (NewUpper << (21 - Rotate)) | NewLower;
+		return static_cast<std::uint32_t>((NewUpper << (21 - Rotate)) | NewLower);
 	}
 };
 
