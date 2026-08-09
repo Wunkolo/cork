@@ -2929,7 +2929,7 @@ void RBIT(XReg Xd, XReg Xn)
 /// @param Xn Is the 64-bit name of the general-purpose register holding the
 /// address to be branched to, encoded in the "Rn" field. Defaults to X30 if
 /// absent.
-void RET(XReg Xn)
+void RET(XReg Xn = X30)
 {
 	Emit<"1101011001011111000000nnnnn00000", "n">(Xn);
 }
