@@ -91,84 +91,84 @@ std::uint32_t Encode(std::uint32_t Value)
 template<std::uint32_t Splat>
 std::uint32_t Encode(RReg Value)
 {
-	static_assert(std::popcount(Splat) == 5);
+	static_assert(static_cast<std::size_t>(std::popcount(Splat)) == 5);
 	return BitExpand<Splat>(static_cast<std::uint32_t>(Value.Index));
 }
 
 template<std::uint32_t Splat>
 std::uint32_t Encode(WReg Value)
 {
-	static_assert(std::popcount(Splat) == 5);
+	static_assert(static_cast<std::size_t>(std::popcount(Splat)) == 5);
 	return BitExpand<Splat>(static_cast<std::uint32_t>(Value.Index));
 }
 
 template<std::uint32_t Splat>
 std::uint32_t Encode(WRegWsp Value)
 {
-	static_assert(std::popcount(Splat) == 5);
+	static_assert(static_cast<std::size_t>(std::popcount(Splat)) == 5);
 	return BitExpand<Splat>(static_cast<std::uint32_t>(Value.Index));
 }
 
 template<std::uint32_t Splat>
 std::uint32_t Encode(XReg Value)
 {
-	static_assert(std::popcount(Splat) == 5);
+	static_assert(static_cast<std::size_t>(std::popcount(Splat)) == 5);
 	return BitExpand<Splat>(static_cast<std::uint32_t>(Value.Index));
 }
 
 template<std::uint32_t Splat>
 std::uint32_t Encode(XRegSp Value)
 {
-	static_assert(std::popcount(Splat) == 5);
+	static_assert(static_cast<std::size_t>(std::popcount(Splat)) == 5);
 	return BitExpand<Splat>(static_cast<std::uint32_t>(Value.Index));
 }
 
 template<std::uint32_t Splat>
 std::uint32_t Encode(Condition Value)
 {
-	static_assert(std::popcount(Splat) == 4);
+	static_assert(static_cast<std::size_t>(std::popcount(Splat)) == 4);
 	return BitExpand<Splat>(static_cast<std::uint32_t>(Value));
 }
 
 template<std::uint32_t Splat>
 std::uint32_t Encode(ConditionFlag Value)
 {
-	static_assert(std::popcount(Splat) == 4);
+	static_assert(static_cast<std::size_t>(std::popcount(Splat)) == 4);
 	return BitExpand<Splat>(static_cast<std::uint32_t>(Value));
 }
 
 template<std::uint32_t Splat>
 std::uint32_t Encode(RegisterExtension Value)
 {
-	static_assert(std::popcount(Splat) == 3);
+	static_assert(static_cast<std::size_t>(std::popcount(Splat)) == 3);
 	return BitExpand<Splat>(static_cast<std::uint32_t>(Value));
 }
 
 template<std::uint32_t Splat>
 std::uint32_t Encode(Shift Value)
 {
-	static_assert(std::popcount(Splat) == 2);
+	static_assert(static_cast<std::size_t>(std::popcount(Splat)) == 2);
 	return BitExpand<Splat>(static_cast<std::uint32_t>(Value));
 }
 
 template<std::uint32_t Splat>
 std::uint32_t Encode(BarrierOperation Value)
 {
-	static_assert(std::popcount(Splat) == 4);
+	static_assert(static_cast<std::size_t>(std::popcount(Splat)) == 4);
 	return BitExpand<Splat>(static_cast<std::uint32_t>(Value));
 }
 
 template<std::uint32_t Splat>
 std::uint32_t Encode(InstructionCacheOperation Value)
 {
-	static_assert(std::popcount(Splat) == 10);
+	static_assert(static_cast<std::size_t>(std::popcount(Splat)) == 10);
 	return BitExpand<Splat>(static_cast<std::uint32_t>(Value));
 }
 
 template<std::uint32_t Splat, std::size_t BitWidth, std::size_t Alignment>
 std::uint32_t Encode(Imm<BitWidth, Alignment> Value)
 {
-	static_assert(std::popcount(Splat) >= BitWidth);
+	static_assert(static_cast<std::size_t>(std::popcount(Splat)) >= BitWidth);
 	return BitExpand<Splat>(
 		static_cast<std::uint32_t>(Value.Value / Alignment)
 	);
@@ -177,7 +177,7 @@ std::uint32_t Encode(Imm<BitWidth, Alignment> Value)
 template<std::uint32_t Splat, std::size_t BitWidth, std::size_t Alignment>
 std::uint32_t Encode(SImm<BitWidth, Alignment> Value)
 {
-	static_assert(std::popcount(Splat) >= BitWidth);
+	static_assert(static_cast<std::size_t>(std::popcount(Splat)) >= BitWidth);
 	return BitExpand<Splat>(
 		static_cast<std::uint32_t>(Value.Value / Alignment)
 	);
@@ -187,7 +187,7 @@ template<std::uint32_t Splat, std::uint8_t... Choices>
 std::uint32_t Encode(ImmChoice<Choices...> Value)
 {
 	static_assert(
-		std::popcount(Splat) >= ImmChoice<Choices...>::BitWidth,
+		static_cast<std::size_t>(std::popcount(Splat)) >= ImmChoice<Choices...>::BitWidth,
 		"Not enough bits to encode choices"
 	);
 	return BitExpand<Splat>(static_cast<std::uint32_t>(Value.Value));
@@ -196,14 +196,14 @@ std::uint32_t Encode(ImmChoice<Choices...> Value)
 template<std::uint32_t Splat>
 std::uint32_t Encode(BitMask32 Value)
 {
-	static_assert(std::popcount(Splat) >= 12);
+	static_assert(static_cast<std::size_t>(std::popcount(Splat)) >= 12);
 	return BitExpand<Splat>(static_cast<std::uint32_t>(Value.Value));
 }
 
 template<std::uint32_t Splat>
 std::uint32_t Encode(BitMask64 Value)
 {
-	static_assert(std::popcount(Splat) >= 13);
+	static_assert(static_cast<std::size_t>(std::popcount(Splat)) >= 13);
 	return BitExpand<Splat>(static_cast<std::uint32_t>(Value.Value));
 }
 
