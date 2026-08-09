@@ -18,12 +18,12 @@ struct Imm
 		"Alignment must be a positive power of two"
 	);
 
-	static constexpr std::uint64_t AlignmentMask = Alignment - 1;
-	static constexpr std::uint64_t AlignmentBits = std::popcount(AlignmentMask);
-	static constexpr std::uint64_t Mask          = (1 << BitSize) - 1;
-	const std::uint64_t            Value;
+	static constexpr std::uint32_t AlignmentMask = Alignment - 1;
+	static constexpr std::uint32_t AlignmentBits = std::popcount(AlignmentMask);
+	static constexpr std::uint32_t Mask          = (1 << BitSize) - 1;
+	const std::uint32_t            Value;
 
-	constexpr Imm(std::uint64_t ImmValue) : Value(ImmValue)
+	constexpr Imm(std::uint32_t ImmValue) : Value(ImmValue)
 	{
 		// Ensure value can be encoded, maybe do this at encode-time and not in
 		// the ctor?
