@@ -86,6 +86,8 @@ struct SImm
 template<std::uint8_t... Choices>
 struct ImmChoice
 {
+	static_assert(sizeof...(Choices) <= 0xFF);
+
 private:
 	consteval std::uint8_t FindChoiceIndex(std::uint8_t Choice)
 	{
@@ -95,7 +97,7 @@ private:
 
 		// Get the index of the choice
 		constexpr std::array ChoiceArray = {Choices...};
-		for( std::size_t i = 0; i < sizeof...(Choices); ++i )
+		for( std::uint8_t i = 0; i < sizeof...(Choices); ++i )
 		{
 			if( ChoiceArray[i] == Choice )
 			{
@@ -108,7 +110,7 @@ private:
 	}
 
 public:
-	const std::uint32_t Value;
+	const std::uint8_t Value;
 
 	// Number of bits required to encode all choices
 	static constexpr std::size_t BitWidth
