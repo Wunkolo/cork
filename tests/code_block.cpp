@@ -1,5 +1,6 @@
 #include <catch2/catch_test_macros.hpp>
 
+#include <cork/a64/code.hpp>
 #include <cork/code_block.hpp>
 
 #include <array>
@@ -10,11 +11,12 @@ using namespace Cork;
 // Testing codeblock execution on an a64 host
 TEST_CASE("CodeBlock Execute a64", "[code_block]")
 {
-	const std::array<std::uint32_t, 3> TestCode{{
-		0x5297dde0, //  mov	w0, #0xbeef
-		0x72bbd5a0, //  movk w0, #0xdead, lsl #16
-		0xd65f03c0, //  ret
-	}};
+	CodeGenerator Program;
+	Program.MOVZ(W0, 0xBEEF);
+	Program.MOVK(W0, 0xDEAD, LSL, 16);
+	Program.RET();
+
+	const std::span<const std::uint32_t> TestCode = Program.GetCode();
 
 	std::optional<CodeBlock> CreateResult
 		= CodeBlock::Create(TestCode.size() * sizeof(std::uint32_t));
@@ -26,8 +28,8 @@ TEST_CASE("CodeBlock Execute a64", "[code_block]")
 	// Allow write access
 	Code.UnProtect();
 
-	// Copy code over
-	std::copy(TestCode.cbegin(), TestCode.cend(), Code.BlockMemory.begin());
+	// Copy code over to code-block memory
+	std::copy(TestCode.begin(), TestCode.end(), Code.BlockMemory.begin());
 
 	// Remove write access
 	Code.Protect();
