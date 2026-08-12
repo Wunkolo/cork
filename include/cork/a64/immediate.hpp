@@ -27,7 +27,7 @@ struct Imm
 	{
 		// Ensure value can be encoded, maybe do this at encode-time and not in
 		// the ctor?
-		assert((ImmValue & Mask) == Value);
+		assert((ImmValue & (Mask << AlignmentBits)) == Value);
 
 		if constexpr( Alignment > 1 )
 		{
@@ -79,7 +79,9 @@ struct SImm
 		const std::uint64_t     Packed   = (Value >> AlignmentBits) & Mask;
 		const std::uint64_t     NewUpper = (Packed) & ((1 << Rotate) - 1);
 		const std::uint64_t     NewLower = (Packed) >> Rotate;
-		return static_cast<std::uint32_t>((NewUpper << (21 - Rotate)) | NewLower);
+		return static_cast<std::uint32_t>(
+			(NewUpper << (21 - Rotate)) | NewLower
+		);
 	}
 };
 
