@@ -3807,6 +3807,344 @@ void STP(XReg Xt, XReg Xt2, XRegSp Xn, SImm<7, 8> imm = 0)
 	);
 }
 
+/// @brief STR - Store Register (immediate) stores a word or a doubleword from a
+/// register to memory. The address that is used for the store is calculated
+/// from a base register and an immediate offset.
+/// @note STR_32_ldst_immpost
+/// @param Wt Is the 32-bit name of the general-purpose register to be
+/// transferred, encoded in the "Rt" field.
+/// @param Xn Is the 64-bit name of the general-purpose base register or stack
+/// pointer, encoded in the "Rn" field.
+/// @param simm Is the signed immediate byte offset, in the range -256 to 255,
+/// encoded in the "imm9" field.
+void STR(WReg Wt, PostIndex Xn, SImm<9> simm)
+{
+	Emit<"10111000000iiiiiiiii01nnnnnttttt", "t", "n", "i">(Wt, Xn, simm);
+}
+
+/// @brief STR - Store Register (immediate) stores a word or a doubleword from a
+/// register to memory. The address that is used for the store is calculated
+/// from a base register and an immediate offset.
+/// @note STR_64_ldst_immpost
+/// @param Xt Is the 64-bit name of the general-purpose register to be
+/// transferred, encoded in the "Rt" field.
+/// @param Xn Is the 64-bit name of the general-purpose base register or stack
+/// pointer, encoded in the "Rn" field.
+/// @param simm Is the signed immediate byte offset, in the range -256 to 255,
+/// encoded in the "imm9" field.
+void STR(XReg Xt, PostIndex Xn, SImm<9> simm)
+{
+	Emit<"11111000000iiiiiiiii01nnnnnttttt", "t", "n", "i">(Xt, Xn, simm);
+}
+
+/// @brief STR - Store Register (immediate) stores a word or a doubleword from a
+/// register to memory. The address that is used for the store is calculated
+/// from a base register and an immediate offset.
+/// @note STR_32_ldst_immpre
+/// @param Wt Is the 32-bit name of the general-purpose register to be
+/// transferred, encoded in the "Rt" field.
+/// @param Xn Is the 64-bit name of the general-purpose base register or stack
+/// pointer, encoded in the "Rn" field.
+/// @param simm Is the signed immediate byte offset, in the range -256 to 255,
+/// encoded in the "imm9" field.
+void STR(WReg Wt, PreIndex Xn, SImm<9> simm)
+{
+	Emit<"10111000000iiiiiiiii11nnnnnttttt", "t", "n", "i">(Wt, Xn, simm);
+}
+
+/// @brief STR - Store Register (immediate) stores a word or a doubleword from a
+/// register to memory. The address that is used for the store is calculated
+/// from a base register and an immediate offset.
+/// @note STR_64_ldst_immpre
+/// @param Xt Is the 64-bit name of the general-purpose register to be
+/// transferred, encoded in the "Rt" field.
+/// @param Xn Is the 64-bit name of the general-purpose base register or stack
+/// pointer, encoded in the "Rn" field.
+/// @param simm Is the signed immediate byte offset, in the range -256 to 255,
+/// encoded in the "imm9" field.
+void STR(XReg Xt, PreIndex Xn, SImm<9> simm)
+{
+	Emit<"11111000000iiiiiiiii11nnnnnttttt", "t", "n", "i">(Xt, Xn, simm);
+}
+
+/// @brief STR - Store Register (immediate) stores a word or a doubleword from a
+/// register to memory. The address that is used for the store is calculated
+/// from a base register and an immediate offset.
+/// @note STR_32_ldst_pos
+/// @param Wt Is the 32-bit name of the general-purpose register to be
+/// transferred, encoded in the "Rt" field.
+/// @param Xn Is the 64-bit name of the general-purpose base register or stack
+/// pointer, encoded in the "Rn" field.
+/// @param pimm For the 32-bit variant: is the optional positive immediate byte
+/// offset, a multiple of 4 in the range 0 to 16380, defaulting to 0 and encoded
+/// in the "imm12" field as <pimm>/4.
+void STR(WReg Wt, XRegSp Xn, Imm<12, 4> pimm = 0)
+{
+	Emit<"1011100100iiiiiiiiiiiinnnnnttttt", "t", "n", "i">(Wt, Xn, pimm);
+}
+
+/// @brief STR - Store Register (immediate) stores a word or a doubleword from a
+/// register to memory. The address that is used for the store is calculated
+/// from a base register and an immediate offset.
+/// @note STR_64_ldst_pos
+/// @param Xt Is the 64-bit name of the general-purpose register to be
+/// transferred, encoded in the "Rt" field.
+/// @param Xn Is the 64-bit name of the general-purpose base register or stack
+/// pointer, encoded in the "Rn" field.
+/// @param pimm For the 64-bit variant: is the optional positive immediate byte
+/// offset, a multiple of 8 in the range 0 to 32760, defaulting to 0 and encoded
+/// in the "imm12" field as <pimm>/8.
+void STR(XReg Xt, XRegSp Xn, Imm<12, 8> pimm = 0)
+{
+	Emit<"1111100100iiiiiiiiiiiinnnnnttttt", "t", "n", "i">(Xt, Xn, pimm);
+}
+
+/// @brief STR - Store Register (register) calculates an address from a base
+/// register value and an offset register value, and stores a 32-bit word or a
+/// 64-bit doubleword to the calculated address, from a register. The
+/// instruction uses an offset addressing mode, that calculates the address used
+/// for the memory access from a base register value and an offset register
+/// value. The offset can be optionally shifted and extended.
+/// @note STR_32_ldst_regoff
+/// @param Wt Is the 32-bit name of the general-purpose register to be
+/// transferred, encoded in the "Rt" field.
+/// @param Xn Is the 64-bit name of the general-purpose base register or stack
+/// pointer, encoded in the "Rn" field.
+/// @param Wm When <field>option<0></field> is set to 0, is the 32-bit
+/// name of the general-purpose index register, encoded in the "Rm" field.
+/// @param Xm When <field>option<0></field> is set to 1, is the 64-bit
+/// name of the general-purpose index register, encoded in the "Rm" field.
+/// @param extend Is the index extend/shift specifier, defaulting to LSL, and
+/// which must be omitted for the LSL option when <amount> is omitted.
+/// @param amount For the 32-bit variant: is the index shift amount, optional
+/// only when <extend> is not LSL. Where it is permitted to be optional,
+/// it defaults to #0. It is
+void STR(
+	WReg Wt, XRegSp Xn, RReg Rm,
+	RegisterExtension extend = RegisterExtension::UXTX,
+	ImmChoice<0, 2>   amount = 0
+)
+{
+	// TODO: Allow "LSL" as extension argument
+	// TODO: Verify extension with Rm width
+	Emit<"10111000001mmmmmxxxS10nnnnnttttt", "t", "n", "m", "x", "S">(
+		Wt, Xn, Rm, extend, amount
+	);
+}
+
+/// @brief STR - Store Register (register) calculates an address from a base
+/// register value and an offset register value, and stores a 32-bit word or a
+/// 64-bit doubleword to the calculated address, from a register. The
+/// instruction uses an offset addressing mode, that calculates the address used
+/// for the memory access from a base register value and an offset register
+/// value. The offset can be optionally shifted and extended.
+/// @note STR_64_ldst_regoff
+/// @param Xt Is the 64-bit name of the general-purpose register to be
+/// transferred, encoded in the "Rt" field.
+/// @param Xn Is the 64-bit name of the general-purpose base register or stack
+/// pointer, encoded in the "Rn" field.
+/// @param Wm When <field>option<0></field> is set to 0, is the 32-bit
+/// name of the general-purpose index register, encoded in the "Rm" field.
+/// @param Xm When <field>option<0></field> is set to 1, is the 64-bit
+/// name of the general-purpose index register, encoded in the "Rm" field.
+/// @param extend Is the index extend/shift specifier, defaulting to LSL, and
+/// which must be omitted for the LSL option when <amount> is omitted.
+/// @param amount For the 64-bit variant: is the index shift amount, optional
+/// only when <extend> is not LSL. Where it is permitted to be optional,
+/// it defaults to #0. It is
+void STR(
+	XReg Xt, XRegSp Xn, RReg Rm,
+	RegisterExtension     extend = RegisterExtension::UXTX,
+	Cork::ImmChoice<0, 3> amount = 0
+)
+{
+	// TODO: Allow "LSL" as extension argument
+	// TODO: Verify extension with Rm width
+	Emit<"11111000001mmmmmxxxS10nnnnnttttt", "t", "n", "m", "x", "S">(
+		Xt, Xn, Rm, extend, amount
+	);
+}
+
+/// @brief STRB - Store Register Byte (immediate) stores the least significant
+/// byte of a 32-bit register to memory. The address that is used for the store
+/// is calculated from a base register and an immediate offset.
+/// @note STRB_32_ldst_immpost
+/// @param Wt Is the 32-bit name of the general-purpose register to be
+/// transferred, encoded in the "Rt" field.
+/// @param Xn Is the 64-bit name of the general-purpose base register or stack
+/// pointer, encoded in the "Rn" field.
+/// @param simm Is the signed immediate byte offset, in the range -256 to 255,
+/// encoded in the "imm9" field.
+void STRB(WReg Wt, PostIndex Xn, SImm<9> simm)
+{
+	Emit<"00111000000iiiiiiiii01nnnnnttttt", "t", "n", "i">(Wt, Xn, simm);
+}
+
+/// @brief STRB - Store Register Byte (immediate) stores the least significant
+/// byte of a 32-bit register to memory. The address that is used for the store
+/// is calculated from a base register and an immediate offset.
+/// @note STRB_32_ldst_immpre
+/// @param Wt Is the 32-bit name of the general-purpose register to be
+/// transferred, encoded in the "Rt" field.
+/// @param Xn Is the 64-bit name of the general-purpose base register or stack
+/// pointer, encoded in the "Rn" field.
+/// @param simm Is the signed immediate byte offset, in the range -256 to 255,
+/// encoded in the "imm9" field.
+void STRB(WReg Wt, PreIndex Xn, SImm<9> simm)
+{
+	Emit<"00111000000iiiiiiiii11nnnnnttttt", "t", "n", "i">(Wt, Xn, simm);
+}
+
+/// @brief STRB - Store Register Byte (immediate) stores the least significant
+/// byte of a 32-bit register to memory. The address that is used for the store
+/// is calculated from a base register and an immediate offset.
+/// @note STRB_32_ldst_pos
+/// @param Wt Is the 32-bit name of the general-purpose register to be
+/// transferred, encoded in the "Rt" field.
+/// @param Xn Is the 64-bit name of the general-purpose base register or stack
+/// pointer, encoded in the "Rn" field.
+/// @param pimm Is the optional positive immediate byte offset, in the range 0
+/// to 4095, defaulting to 0 and encoded in the "imm12" field.
+void STRB(WReg Wt, XRegSp Xn, Imm<12> pimm = 0)
+{
+	Emit<"0011100100iiiiiiiiiiiinnnnnttttt", "t", "n", "i">(Wt, Xn, pimm);
+}
+
+/// @brief STRB - Store Register Byte (register) calculates an address from a
+/// base register value and an offset register value, and stores a byte from a
+/// 32-bit register to the calculated address. The instruction uses an offset
+/// addressing mode, that calculates the address used for the memory access from
+/// a base register value and an offset register value. The offset can be
+/// optionally shifted and extended.
+/// @note STRB_32B_ldst_regoff
+/// @param Wt Is the 32-bit name of the general-purpose register to be
+/// transferred, encoded in the "Rt" field.
+/// @param Xn Is the 64-bit name of the general-purpose base register or stack
+/// pointer, encoded in the "Rn" field.
+/// @param Wm When <field>option<0></field> is set to 0, is the 32-bit
+/// name of the general-purpose index register, encoded in the "Rm" field.
+/// @param Xm When <field>option<0></field> is set to 1, is the 64-bit
+/// name of the general-purpose index register, encoded in the "Rm" field.
+/// @param extend Is the index extend specifier,
+/// @param amount Is the index shift amount, it must be <value>#0</value>,
+/// encoded in "S" as 0 if omitted, or as 1 if present.
+void STRB(
+	WReg Wt, XRegSp Xn, RReg Rm,
+	RegisterExtension extend = RegisterExtension::UXTX, ImmChoice<0> amount = 0
+)
+{
+	// TODO: Allow "LSL" as extension argument
+	// TODO: Verify extension with Rm width
+	Emit<"00111000001mmmmmxxxS10nnnnnttttt", "t", "n", "m", "x", "S">(
+		Wt, Xn, Rm, extend, amount
+	);
+}
+
+/// @brief STRB - Store Register Byte (register) calculates an address from a
+/// base register value and an offset register value, and stores a byte from a
+/// 32-bit register to the calculated address. The instruction uses an offset
+/// addressing mode, that calculates the address used for the memory access from
+/// a base register value and an offset register value. The offset can be
+/// optionally shifted and extended.
+/// @note STRB_32BL_ldst_regoff
+/// @param Wt Is the 32-bit name of the general-purpose register to be
+/// transferred, encoded in the "Rt" field.
+/// @param Xn Is the 64-bit name of the general-purpose base register or stack
+/// pointer, encoded in the "Rn" field.
+/// @param Xm When <field>option<0></field> is set to 1, is the 64-bit
+/// name of the general-purpose index register, encoded in the "Rm" field.
+/// @param amount Is the index shift amount, it must be <value>#0</value>,
+/// encoded in "S" as 0 if omitted, or as 1 if present.
+void STRB(
+	WReg Wt, XRegSp Xn, XReg Xm, LslOnly = Shift::LSL, ImmChoice<0> amount = 0
+)
+{
+	Emit<"00111000001mmmmm011S10nnnnnttttt", "t", "n", "m", "S">(
+		Wt, Xn, Xm, amount
+	);
+}
+
+/// @brief STRH - Store Register Halfword (immediate) stores the least
+/// significant halfword of a 32-bit register to memory. The address that is
+/// used for the store is calculated from a base register and an immediate
+/// offset.
+/// @note STRH_32_ldst_immpost
+/// @param Wt Is the 32-bit name of the general-purpose register to be
+/// transferred, encoded in the "Rt" field.
+/// @param Xn Is the 64-bit name of the general-purpose base register or stack
+/// pointer, encoded in the "Rn" field.
+/// @param simm Is the signed immediate byte offset, in the range -256 to 255,
+/// encoded in the "imm9" field.
+void STRH(WReg Wt, PostIndex Xn, SImm<9> simm)
+{
+	Emit<"01111000000iiiiiiiii01nnnnnttttt", "t", "n", "i">(Wt, Xn, simm);
+}
+
+/// @brief STRH - Store Register Halfword (immediate) stores the least
+/// significant halfword of a 32-bit register to memory. The address that is
+/// used for the store is calculated from a base register and an immediate
+/// offset.
+/// @note STRH_32_ldst_immpre
+/// @param Wt Is the 32-bit name of the general-purpose register to be
+/// transferred, encoded in the "Rt" field.
+/// @param Xn Is the 64-bit name of the general-purpose base register or stack
+/// pointer, encoded in the "Rn" field.
+/// @param simm Is the signed immediate byte offset, in the range -256 to 255,
+/// encoded in the "imm9" field.
+void STRH(WReg Wt, PreIndex Xn, SImm<9> simm)
+{
+	Emit<"01111000000iiiiiiiii11nnnnnttttt", "t", "n", "i">(Wt, Xn, simm);
+}
+
+/// @brief STRH - Store Register Halfword (immediate) stores the least
+/// significant halfword of a 32-bit register to memory. The address that is
+/// used for the store is calculated from a base register and an immediate
+/// offset.
+/// @note STRH_32_ldst_pos
+/// @param Wt Is the 32-bit name of the general-purpose register to be
+/// transferred, encoded in the "Rt" field.
+/// @param Xn Is the 64-bit name of the general-purpose base register or stack
+/// pointer, encoded in the "Rn" field.
+/// @param pimm Is the optional positive immediate byte offset, a multiple of 2
+/// in the range 0 to 8190, defaulting to 0 and encoded in the "imm12" field as
+/// <pimm>/2.
+void STRH(WReg Wt, XRegSp Xn, Imm<12, 2> pimm = 0)
+{
+	Emit<"0111100100iiiiiiiiiiiinnnnnttttt", "t", "n", "i">(Wt, Xn, pimm);
+}
+
+/// @brief STRH - Store Register Halfword (register) calculates an address from
+/// a base register value and an offset register value, and stores a halfword
+/// from a 32-bit register to the calculated address. The instruction uses an
+/// offset addressing mode, that calculates the address used for the memory
+/// access from a base register value and an offset register value. The offset
+/// can be optionally shifted and extended.
+/// @note STRH_32_ldst_regoff
+/// @param Wt Is the 32-bit name of the general-purpose register to be
+/// transferred, encoded in the "Rt" field.
+/// @param Xn Is the 64-bit name of the general-purpose base register or stack
+/// pointer, encoded in the "Rn" field.
+/// @param Wm When <field>option<0></field> is set to 0, is the 32-bit
+/// name of the general-purpose index register, encoded in the "Rm" field.
+/// @param Xm When <field>option<0></field> is set to 1, is the 64-bit
+/// name of the general-purpose index register, encoded in the "Rm" field.
+/// @param extend Is the index extend/shift specifier, defaulting to LSL, and
+/// which must be omitted for the LSL option when <amount> is omitted.
+/// @param amount Is the index shift amount, optional only when <extend>
+/// is not LSL. Where it is permitted to be optional, it defaults to #0. It is
+void STRH(
+	WReg Wt, XRegSp Xn, RReg Rm,
+	RegisterExtension extend = RegisterExtension::UXTX,
+	ImmChoice<0, 1>   amount = 0
+)
+{
+	// TODO: Allow "LSL" as extension argument
+	// TODO: Verify extension with Rm width
+	Emit<"01111000001mmmmmxxxS10nnnnnttttt", "t", "n", "m", "x", "S">(
+		Wt, Xn, Rm, extend, amount
+	);
+}
+
 /// @brief STXP - Store Exclusive Pair of registers stores two 32-bit words or
 /// two 64-bit doublewords from two registers to a memory location if the PE has
 /// exclusive access to the memory address, and returns a status value of 0 if
