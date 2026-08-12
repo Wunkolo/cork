@@ -4221,6 +4221,66 @@ void STTRH(WReg Wt, XRegSp Xn, SImm<9> simm = 0)
 	Emit<"01111000000iiiiiiiii10nnnnnttttt", "t", "n", "i">(Wt, Xn, simm);
 }
 
+/// @brief STUR - Store Register (unscaled) calculates an address from a base
+/// register value and an immediate offset, and stores a 32-bit word or a 64-bit
+/// doubleword to the calculated address, from a register.
+/// @note STUR_32_ldst_unscaled
+/// @param Wt Is the 32-bit name of the general-purpose register to be
+/// transferred, encoded in the "Rt" field.
+/// @param Xn Is the 64-bit name of the general-purpose base register or stack
+/// pointer, encoded in the "Rn" field.
+/// @param simm Is the optional signed immediate byte offset, in the range -256
+/// to 255, defaulting to 0 and encoded in the "imm9" field.
+void STUR(WReg Wt, XRegSp Xn, SImm<9> simm = 0)
+{
+	Emit<"10111000000iiiiiiiii00nnnnnttttt", "t", "n", "i">(Wt, Xn, simm);
+}
+
+/// @brief STUR - Store Register (unscaled) calculates an address from a base
+/// register value and an immediate offset, and stores a 32-bit word or a 64-bit
+/// doubleword to the calculated address, from a register.
+/// @note STUR_64_ldst_unscaled
+/// @param Xt Is the 64-bit name of the general-purpose register to be
+/// transferred, encoded in the "Rt" field.
+/// @param Xn Is the 64-bit name of the general-purpose base register or stack
+/// pointer, encoded in the "Rn" field.
+/// @param simm Is the optional signed immediate byte offset, in the range -256
+/// to 255, defaulting to 0 and encoded in the "imm9" field.
+void STUR(XReg Xt, XRegSp Xn, SImm<9> simm = 0)
+{
+	Emit<"11111000000iiiiiiiii00nnnnnttttt", "t", "n", "i">(Xt, Xn, simm);
+}
+
+/// @brief STURB - Store Register Byte (unscaled) calculates an address from a
+/// base register value and an immediate offset, and stores a byte to the
+/// calculated address, from a 32-bit register.
+/// @note STURB_32_ldst_unscaled
+/// @param Wt Is the 32-bit name of the general-purpose register to be
+/// transferred, encoded in the "Rt" field.
+/// @param Xn Is the 64-bit name of the general-purpose base register or stack
+/// pointer, encoded in the "Rn" field.
+/// @param simm Is the optional signed immediate byte offset, in the range -256
+/// to 255, defaulting to 0 and encoded in the "imm9" field.
+void STURB(WReg Wt, XRegSp Xn, SImm<9> simm = 0)
+{
+	Emit<"00111000000iiiiiiiii00nnnnnttttt", "t", "n", "i">(Wt, Xn, simm);
+}
+
+/// @brief STURH - Store Register Halfword (unscaled) calculates an address from
+/// a base register value and an immediate offset, and stores a halfword to the
+/// calculated address, from a 32-bit register.
+/// @note STURH_32_ldst_unscaled
+/// @param Wt Is the 32-bit name of the general-purpose register to be
+/// transferred, encoded in the "Rt" field.
+/// @param Xn Is the 64-bit name of the general-purpose base register or stack
+/// pointer, encoded in the "Rn" field.
+/// @param simm Is the optional signed immediate byte offset, in the range -256
+/// to 255, defaulting to 0 and encoded in the "imm9" field.
+void STURH(WReg Wt, XRegSp Xn, SImm<9> simm = 0)
+{
+	Emit<"01111000000iiiiiiiii00nnnnnttttt", "t", "n", "i">(Wt, Xn, simm);
+}
+
 /// @brief STXP - Store Exclusive Pair of registers stores two 32-bit words or
 /// two 64-bit doublewords from two registers to a memory location if the PE has
 /// exclusive access to the memory address, and returns a status value of 0 if
