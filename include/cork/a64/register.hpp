@@ -264,4 +264,12 @@ struct LslOnly
 	}
 };
 
+struct PreIndex : XRegSp
+{
+};
+
+struct PostIndex : XRegSp
+{
+};
+
 } // namespace Cork
