@@ -113,7 +113,6 @@ private:
 
 public:
 	const std::uint8_t Value;
-
 	// Number of bits required to encode all choices
 	static constexpr std::size_t BitWidth
 		= std::bit_width(sizeof...(Choices) - 1);
@@ -121,6 +120,19 @@ public:
 	consteval ImmChoice(std::uint8_t ImmValue)
 		: Value(FindChoiceIndex(ImmValue))
 	{
+	}
+};
+
+template<std::uint8_t Choice>
+struct ImmChoice<Choice>
+{
+public:
+	const std::uint8_t           Value    = 1;
+	static constexpr std::size_t BitWidth = 1;
+
+	consteval ImmChoice(std::uint8_t ImmValue)
+	{
+		assert(Choice == ImmValue);
 	}
 };
 
