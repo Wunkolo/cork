@@ -3494,8 +3494,7 @@ void SSBB()
 
 /// @brief STLRB - Store-Release Register Byte stores a byte from a 32-bit
 /// register to a memory location. The instruction also has memory ordering
-/// semantics as described in Load-Acquire, Store-Release. For information about
-/// addressing modes, see Load/Store addressing modes.
+/// semantics as described in Load-Acquire, Store-Release.
 /// @note STLRB_SL32_ldstord
 /// @param Wt Is the 32-bit name of the general-purpose register to be
 /// transferred, encoded in the "Rt" field.
@@ -3518,6 +3517,132 @@ void STLRB(WReg Wt, XRegSp Xn)
 void STLRH(WReg Wt, XRegSp Xn)
 {
 	Emit<"0100100010011111111111nnnnnttttt", "t", "n">(Wt, Xn);
+}
+
+/// @brief STLXP - Store-Release Exclusive Pair of registers stores two 32-bit
+/// words or two 64-bit doublewords to a memory location if the PE has exclusive
+/// access to the memory address, from two registers, and returns a status value
+/// of 0 if the store was successful, or of 1 if no store was performed. If a
+/// 64-bit pair Store-Exclusive succeeds, it causes a single-copy atomic update
+/// of the 128-bit memory location being updated.
+/// @note STLXP_SP32_ldstexclp
+/// @param Ws Is the 32-bit name of the general-purpose register into which the
+/// status result of the store exclusive is written, encoded in the "Rs" field.
+/// The value returned is:
+/// 0 : If the operation updates memory.
+/// 1 : If the operation fails to update memory.
+/// @param Wt Is the 32-bit name of the first general-purpose register to be
+/// transferred, encoded in the "Rt" field.
+/// @param Wt2 Is the 32-bit name of the second general-purpose register to be
+/// transferred, encoded in the "Rt2" field.
+/// @param Xn Is the 64-bit name of the general-purpose base register or stack
+/// pointer, encoded in the "Rn" field.
+void STLXP(WReg Ws, WReg Wt, WReg Wt2, XRegSp Xn)
+{
+	Emit<"10001000001sssss1uuuuunnnnnttttt", "s", "t", "u", "n">(
+		Ws, Wt, Wt2, Xn
+	);
+}
+
+/// @brief STLXP - Store-Release Exclusive Pair of registers stores two 32-bit
+/// words or two 64-bit doublewords to a memory location if the PE has exclusive
+/// access to the memory address, from two registers, and returns a status value
+/// of 0 if the store was successful, or of 1 if no store was performed. If a
+/// 64-bit pair Store-Exclusive succeeds, it causes a single-copy atomic update
+/// of the 128-bit memory location being updated.
+/// @note STLXP_SP64_ldstexclp
+/// @param Ws Is the 32-bit name of the general-purpose register into which the
+/// status result of the store exclusive is written, encoded in the "Rs" field.
+/// The value returned is:
+/// 0 : If the operation updates memory.
+/// 1 : If the operation fails to update memory.
+/// @param Xt Is the 64-bit name of the first general-purpose register to be
+/// transferred, encoded in the "Rt" field.
+/// @param Xt2 Is the 64-bit name of the second general-purpose register to be
+/// transferred, encoded in the "Rt2" field.
+/// @param Xn Is the 64-bit name of the general-purpose base register or stack
+/// pointer, encoded in the "Rn" field.
+void STLXP(WReg Ws, XReg Xt, XReg Xt2, XRegSp Xn)
+{
+	Emit<"11001000001sssss1uuuuunnnnnttttt", "s", "t", "u", "n">(
+		Ws, Xt, Xt2, Xn
+	);
+}
+
+/// @brief STLXR - Store-Release Exclusive Register stores a 32-bit word or a
+/// 64-bit doubleword to memory if the PE has exclusive access to the memory
+/// address, from two registers, and returns a status value of 0 if the store
+/// was successful, or of 1 if no store was performed.
+/// @note STLXR_SR32_ldstexclr
+/// @param Ws Is the 32-bit name of the general-purpose register into which the
+/// status result of the store exclusive is written, encoded in the "Rs" field.
+/// The value returned is:
+/// 0 : If the operation updates memory.
+/// 1 : If the operation fails to update memory.
+/// @param Wt Is the 32-bit name of the general-purpose register to be
+/// transferred, encoded in the "Rt" field.
+/// @param Xn Is the 64-bit name of the general-purpose base register or stack
+/// pointer, encoded in the "Rn" field.
+void STLXR(WReg Ws, WReg Wt, XRegSp Xn)
+{
+	Emit<"10001000000sssss111111nnnnnttttt", "s", "t", "n">(Ws, Wt, Xn);
+}
+
+/// @brief STLXR - Store-Release Exclusive Register stores a 32-bit word or a
+/// 64-bit doubleword to memory if the PE has exclusive access to the memory
+/// address, from two registers, and returns a status value of 0 if the store
+/// was successful, or of 1 if no store was performed.
+/// @note STLXR_SR64_ldstexclr
+/// @param Ws Is the 32-bit name of the general-purpose register into which the
+/// status result of the store exclusive is written, encoded in the "Rs" field.
+/// The value returned is:
+/// 0 : If the operation updates memory.
+/// 1 : If the operation fails to update memory.
+/// @param Xt Is the 64-bit name of the general-purpose register to be
+/// transferred, encoded in the "Rt" field.
+/// @param Xn Is the 64-bit name of the general-purpose base register or stack
+/// pointer, encoded in the "Rn" field.
+void STLXR(WReg Ws, XReg Xt, XRegSp Xn)
+{
+	Emit<"11001000000sssss111111nnnnnttttt", "s", "t", "n">(Ws, Xt, Xn);
+}
+
+/// @brief STLXRB - Store-Release Exclusive Register Byte stores a byte from a
+/// 32-bit register to memory if the PE has exclusive access to the memory
+/// address, and returns a status value of 0 if the store was successful, or of
+/// 1 if no store was performed.
+/// @note STLXRB_SR32_ldstexclr
+/// @param Ws Is the 32-bit name of the general-purpose register into which the
+/// status result of the store exclusive is written, encoded in the "Rs" field.
+/// The value returned is:
+/// 0 : If the operation updates memory.
+/// 1 : If the operation fails to update memory.
+/// @param Wt Is the 32-bit name of the general-purpose register to be
+/// transferred, encoded in the "Rt" field.
+/// @param Xn Is the 64-bit name of the general-purpose base register or stack
+/// pointer, encoded in the "Rn" field.
+void STLXRB(WReg Ws, WReg Wt, XRegSp Xn)
+{
+	Emit<"00001000000sssss111111nnnnnttttt", "s", "t", "n">(Ws, Wt, Xn);
+}
+
+/// @brief STLXRH - Store-Release Exclusive Register Halfword stores a halfword
+/// from a 32-bit register to memory if the PE has exclusive access to the
+/// memory address, and returns a status value of 0 if the store was successful,
+/// or of 1 if no store was performed.
+/// @note STLXRH_SR32_ldstexclr
+/// @param Ws Is the 32-bit name of the general-purpose register into which the
+/// status result of the store exclusive is written, encoded in the "Rs" field.
+/// The value returned is:
+/// 0 : If the operation updates memory.
+/// 1 : If the operation fails to update memory.
+/// @param Wt Is the 32-bit name of the general-purpose register to be
+/// transferred, encoded in the "Rt" field.
+/// @param Xn Is the 64-bit name of the general-purpose base register or stack
+/// pointer, encoded in the "Rn" field.
+void STLXRH(WReg Ws, WReg Wt, XRegSp Xn)
+{
+	Emit<"01001000000sssss111111nnnnnttttt", "s", "t", "n">(Ws, Wt, Xn);
 }
 
 /// @brief SUB - Subtract (extended register) subtracts a sign or zero-extended
