@@ -3687,6 +3687,126 @@ void STNP(XReg Xt, XReg Xt2, XRegSp Xn, SImm<7, 8> imm)
 	);
 }
 
+/// @brief STP - Store Pair of Registers calculates an address from a base
+/// register value and an immediate offset, and stores two 32-bit words or two
+/// 64-bit doublewords to the calculated address, from two registers.
+/// @note STP_32_ldstpair_post
+/// @param Wt Is the 32-bit name of the first general-purpose register to be
+/// transferred, encoded in the "Rt" field.
+/// @param Wt2 Is the 32-bit name of the second general-purpose register to be
+/// transferred, encoded in the "Rt2" field.
+/// @param Xn Is the 64-bit name of the general-purpose base register or stack
+/// pointer, encoded in the "Rn" field.
+/// @param imm For the 32-bit post-index and 32-bit pre-index variant: is the
+/// signed immediate byte offset, a multiple of 4 in the range -256 to 252,
+/// encoded in the "imm7" field as <imm>/4.
+void STP(WReg Wt, WReg Wt2, PostIndex Xn, SImm<7, 4> imm)
+{
+	Emit<"0010100010iiiiiiiuuuuunnnnnttttt", "t", "u", "n", "i">(
+		Wt, Wt2, Xn, imm
+	);
+}
+
+/// @brief STP - Store Pair of Registers calculates an address from a base
+/// register value and an immediate offset, and stores two 32-bit words or two
+/// 64-bit doublewords to the calculated address, from two registers.
+/// @note STP_64_ldstpair_post
+/// @param Xt Is the 64-bit name of the first general-purpose register to be
+/// transferred, encoded in the "Rt" field.
+/// @param Xt2 Is the 64-bit name of the second general-purpose register to be
+/// transferred, encoded in the "Rt2" field.
+/// @param Xn Is the 64-bit name of the general-purpose base register or stack
+/// pointer, encoded in the "Rn" field.
+/// @param imm For the 64-bit post-index and 64-bit pre-index variant: is the
+/// signed immediate byte offset, a multiple of 8 in the range -512 to 504,
+/// encoded in the "imm7" field as <imm>/8.
+void STP(XReg Xt, XReg Xt2, PostIndex Xn, SImm<7, 8> imm)
+{
+	Emit<"1010100010iiiiiiiuuuuunnnnnttttt", "t", "u", "n", "i">(
+		Xt, Xt2, Xn, imm
+	);
+}
+
+/// @brief STP - Store Pair of Registers calculates an address from a base
+/// register value and an immediate offset, and stores two 32-bit words or two
+/// 64-bit doublewords to the calculated address, from two registers.
+/// @note STP_32_ldstpair_pre
+/// @param Wt Is the 32-bit name of the first general-purpose register to be
+/// transferred, encoded in the "Rt" field.
+/// @param Wt2 Is the 32-bit name of the second general-purpose register to be
+/// transferred, encoded in the "Rt2" field.
+/// @param Xn Is the 64-bit name of the general-purpose base register or stack
+/// pointer, encoded in the "Rn" field.
+/// @param imm For the 32-bit post-index and 32-bit pre-index variant: is the
+/// signed immediate byte offset, a multiple of 4 in the range -256 to 252,
+/// encoded in the "imm7" field as <imm>/4.
+void STP(WReg Wt, WReg Wt2, PreIndex Xn, SImm<7, 4> imm)
+{
+	Emit<"0010100110iiiiiiiuuuuunnnnnttttt", "t", "u", "n", "i">(
+		Wt, Wt2, Xn, imm
+	);
+}
+
+/// @brief STP - Store Pair of Registers calculates an address from a base
+/// register value and an immediate offset, and stores two 32-bit words or two
+/// 64-bit doublewords to the calculated address, from two registers.
+/// @note STP_64_ldstpair_pre
+/// @param Xt Is the 64-bit name of the first general-purpose register to be
+/// transferred, encoded in the "Rt" field.
+/// @param Xt2 Is the 64-bit name of the second general-purpose register to be
+/// transferred, encoded in the "Rt2" field.
+/// @param Xn Is the 64-bit name of the general-purpose base register or stack
+/// pointer, encoded in the "Rn" field.
+/// @param imm For the 64-bit post-index and 64-bit pre-index variant: is the
+/// signed immediate byte offset, a multiple of 8 in the range -512 to 504,
+/// encoded in the "imm7" field as <imm>/8.
+void STP(XReg Xt, XReg Xt2, PreIndex Xn, SImm<7, 8> imm)
+{
+	Emit<"1010100110iiiiiiiuuuuunnnnnttttt", "t", "u", "n", "i">(
+		Xt, Xt2, Xn, imm
+	);
+}
+
+/// @brief STP - Store Pair of Registers calculates an address from a base
+/// register value and an immediate offset, and stores two 32-bit words or two
+/// 64-bit doublewords to the calculated address, from two registers.
+/// @note STP_32_ldstpair_off
+/// @param Wt Is the 32-bit name of the first general-purpose register to be
+/// transferred, encoded in the "Rt" field.
+/// @param Wt2 Is the 32-bit name of the second general-purpose register to be
+/// transferred, encoded in the "Rt2" field.
+/// @param Xn Is the 64-bit name of the general-purpose base register or stack
+/// pointer, encoded in the "Rn" field.
+/// @param imm For the 32-bit signed offset variant: is the optional signed
+/// immediate byte offset, a multiple of 4 in the range -256 to 252, defaulting
+/// to 0 and encoded in the "imm7" field as <imm>/4.
+void STP(WReg Wt, WReg Wt2, XRegSp Xn, SImm<7, 4> imm = 0)
+{
+	Emit<"0010100100iiiiiiiuuuuunnnnnttttt", "t", "u", "n", "i">(
+		Wt, Wt2, Xn, imm
+	);
+}
+
+/// @brief STP - Store Pair of Registers calculates an address from a base
+/// register value and an immediate offset, and stores two 32-bit words or two
+/// 64-bit doublewords to the calculated address, from two registers.
+/// @note STP_64_ldstpair_off
+/// @param Xt Is the 64-bit name of the first general-purpose register to be
+/// transferred, encoded in the "Rt" field.
+/// @param Xt2 Is the 64-bit name of the second general-purpose register to be
+/// transferred, encoded in the "Rt2" field.
+/// @param Xn Is the 64-bit name of the general-purpose base register or stack
+/// pointer, encoded in the "Rn" field.
+/// @param imm For the 64-bit signed offset variant: is the optional signed
+/// immediate byte offset, a multiple of 8 in the range -512 to 504, defaulting
+/// to 0 and encoded in the "imm7" field as <imm>/8.
+void STP(XReg Xt, XReg Xt2, XRegSp Xn, SImm<7, 8> imm = 0)
+{
+	Emit<"1010100100iiiiiiiuuuuunnnnnttttt", "t", "u", "n", "i">(
+		Xt, Xt2, Xn, imm
+	);
+}
+
 /// @brief SUB - Subtract (extended register) subtracts a sign or zero-extended
 /// register value, followed by an optional left shift amount, from a register
 /// value, and writes the result to the destination register. The argument that
