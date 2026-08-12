@@ -3807,6 +3807,132 @@ void STP(XReg Xt, XReg Xt2, XRegSp Xn, SImm<7, 8> imm = 0)
 	);
 }
 
+/// @brief STXP - Store Exclusive Pair of registers stores two 32-bit words or
+/// two 64-bit doublewords from two registers to a memory location if the PE has
+/// exclusive access to the memory address, and returns a status value of 0 if
+/// the store was successful, or of 1 if no store was performed. If a 64-bit
+/// pair Store-Exclusive succeeds, it causes a single-copy atomic update of the
+/// 128-bit memory location being updated.
+/// @note STXP_SP32_ldstexclp
+/// @param Ws Is the 32-bit name of the general-purpose register into which the
+/// status result of the store exclusive is written, encoded in the "Rs" field.
+/// The value returned is:
+/// 0 : If the operation updates memory.
+/// 1 : If the operation fails to update memory.
+/// @param Wt Is the 32-bit name of the first general-purpose register to be
+/// transferred, encoded in the "Rt" field.
+/// @param Wt2 Is the 32-bit name of the second general-purpose register to be
+/// transferred, encoded in the "Rt2" field.
+/// @param Xn Is the 64-bit name of the general-purpose base register or stack
+/// pointer, encoded in the "Rn" field.
+void STXP(WReg Ws, WReg Wt, WReg Wt2, XRegSp Xn)
+{
+	Emit<"10001000001sssss0uuuuunnnnnttttt", "s", "t", "u", "n">(
+		Ws, Wt, Wt2, Xn
+	);
+}
+
+/// @brief STXP - Store Exclusive Pair of registers stores two 32-bit words or
+/// two 64-bit doublewords from two registers to a memory location if the PE has
+/// exclusive access to the memory address, and returns a status value of 0 if
+/// the store was successful, or of 1 if no store was performed. If a 64-bit
+/// pair Store-Exclusive succeeds, it causes a single-copy atomic update of the
+/// 128-bit memory location being updated.
+/// @note STXP_SP64_ldstexclp
+/// @param Ws Is the 32-bit name of the general-purpose register into which the
+/// status result of the store exclusive is written, encoded in the "Rs" field.
+/// The value returned is:
+/// 0 : If the operation updates memory.
+/// 1 : If the operation fails to update memory.
+/// @param Xt Is the 64-bit name of the first general-purpose register to be
+/// transferred, encoded in the "Rt" field.
+/// @param Xt2 Is the 64-bit name of the second general-purpose register to be
+/// transferred, encoded in the "Rt2" field.
+/// @param Xn Is the 64-bit name of the general-purpose base register or stack
+/// pointer, encoded in the "Rn" field.
+void STXP(WReg Ws, XReg Xt, XReg Xt2, XRegSp Xn)
+{
+	Emit<"11001000001sssss0uuuuunnnnnttttt", "s", "t", "u", "n">(
+		Ws, Xt, Xt2, Xn
+	);
+}
+
+/// @brief STXR - Store Exclusive Register stores a 32-bit word or a 64-bit
+/// doubleword from a register to memory if the PE has exclusive access to the
+/// memory address, and returns a status value of 0 if the store was successful,
+/// or of 1 if no store was performed.
+/// @note STXR_SR32_ldstexclr
+/// @param Ws Is the 32-bit name of the general-purpose register into which the
+/// status result of the store exclusive is written, encoded in the "Rs" field.
+/// The value returned is:
+/// 0 : If the operation updates memory.
+/// 1 : If the operation fails to update memory.
+/// @param Wt Is the 32-bit name of the general-purpose register to be
+/// transferred, encoded in the "Rt" field.
+/// @param Xn Is the 64-bit name of the general-purpose base register or stack
+/// pointer, encoded in the "Rn" field.
+void STXR(WReg Ws, WReg Wt, XRegSp Xn)
+{
+	Emit<"10001000000sssss011111nnnnnttttt", "s", "t", "n">(Ws, Wt, Xn);
+}
+
+/// @brief STXR - Store Exclusive Register stores a 32-bit word or a 64-bit
+/// doubleword from a register to memory if the PE has exclusive access to the
+/// memory address, and returns a status value of 0 if the store was successful,
+/// or of 1 if no store was performed.
+/// @note STXR_SR64_ldstexclr
+/// @param Ws Is the 32-bit name of the general-purpose register into which the
+/// status result of the store exclusive is written, encoded in the "Rs" field.
+/// The value returned is:
+/// 0 : If the operation updates memory.
+/// 1 : If the operation fails to update memory.
+/// @param Xt Is the 64-bit name of the general-purpose register to be
+/// transferred, encoded in the "Rt" field.
+/// @param Xn Is the 64-bit name of the general-purpose base register or stack
+/// pointer, encoded in the "Rn" field.
+void STXR(WReg Ws, XReg Xt, XRegSp Xn)
+{
+	Emit<"11001000000sssss011111nnnnnttttt", "s", "t", "n">(Ws, Xt, Xn);
+}
+
+/// @brief STXRB - Store Exclusive Register Byte stores a byte from a register
+/// to memory if the PE has exclusive access to the memory address, and returns
+/// a status value of 0 if the store was successful, or of 1 if no store was
+/// performed.
+/// @note STXRB_SR32_ldstexclr
+/// @param Ws Is the 32-bit name of the general-purpose register into which the
+/// status result of the store exclusive is written, encoded in the "Rs" field.
+/// The value returned is:
+/// 0 : If the operation updates memory.
+/// 1 : If the operation fails to update memory.
+/// @param Wt Is the 32-bit name of the general-purpose register to be
+/// transferred, encoded in the "Rt" field.
+/// @param Xn Is the 64-bit name of the general-purpose base register or stack
+/// pointer, encoded in the "Rn" field.
+void STXRB(WReg Ws, WReg Wt, XRegSp Xn)
+{
+	Emit<"00001000000sssss011111nnnnnttttt", "s", "t", "n">(Ws, Wt, Xn);
+}
+
+/// @brief STXRH - Store Exclusive Register Halfword stores a halfword from a
+/// register to memory if the PE has exclusive access to the memory address, and
+/// returns a status value of 0 if the store was successful, or of 1 if no store
+/// was performed.
+/// @note STXRH_SR32_ldstexclr
+/// @param Ws Is the 32-bit name of the general-purpose register into which the
+/// status result of the store exclusive is written, encoded in the "Rs" field.
+/// The value returned is:
+/// 0 : If the operation updates memory.
+/// 1 : If the operation fails to update memory.
+/// @param Wt Is the 32-bit name of the general-purpose register to be
+/// transferred, encoded in the "Rt" field.
+/// @param Xn Is the 64-bit name of the general-purpose base register or stack
+/// pointer, encoded in the "Rn" field.
+void STXRH(WReg Ws, WReg Wt, XRegSp Xn)
+{
+	Emit<"01001000000sssss011111nnnnnttttt", "s", "t", "n">(Ws, Wt, Xn);
+}
+
 /// @brief SUB - Subtract (extended register) subtracts a sign or zero-extended
 /// register value, followed by an optional left shift amount, from a register
 /// value, and writes the result to the destination register. The argument that
