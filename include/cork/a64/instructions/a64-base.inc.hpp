@@ -3645,6 +3645,48 @@ void STLXRH(WReg Ws, WReg Wt, XRegSp Xn)
 	Emit<"01001000000sssss111111nnnnnttttt", "s", "t", "n">(Ws, Wt, Xn);
 }
 
+/// @brief STNP - Store Pair of Registers, with non-temporal hint, calculates an
+/// address from a base register value and an immediate offset, and stores two
+/// 32-bit words or two 64-bit doublewords to the calculated address, from two
+/// registers.
+/// @note STNP_32_ldstnapair_offs
+/// @param Wt Is the 32-bit name of the first general-purpose register to be
+/// transferred, encoded in the "Rt" field.
+/// @param Wt2 Is the 32-bit name of the second general-purpose register to be
+/// transferred, encoded in the "Rt2" field.
+/// @param Xn Is the 64-bit name of the general-purpose base register or stack
+/// pointer, encoded in the "Rn" field.
+/// @param imm For the 32-bit variant: is the optional signed immediate byte
+/// offset, a multiple of 4 in the range -256 to 252, defaulting to 0 and
+/// encoded in the "imm7" field as <imm>/4.
+void STNP(WReg Wt, WReg Wt2, XRegSp Xn, SImm<7, 4> imm)
+{
+	Emit<"0010100000iiiiiiiuuuuunnnnnttttt", "t", "u", "n", "i">(
+		Wt, Wt2, Xn, imm
+	);
+}
+
+/// @brief STNP - Store Pair of Registers, with non-temporal hint, calculates an
+/// address from a base register value and an immediate offset, and stores two
+/// 32-bit words or two 64-bit doublewords to the calculated address, from two
+/// registers.
+/// @note STNP_64_ldstnapair_offs
+/// @param Xt Is the 64-bit name of the first general-purpose register to be
+/// transferred, encoded in the "Rt" field.
+/// @param Xt2 Is the 64-bit name of the second general-purpose register to be
+/// transferred, encoded in the "Rt2" field.
+/// @param Xn Is the 64-bit name of the general-purpose base register or stack
+/// pointer, encoded in the "Rn" field.
+/// @param imm For the 64-bit variant: is the optional signed immediate byte
+/// offset, a multiple of 8 in the range -512 to 504, defaulting to 0 and
+/// encoded in the "imm7" field as <imm>/8.
+void STNP(XReg Xt, XReg Xt2, XRegSp Xn, SImm<7, 8> imm)
+{
+	Emit<"1010100000iiiiiiiuuuuunnnnnttttt", "t", "u", "n", "i">(
+		Xt, Xt2, Xn, imm
+	);
+}
+
 /// @brief SUB - Subtract (extended register) subtracts a sign or zero-extended
 /// register value, followed by an optional left shift amount, from a register
 /// value, and writes the result to the destination register. The argument that
