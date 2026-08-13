@@ -107,6 +107,7 @@ void ADD(
 )
 {
 	// TODO: Allow "LSL" as extension argument
+	// TODO: Verify extension with Rm width
 	assert(amount.Value <= 4);
 	Emit<"10001011001mmmmmxxxiiinnnnnddddd", "d", "n", "m", "x", "i">(
 		Xd, Xn, Rm, extend, amount
@@ -5607,8 +5608,8 @@ void STRB(WReg Wt, XRegSp Xn, Imm<12> pimm = 0)
 /// @param amount Is the index shift amount, it must be <value>#0</value>,
 /// encoded in "S" as 0 if omitted, or as 1 if present.
 void STRB(
-	WReg Wt, XRegSp Xn, RReg Rm,
-	RegisterExtension extend = RegisterExtension::UXTX, ImmChoice<0> amount = 0
+	WReg Wt, XRegSp Xn, RReg Rm, RegisterExtension extend,
+	ImmChoice<0> amount = 0
 )
 {
 	// TODO: Allow "LSL" as extension argument
@@ -6037,6 +6038,7 @@ void SUB(
 )
 {
 	// TODO: Allow "LSL" as extension argument
+	// TODO: Verify extension with Rm width
 	assert(amount.Value <= 4);
 	Emit<"11001011001mmmmmxxxiiinnnnnddddd", "d", "n", "m", "x", "i">(
 		Xd, Xn, Rm, extend, amount
@@ -6184,6 +6186,7 @@ void SUBS(
 )
 {
 	// TODO: Allow "LSL" as extension argument
+	// TODO: Verify extension with Rm width
 	assert(amount.Value <= 4);
 	Emit<"11101011001mmmmmxxxiiinnnnnddddd", "d", "n", "m", "x", "i">(
 		Xd, Xn, Rm, extend, amount
