@@ -2076,6 +2076,152 @@ void ISB(BarrierOperation option = BarrierOperation::SY)
 	Emit<"11010101000000110011MMMM11011111", "M">(option);
 }
 
+/// @brief LDAR - Load-Acquire Register derives an address from a base register
+/// value, loads a 32-bit word or 64-bit doubleword from memory, and writes it
+/// to a register.
+/// @note LDAR_LR32_ldstord
+/// @param Wt Is the 32-bit name of the general-purpose register to be
+/// transferred, encoded in the "Rt" field.
+/// @param Xn Is the 64-bit name of the general-purpose base register or stack
+/// pointer, encoded in the "Rn" field.
+void LDAR(WReg Wt, XRegSp Xn)
+{
+	Emit<"1000100011011111111111nnnnnttttt", "t", "n">(Wt, Xn);
+}
+
+/// @brief LDAR - Load-Acquire Register derives an address from a base register
+/// value, loads a 32-bit word or 64-bit doubleword from memory, and writes it
+/// to a register.
+/// @note LDAR_LR64_ldstord
+/// @param Xt Is the 64-bit name of the general-purpose register to be
+/// transferred, encoded in the "Rt" field.
+/// @param Xn Is the 64-bit name of the general-purpose base register or stack
+/// pointer, encoded in the "Rn" field.
+void LDAR(XReg Xt, XRegSp Xn)
+{
+	Emit<"1100100011011111111111nnnnnttttt", "t", "n">(Xt, Xn);
+}
+
+/// @brief LDARB - Load-Acquire Register Byte derives an address from a base
+/// register value, loads a byte from memory, zero-extends it and writes it to a
+/// register.
+/// @note LDARB_LR32_ldstord
+/// @param Wt Is the 32-bit name of the general-purpose register to be
+/// transferred, encoded in the "Rt" field.
+/// @param Xn Is the 64-bit name of the general-purpose base register or stack
+/// pointer, encoded in the "Rn" field.
+void LDARB(WReg Wt, XRegSp Xn)
+{
+	Emit<"0000100011011111111111nnnnnttttt", "t", "n">(Wt, Xn);
+}
+
+/// @brief LDARH - Load-Acquire Register Halfword derives an address from a base
+/// register value, loads a halfword from memory, zero-extends it, and writes it
+/// to a register.
+/// @note LDARH_LR32_ldstord
+/// @param Wt Is the 32-bit name of the general-purpose register to be
+/// transferred, encoded in the "Rt" field.
+/// @param Xn Is the 64-bit name of the general-purpose base register or stack
+/// pointer, encoded in the "Rn" field.
+void LDARH(WReg Wt, XRegSp Xn)
+{
+	Emit<"0100100011011111111111nnnnnttttt", "t", "n">(Wt, Xn);
+}
+
+/// @brief LDAXP - Load-Acquire Exclusive Pair of Registers derives an address
+/// from a base register value, loads two 32-bit words or two 64-bit doublewords
+/// from memory, and writes them to two registers. The PE marks the
+/// physical address being accessed as an exclusive access. This exclusive
+/// access mark is checked by Store Exclusive instructions.
+/// @note LDAXP_LP32_ldstexclp
+/// @param Wt Is the 32-bit name of the first general-purpose register to be
+/// transferred, encoded in the "Rt" field.
+/// @param Wt2 Is the 32-bit name of the second general-purpose register to be
+/// transferred, encoded in the "Rt2" field.
+/// @param Xn Is the 64-bit name of the general-purpose base register or stack
+/// pointer, encoded in the "Rn" field.
+void LDAXP(WReg Wt, WReg Wt2, XRegSp Xn)
+{
+	Emit<"10001000011111111uuuuunnnnnttttt", "t", "u", "n">(Wt, Wt2, Xn);
+}
+
+/// @brief LDAXP - Load-Acquire Exclusive Pair of Registers derives an address
+/// from a base register value, loads two 32-bit words or two 64-bit doublewords
+/// from memory, and writes them to two registers. The PE marks the
+/// physical address being accessed as an exclusive access. This exclusive
+/// access mark is checked by Store Exclusive instructions.
+/// @note LDAXP_LP64_ldstexclp
+/// @param Xt Is the 64-bit name of the first general-purpose register to be
+/// transferred, encoded in the "Rt" field.
+/// @param Xt2 Is the 64-bit name of the second general-purpose register to be
+/// transferred, encoded in the "Rt2" field.
+/// @param Xn Is the 64-bit name of the general-purpose base register or stack
+/// pointer, encoded in the "Rn" field.
+void LDAXP(XReg Xt, XReg Xt2, XRegSp Xn)
+{
+	Emit<"11001000011111111uuuuunnnnnttttt", "t", "u", "n">(Xt, Xt2, Xn);
+}
+
+/// @brief LDAXR - Load-Acquire Exclusive Register derives an address from a
+/// base register value, loads a 32-bit word or 64-bit doubleword from memory,
+/// and writes it to a register. The memory access is atomic. The PE marks the
+/// physical address being accessed as an exclusive access. This exclusive
+/// access mark is checked by Store Exclusive instructions.
+/// @note LDAXR_LR32_ldstexclr
+/// @param Wt Is the 32-bit name of the general-purpose register to be
+/// transferred, encoded in the "Rt" field.
+/// @param Xn Is the 64-bit name of the general-purpose base register or stack
+/// pointer, encoded in the "Rn" field.
+void LDAXR(WReg Wt, XRegSp Xn)
+{
+	Emit<"1000100001011111111111nnnnnttttt", "t", "n">(Wt, Xn);
+}
+
+/// @brief LDAXR - Load-Acquire Exclusive Register derives an address from a
+/// base register value, loads a 32-bit word or 64-bit doubleword from memory,
+/// and writes it to a register. The memory access is atomic. The PE marks the
+/// physical address being accessed as an exclusive access. This exclusive
+/// access mark is checked by Store Exclusive instructions.
+/// @note LDAXR_LR64_ldstexclr
+/// @param Xt Is the 64-bit name of the general-purpose register to be
+/// transferred, encoded in the "Rt" field.
+/// @param Xn Is the 64-bit name of the general-purpose base register or stack
+/// pointer, encoded in the "Rn" field.
+void LDAXR(XReg Xt, XRegSp Xn)
+{
+	Emit<"1100100001011111111111nnnnnttttt", "t", "n">(Xt, Xn);
+}
+
+/// @brief LDAXRB - Load-Acquire Exclusive Register Byte derives an address from
+/// a base register value, loads a byte from memory, zero-extends it and writes
+/// it to a register. The memory access is atomic. The PE marks the physical
+/// address being accessed as an exclusive access. This exclusive access mark is
+/// checked by Store Exclusive instructions.
+/// @note LDAXRB_LR32_ldstexclr
+/// @param Wt Is the 32-bit name of the general-purpose register to be
+/// transferred, encoded in the "Rt" field.
+/// @param Xn Is the 64-bit name of the general-purpose base register or stack
+/// pointer, encoded in the "Rn" field.
+void LDAXRB(WReg Wt, XRegSp Xn)
+{
+	Emit<"0000100001011111111111nnnnnttttt", "t", "n">(Wt, Xn);
+}
+
+/// @brief LDAXRH - Load-Acquire Exclusive Register Halfword derives an address
+/// from a base register value, loads a halfword from memory, zero-extends it
+/// and writes it to a register. The memory access is atomic. The PE marks the
+/// physical address being accessed as an exclusive access. This exclusive
+/// access mark is checked by Store Exclusive instructions.
+/// @note LDAXRH_LR32_ldstexclr
+/// @param Wt Is the 32-bit name of the general-purpose register to be
+/// transferred, encoded in the "Rt" field.
+/// @param Xn Is the 64-bit name of the general-purpose base register or stack
+/// pointer, encoded in the "Rn" field.
+void LDAXRH(WReg Wt, XRegSp Xn)
+{
+	Emit<"0100100001011111111111nnnnnttttt", "t", "n">(Wt, Xn);
+}
+
 /// @brief LDTR - Load Register (unprivileged) loads a word or doubleword from
 /// memory, and writes it to a register. The address that is used for the load
 /// is calculated from a base register and an immediate offset. Memory accesses
