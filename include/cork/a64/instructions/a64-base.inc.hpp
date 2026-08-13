@@ -2638,6 +2638,621 @@ void LDR(
 	);
 }
 
+/// @brief LDRB - Load Register Byte (immediate) loads a byte from memory,
+/// zero-extends it, and writes the result to a register. The address that is
+/// used for the load is calculated from a base register and an immediate
+/// offset.
+/// @note LDRB_32_ldst_immpost
+/// @param Wt Is the 32-bit name of the general-purpose register to be
+/// transferred, encoded in the "Rt" field.
+/// @param Xn Is the 64-bit name of the general-purpose base register or stack
+/// pointer, encoded in the "Rn" field.
+/// @param simm Is the signed immediate byte offset, in the range -256 to 255,
+/// encoded in the "imm9" field.
+void LDRB(WReg Wt, PostIndex Xn, SImm<9> simm)
+{
+	Emit<"00111000010iiiiiiiii01nnnnnttttt", "t", "n", "i">(Wt, Xn, simm);
+}
+
+/// @brief LDRB - Load Register Byte (immediate) loads a byte from memory,
+/// zero-extends it, and writes the result to a register. The address that is
+/// used for the load is calculated from a base register and an immediate
+/// offset.
+/// @note LDRB_32_ldst_immpre
+/// @param Wt Is the 32-bit name of the general-purpose register to be
+/// transferred, encoded in the "Rt" field.
+/// @param Xn Is the 64-bit name of the general-purpose base register or stack
+/// pointer, encoded in the "Rn" field.
+/// @param simm Is the signed immediate byte offset, in the range -256 to 255,
+/// encoded in the "imm9" field.
+void LDRB(WReg Wt, PreIndex Xn, SImm<9> simm)
+{
+	Emit<"00111000010iiiiiiiii11nnnnnttttt", "t", "n", "i">(Wt, Xn, simm);
+}
+
+/// @brief LDRB - Load Register Byte (immediate) loads a byte from memory,
+/// zero-extends it, and writes the result to a register. The address that is
+/// used for the load is calculated from a base register and an immediate
+/// offset.
+/// @note LDRB_32_ldst_pos
+/// @param Wt Is the 32-bit name of the general-purpose register to be
+/// transferred, encoded in the "Rt" field.
+/// @param Xn Is the 64-bit name of the general-purpose base register or stack
+/// pointer, encoded in the "Rn" field.
+/// @param pimm Is the optional positive immediate byte offset, in the range 0
+/// to 4095, defaulting to 0 and encoded in the "imm12" field.
+void LDRB(WReg Wt, XRegSp Xn, Imm<12> pimm = 0)
+{
+	Emit<"0011100101iiiiiiiiiiiinnnnnttttt", "t", "n", "i">(Wt, Xn, pimm);
+}
+
+/// @brief LDRB - Load Register Byte (register) calculates an address from a
+/// base register value and an offset register value, loads a byte from memory,
+/// zero-extends it, and writes it to a register.
+/// @note LDRB_32B_ldst_regoff
+/// @param Wt Is the 32-bit name of the general-purpose register to be
+/// transferred, encoded in the "Rt" field.
+/// @param Xn Is the 64-bit name of the general-purpose base register or stack
+/// pointer, encoded in the "Rn" field.
+/// @param Wm When <field>option<0></field> is set to 0, is the 32-bit
+/// name of the general-purpose index register, encoded in the "Rm" field.
+/// @param Xm When <field>option<0></field> is set to 1, is the 64-bit
+/// name of the general-purpose index register, encoded in the "Rm" field.
+/// @param extend Is the index extend specifier,
+/// @param amount Is the index shift amount, it must be <value>#0</value>,
+/// encoded in "S" as 0 if omitted, or as 1 if present.
+void LDRB(
+	WReg Wt, XRegSp Xn, RReg Rm, RegisterExtension extend,
+	ImmChoice<0> amount = 0
+)
+{
+	// TODO: Allow "LSL" as extension argument
+	// TODO: Verify extension with Rm width
+	Emit<"00111000011mmmmmxxxS10nnnnnttttt", "t", "n", "m", "x", "S">(
+		Wt, Xn, Rm, extend, amount
+	);
+}
+
+/// @brief LDRB - Load Register Byte (register) calculates an address from a
+/// base register value and an offset register value, loads a byte from memory,
+/// zero-extends it, and writes it to a register.
+/// @note LDRB_32BL_ldst_regoff
+/// @param Wt Is the 32-bit name of the general-purpose register to be
+/// transferred, encoded in the "Rt" field.
+/// @param Xn Is the 64-bit name of the general-purpose base register or stack
+/// pointer, encoded in the "Rn" field.
+/// @param Xm When <field>option<0></field> is set to 1, is the 64-bit
+/// name of the general-purpose index register, encoded in the "Rm" field.
+/// @param amount Is the index shift amount, it must be <value>#0</value>,
+/// encoded in "S" as 0 if omitted, or as 1 if present.
+void LDRB(
+	WReg Wt, XRegSp Xn, XReg Xm, LslOnly = Shift::LSL, ImmChoice<0> amount = 0
+)
+{
+	Emit<"00111000011mmmmm011S10nnnnnttttt", "t", "n", "m", "S">(
+		Wt, Xn, Xm, amount
+	);
+}
+
+/// @brief LDRH - Load Register Halfword (immediate) loads a halfword from
+/// memory, zero-extends it, and writes the result to a register. The address
+/// that is used for the load is calculated from a base register and an
+/// immediate offset.
+/// @note LDRH_32_ldst_immpost
+/// @param Wt Is the 32-bit name of the general-purpose register to be
+/// transferred, encoded in the "Rt" field.
+/// @param Xn Is the 64-bit name of the general-purpose base register or stack
+/// pointer, encoded in the "Rn" field.
+/// @param simm Is the signed immediate byte offset, in the range -256 to 255,
+/// encoded in the "imm9" field.
+void LDRH(WReg Wt, PostIndex Xn, SImm<9> simm)
+{
+	Emit<"01111000010iiiiiiiii01nnnnnttttt", "t", "n", "i">(Wt, Xn, simm);
+}
+
+/// @brief LDRH - Load Register Halfword (immediate) loads a halfword from
+/// memory, zero-extends it, and writes the result to a register. The address
+/// that is used for the load is calculated from a base register and an
+/// immediate offset.
+/// @note LDRH_32_ldst_immpre
+/// @param Wt Is the 32-bit name of the general-purpose register to be
+/// transferred, encoded in the "Rt" field.
+/// @param Xn Is the 64-bit name of the general-purpose base register or stack
+/// pointer, encoded in the "Rn" field.
+/// @param simm Is the signed immediate byte offset, in the range -256 to 255,
+/// encoded in the "imm9" field.
+void LDRH(WReg Wt, PreIndex Xn, SImm<9> simm)
+{
+	Emit<"01111000010iiiiiiiii11nnnnnttttt", "t", "n", "i">(Wt, Xn, simm);
+}
+
+/// @brief LDRH - Load Register Halfword (immediate) loads a halfword from
+/// memory, zero-extends it, and writes the result to a register. The address
+/// that is used for the load is calculated from a base register and an
+/// immediate offset.
+/// @note LDRH_32_ldst_pos
+/// @param Wt Is the 32-bit name of the general-purpose register to be
+/// transferred, encoded in the "Rt" field.
+/// @param Xn Is the 64-bit name of the general-purpose base register or stack
+/// pointer, encoded in the "Rn" field.
+/// @param pimm Is the optional positive immediate byte offset, a multiple of 2
+/// in the range 0 to 8190, defaulting to 0 and encoded in the "imm12" field as
+/// <pimm>/2.
+void LDRH(WReg Wt, XRegSp Xn, Imm<12, 2> pimm = 0)
+{
+	Emit<"0111100101iiiiiiiiiiiinnnnnttttt", "t", "n", "i">(Wt, Xn, pimm);
+}
+
+/// @brief LDRH - Load Register Halfword (register) calculates an address from a
+/// base register value and an offset register value, loads a halfword from
+/// memory, zero-extends it, and writes it to a register.
+/// @note LDRH_32_ldst_regoff
+/// @param Wt Is the 32-bit name of the general-purpose register to be
+/// transferred, encoded in the "Rt" field.
+/// @param Xn Is the 64-bit name of the general-purpose base register or stack
+/// pointer, encoded in the "Rn" field.
+/// @param Wm When <field>option<0></field> is set to 0, is the 32-bit
+/// name of the general-purpose index register, encoded in the "Rm" field.
+/// @param Xm When <field>option<0></field> is set to 1, is the 64-bit
+/// name of the general-purpose index register, encoded in the "Rm" field.
+/// @param extend Is the index extend/shift specifier, defaulting to LSL, and
+/// which must be omitted for the LSL option when <amount> is omitted.
+/// @param amount Is the index shift amount, optional only when <extend>
+/// is not LSL. Where it is permitted to be optional, it defaults to #0.
+void LDRH(
+	WReg Wt, XRegSp Xn, RReg Rm,
+	RegisterExtension extend = RegisterExtension::UXTX,
+	ImmChoice<0, 1>   amount = 0
+)
+{
+	// TODO: Allow "LSL" as extension argument
+	// TODO: Verify extension with Rm width
+	Emit<"01111000011mmmmmxxxS10nnnnnttttt", "t", "n", "m", "x", "S">(
+		Wt, Xn, Rm, extend, amount
+	);
+}
+
+/// @brief LDRSB - Load Register Signed Byte (immediate) loads a byte from
+/// memory, sign-extends it to either 32 bits or 64 bits, and writes the result
+/// to a register. The address that is used for the load is calculated from a
+/// base register and an immediate offset.
+/// @note LDRSB_32_ldst_immpost
+/// @param Wt Is the 32-bit name of the general-purpose register to be
+/// transferred, encoded in the "Rt" field.
+/// @param Xn Is the 64-bit name of the general-purpose base register or stack
+/// pointer, encoded in the "Rn" field.
+/// @param simm Is the signed immediate byte offset, in the range -256 to 255,
+/// encoded in the "imm9" field.
+void LDRSB(WReg Wt, PostIndex Xn, SImm<9> simm)
+{
+	Emit<"00111000110iiiiiiiii01nnnnnttttt", "t", "n", "i">(Wt, Xn, simm);
+}
+
+/// @brief LDRSB - Load Register Signed Byte (immediate) loads a byte from
+/// memory, sign-extends it to either 32 bits or 64 bits, and writes the result
+/// to a register. The address that is used for the load is calculated from a
+/// base register and an immediate offset.
+/// @note LDRSB_64_ldst_immpost
+/// @param Xt Is the 64-bit name of the general-purpose register to be
+/// transferred, encoded in the "Rt" field.
+/// @param Xn Is the 64-bit name of the general-purpose base register or stack
+/// pointer, encoded in the "Rn" field.
+/// @param simm Is the signed immediate byte offset, in the range -256 to 255,
+/// encoded in the "imm9" field.
+void LDRSB(XReg Xt, PostIndex Xn, SImm<9> simm)
+{
+	Emit<"00111000100iiiiiiiii01nnnnnttttt", "t", "n", "i">(Xt, Xn, simm);
+}
+
+/// @brief LDRSB - Load Register Signed Byte (immediate) loads a byte from
+/// memory, sign-extends it to either 32 bits or 64 bits, and writes the result
+/// to a register. The address that is used for the load is calculated from a
+/// base register and an immediate offset.
+/// @note LDRSB_32_ldst_immpre
+/// @param Wt Is the 32-bit name of the general-purpose register to be
+/// transferred, encoded in the "Rt" field.
+/// @param Xn Is the 64-bit name of the general-purpose base register or stack
+/// pointer, encoded in the "Rn" field.
+/// @param simm Is the signed immediate byte offset, in the range -256 to 255,
+/// encoded in the "imm9" field.
+void LDRSB(WReg Wt, PreIndex Xn, SImm<9> simm)
+{
+	Emit<"00111000110iiiiiiiii11nnnnnttttt", "t", "n", "i">(Wt, Xn, simm);
+}
+
+/// @brief LDRSB - Load Register Signed Byte (immediate) loads a byte from
+/// memory, sign-extends it to either 32 bits or 64 bits, and writes the result
+/// to a register. The address that is used for the load is calculated from a
+/// base register and an immediate offset.
+/// @note LDRSB_64_ldst_immpre
+/// @param Xt Is the 64-bit name of the general-purpose register to be
+/// transferred, encoded in the "Rt" field.
+/// @param Xn Is the 64-bit name of the general-purpose base register or stack
+/// pointer, encoded in the "Rn" field.
+/// @param simm Is the signed immediate byte offset, in the range -256 to 255,
+/// encoded in the "imm9" field.
+void LDRSB(XReg Xt, PreIndex Xn, SImm<9> simm)
+{
+	Emit<"00111000100iiiiiiiii11nnnnnttttt", "t", "n", "i">(Xt, Xn, simm);
+}
+
+/// @brief LDRSB - Load Register Signed Byte (immediate) loads a byte from
+/// memory, sign-extends it to either 32 bits or 64 bits, and writes the result
+/// to a register. The address that is used for the load is calculated from a
+/// base register and an immediate offset.
+/// @note LDRSB_32_ldst_pos
+/// @param Wt Is the 32-bit name of the general-purpose register to be
+/// transferred, encoded in the "Rt" field.
+/// @param Xn Is the 64-bit name of the general-purpose base register or stack
+/// pointer, encoded in the "Rn" field.
+/// @param pimm Is the optional positive immediate byte offset, in the range 0
+/// to 4095, defaulting to 0 and encoded in the "imm12" field.
+void LDRSB(WReg Wt, XRegSp Xn, Imm<12> pimm = 0)
+{
+	Emit<"0011100111iiiiiiiiiiiinnnnnttttt", "t", "n", "i">(Wt, Xn, pimm);
+}
+
+/// @brief LDRSB - Load Register Signed Byte (immediate) loads a byte from
+/// memory, sign-extends it to either 32 bits or 64 bits, and writes the result
+/// to a register. The address that is used for the load is calculated from a
+/// base register and an immediate offset.
+/// @note LDRSB_64_ldst_pos
+/// @param Xt Is the 64-bit name of the general-purpose register to be
+/// transferred, encoded in the "Rt" field.
+/// @param Xn Is the 64-bit name of the general-purpose base register or stack
+/// pointer, encoded in the "Rn" field.
+/// @param pimm Is the optional positive immediate byte offset, in the range 0
+/// to 4095, defaulting to 0 and encoded in the "imm12" field.
+void LDRSB(XReg Xt, XRegSp Xn, Imm<12> pimm = 0)
+{
+	Emit<"0011100110iiiiiiiiiiiinnnnnttttt", "t", "n", "i">(Xt, Xn, pimm);
+}
+
+/// @brief LDRSB - Load Register Signed Byte (register) calculates an address
+/// from a base register value and an offset register value, loads a byte from
+/// memory, sign-extends it, and writes it to a register.
+/// @note LDRSB_32B_ldst_regoff
+/// @param Wt Is the 32-bit name of the general-purpose register to be
+/// transferred, encoded in the "Rt" field.
+/// @param Xn Is the 64-bit name of the general-purpose base register or stack
+/// pointer, encoded in the "Rn" field.
+/// @param Wm When <field>option<0></field> is set to 0, is the 32-bit
+/// name of the general-purpose index register, encoded in the "Rm" field.
+/// @param Xm When <field>option<0></field> is set to 1, is the 64-bit
+/// name of the general-purpose index register, encoded in the "Rm" field.
+/// @param extend Is the index extend specifier,
+/// @param amount Is the index shift amount, it must be <value>#0</value>,
+/// encoded in "S" as 0 if omitted, or as 1 if present.
+void LDRSB(
+	WReg Wt, XRegSp Xn, RReg Rm, RegisterExtension extend,
+	ImmChoice<0> amount = 0
+)
+{
+	// TODO: Allow "LSL" as extension argument
+	// TODO: Verify extension with Rm width
+	Emit<"00111000111mmmmmxxxS10nnnnnttttt", "t", "n", "m", "x", "S">(
+		Wt, Xn, Rm, extend, amount
+	);
+}
+
+/// @brief LDRSB - Load Register Signed Byte (register) calculates an address
+/// from a base register value and an offset register value, loads a byte from
+/// memory, sign-extends it, and writes it to a register.
+/// @note LDRSB_32BL_ldst_regoff
+/// @param Wt Is the 32-bit name of the general-purpose register to be
+/// transferred, encoded in the "Rt" field.
+/// @param Xn Is the 64-bit name of the general-purpose base register or stack
+/// pointer, encoded in the "Rn" field.
+/// @param Xm When <field>option<0></field> is set to 1, is the 64-bit
+/// name of the general-purpose index register, encoded in the "Rm" field.
+/// @param amount Is the index shift amount, it must be <value>#0</value>,
+/// encoded in "S" as 0 if omitted, or as 1 if present.
+void LDRSB(
+	WReg Wt, XRegSp Xn, XReg Xm, LslOnly = Shift::LSL, ImmChoice<0> amount = 0
+)
+{
+	Emit<"00111000111mmmmm011S10nnnnnttttt", "t", "n", "m", "S">(
+		Wt, Xn, Xm, amount
+	);
+}
+
+/// @brief LDRSB - Load Register Signed Byte (register) calculates an address
+/// from a base register value and an offset register value, loads a byte from
+/// memory, sign-extends it, and writes it to a register.
+/// @note LDRSB_64B_ldst_regoff
+/// @param Xt Is the 64-bit name of the general-purpose register to be
+/// transferred, encoded in the "Rt" field.
+/// @param Xn Is the 64-bit name of the general-purpose base register or stack
+/// pointer, encoded in the "Rn" field.
+/// @param Wm When <field>option<0></field> is set to 0, is the 32-bit
+/// name of the general-purpose index register, encoded in the "Rm" field.
+/// @param Xm When <field>option<0></field> is set to 1, is the 64-bit
+/// name of the general-purpose index register, encoded in the "Rm" field.
+/// @param extend Is the index extend specifier,
+/// @param amount Is the index shift amount, it must be <value>#0</value>,
+/// encoded in "S" as 0 if omitted, or as 1 if present.
+void LDRSB(
+	XReg Xt, XRegSp Xn, RReg Rm, RegisterExtension extend,
+	ImmChoice<0> amount = 0
+)
+{
+	// TODO: Allow "LSL" as extension argument
+	// TODO: Verify extension with Rm width
+	Emit<"00111000101mmmmmxxxS10nnnnnttttt", "t", "n", "m", "x", "S">(
+		Xt, Xn, Rm, extend, amount
+	);
+}
+
+/// @brief LDRSB - Load Register Signed Byte (register) calculates an address
+/// from a base register value and an offset register value, loads a byte from
+/// memory, sign-extends it, and writes it to a register.
+/// @note LDRSB_64BL_ldst_regoff
+/// @param Xt Is the 64-bit name of the general-purpose register to be
+/// transferred, encoded in the "Rt" field.
+/// @param Xn Is the 64-bit name of the general-purpose base register or stack
+/// pointer, encoded in the "Rn" field.
+/// @param Xm When <field>option<0></field> is set to 1, is the 64-bit
+/// name of the general-purpose index register, encoded in the "Rm" field.
+/// @param amount Is the index shift amount, it must be <value>#0</value>,
+/// encoded in "S" as 0 if omitted, or as 1 if present.
+void LDRSB(
+	XReg Xt, XRegSp Xn, XReg Xm, LslOnly = Shift::LSL, ImmChoice<0> amount = 0
+)
+{
+	Emit<"00111000101mmmmm011S10nnnnnttttt", "t", "n", "m", "S">(
+		Xt, Xn, Xm, amount
+	);
+}
+
+/// @brief LDRSH - Load Register Signed Halfword (immediate) loads a halfword
+/// from memory, sign-extends it to 32 bits or 64 bits, and writes the result to
+/// a register. The address that is used for the load is calculated from a base
+/// register and an immediate offset.
+/// @note LDRSH_32_ldst_immpost
+/// @param Wt Is the 32-bit name of the general-purpose register to be
+/// transferred, encoded in the "Rt" field.
+/// @param Xn Is the 64-bit name of the general-purpose base register or stack
+/// pointer, encoded in the "Rn" field.
+/// @param simm Is the signed immediate byte offset, in the range -256 to 255,
+/// encoded in the "imm9" field.
+void LDRSH(WReg Wt, PostIndex Xn, SImm<9> simm)
+{
+	Emit<"01111000110iiiiiiiii01nnnnnttttt", "t", "n", "i">(Wt, Xn, simm);
+}
+
+/// @brief LDRSH - Load Register Signed Halfword (immediate) loads a halfword
+/// from memory, sign-extends it to 32 bits or 64 bits, and writes the result to
+/// a register. The address that is used for the load is calculated from a base
+/// register and an immediate offset.
+/// @note LDRSH_64_ldst_immpost
+/// @param Xt Is the 64-bit name of the general-purpose register to be
+/// transferred, encoded in the "Rt" field.
+/// @param Xn Is the 64-bit name of the general-purpose base register or stack
+/// pointer, encoded in the "Rn" field.
+/// @param simm Is the signed immediate byte offset, in the range -256 to 255,
+/// encoded in the "imm9" field.
+void LDRSH(XReg Xt, PostIndex Xn, SImm<9> simm)
+{
+	Emit<"01111000100iiiiiiiii01nnnnnttttt", "t", "n", "i">(Xt, Xn, simm);
+}
+
+/// @brief LDRSH - Load Register Signed Halfword (immediate) loads a halfword
+/// from memory, sign-extends it to 32 bits or 64 bits, and writes the result to
+/// a register. The address that is used for the load is calculated from a base
+/// register and an immediate offset.
+/// @note LDRSH_32_ldst_immpre
+/// @param Wt Is the 32-bit name of the general-purpose register to be
+/// transferred, encoded in the "Rt" field.
+/// @param Xn Is the 64-bit name of the general-purpose base register or stack
+/// pointer, encoded in the "Rn" field.
+/// @param simm Is the signed immediate byte offset, in the range -256 to 255,
+/// encoded in the "imm9" field.
+void LDRSH(WReg Wt, PreIndex Xn, SImm<9> simm)
+{
+	Emit<"01111000110iiiiiiiii11nnnnnttttt", "t", "n", "i">(Wt, Xn, simm);
+}
+
+/// @brief LDRSH - Load Register Signed Halfword (immediate) loads a halfword
+/// from memory, sign-extends it to 32 bits or 64 bits, and writes the result to
+/// a register. The address that is used for the load is calculated from a base
+/// register and an immediate offset.
+/// @note LDRSH_64_ldst_immpre
+/// @param Xt Is the 64-bit name of the general-purpose register to be
+/// transferred, encoded in the "Rt" field.
+/// @param Xn Is the 64-bit name of the general-purpose base register or stack
+/// pointer, encoded in the "Rn" field.
+/// @param simm Is the signed immediate byte offset, in the range -256 to 255,
+/// encoded in the "imm9" field.
+void LDRSH(XReg Xt, PreIndex Xn, SImm<9> simm)
+{
+	Emit<"01111000100iiiiiiiii11nnnnnttttt", "t", "n", "i">(Xt, Xn, simm);
+}
+
+/// @brief LDRSH - Load Register Signed Halfword (immediate) loads a halfword
+/// from memory, sign-extends it to 32 bits or 64 bits, and writes the result to
+/// a register. The address that is used for the load is calculated from a base
+/// register and an immediate offset.
+/// @note LDRSH_32_ldst_pos
+/// @param Wt Is the 32-bit name of the general-purpose register to be
+/// transferred, encoded in the "Rt" field.
+/// @param Xn Is the 64-bit name of the general-purpose base register or stack
+/// pointer, encoded in the "Rn" field.
+/// @param pimm Is the optional positive immediate byte offset, a multiple of 2
+/// in the range 0 to 8190, defaulting to 0 and encoded in the "imm12" field as
+/// <pimm>/2.
+void LDRSH(WReg Wt, XRegSp Xn, Imm<12, 2> pimm = 0)
+{
+	Emit<"0111100111iiiiiiiiiiiinnnnnttttt", "t", "n", "i">(Wt, Xn, pimm);
+}
+
+/// @brief LDRSH - Load Register Signed Halfword (immediate) loads a halfword
+/// from memory, sign-extends it to 32 bits or 64 bits, and writes the result to
+/// a register. The address that is used for the load is calculated from a base
+/// register and an immediate offset.
+/// @note LDRSH_64_ldst_pos
+/// @param Xt Is the 64-bit name of the general-purpose register to be
+/// transferred, encoded in the "Rt" field.
+/// @param Xn Is the 64-bit name of the general-purpose base register or stack
+/// pointer, encoded in the "Rn" field.
+/// @param pimm Is the optional positive immediate byte offset, a multiple of 2
+/// in the range 0 to 8190, defaulting to 0 and encoded in the "imm12" field as
+/// <pimm>/2.
+void LDRSH(XReg Xt, XRegSp Xn, Imm<12, 2> pimm = 0)
+{
+	Emit<"0111100110iiiiiiiiiiiinnnnnttttt", "t", "n", "i">(Xt, Xn, pimm);
+}
+
+/// @brief LDRSH - Load Register Signed Halfword (register) calculates an
+/// address from a base register value and an offset register value, loads a
+/// halfword from memory, sign-extends it, and writes it to a register.
+/// @note LDRSH_32_ldst_regoff
+/// @param Wt Is the 32-bit name of the general-purpose register to be
+/// transferred, encoded in the "Rt" field.
+/// @param Xn Is the 64-bit name of the general-purpose base register or stack
+/// pointer, encoded in the "Rn" field.
+/// @param Wm When <field>option<0></field> is set to 0, is the 32-bit
+/// name of the general-purpose index register, encoded in the "Rm" field.
+/// @param Xm When <field>option<0></field> is set to 1, is the 64-bit
+/// name of the general-purpose index register, encoded in the "Rm" field.
+/// @param extend Is the index extend/shift specifier, defaulting to LSL, and
+/// which must be omitted for the LSL option when <amount> is omitted.
+/// @param amount Is the index shift amount, optional only when <extend>
+/// is not LSL. Where it is permitted to be optional, it defaults to #0.
+void LDRSH(
+	WReg Wt, XRegSp Xn, RReg Rm,
+	RegisterExtension extend = RegisterExtension::UXTX,
+	ImmChoice<0, 1>   amount = 0
+)
+{
+	// TODO: Allow "LSL" as extension argument
+	// TODO: Verify extension with Rm width
+	Emit<"01111000111mmmmmxxxS10nnnnnttttt", "t", "n", "m", "x", "S">(
+		Wt, Xn, Rm, extend, amount
+	);
+}
+
+/// @brief LDRSH - Load Register Signed Halfword (register) calculates an
+/// address from a base register value and an offset register value, loads a
+/// halfword from memory, sign-extends it, and writes it to a register.
+/// @note LDRSH_64_ldst_regoff
+/// @param Xt Is the 64-bit name of the general-purpose register to be
+/// transferred, encoded in the "Rt" field.
+/// @param Xn Is the 64-bit name of the general-purpose base register or stack
+/// pointer, encoded in the "Rn" field.
+/// @param Wm When <field>option<0></field> is set to 0, is the 32-bit
+/// name of the general-purpose index register, encoded in the "Rm" field.
+/// @param Xm When <field>option<0></field> is set to 1, is the 64-bit
+/// name of the general-purpose index register, encoded in the "Rm" field.
+/// @param extend Is the index extend/shift specifier, defaulting to LSL, and
+/// which must be omitted for the LSL option when <amount> is omitted.
+/// @param amount Is the index shift amount, optional only when <extend>
+/// is not LSL. Where it is permitted to be optional, it defaults to #0.
+void LDRSH(
+	XReg Xt, XRegSp Xn, RReg Rm,
+	RegisterExtension extend = RegisterExtension::UXTX,
+	ImmChoice<0, 1>   amount = 0
+)
+{
+	// TODO: Allow "LSL" as extension argument
+	// TODO: Verify extension with Rm width
+	Emit<"01111000101mmmmmxxxS10nnnnnttttt", "t", "n", "m", "x", "S">(
+		Xt, Xn, Rm, extend, amount
+	);
+}
+
+/// @brief LDRSW - Load Register Signed Word (immediate) loads a word from
+/// memory, sign-extends it to 64 bits, and writes the result to a register. The
+/// address that is used for the load is calculated from a base register and an
+/// immediate offset.
+/// @note LDRSW_64_ldst_immpost
+/// @param Xt Is the 64-bit name of the general-purpose register to be
+/// transferred, encoded in the "Rt" field.
+/// @param Xn Is the 64-bit name of the general-purpose base register or stack
+/// pointer, encoded in the "Rn" field.
+/// @param simm Is the signed immediate byte offset, in the range -256 to 255,
+/// encoded in the "imm9" field.
+void LDRSW(XReg Xt, PostIndex Xn, SImm<9> simm)
+{
+	Emit<"10111000100iiiiiiiii01nnnnnttttt", "t", "n", "i">(Xt, Xn, simm);
+}
+
+/// @brief LDRSW - Load Register Signed Word (immediate) loads a word from
+/// memory, sign-extends it to 64 bits, and writes the result to a register. The
+/// address that is used for the load is calculated from a base register and an
+/// immediate offset.
+/// @note LDRSW_64_ldst_immpre
+/// @param Xt Is the 64-bit name of the general-purpose register to be
+/// transferred, encoded in the "Rt" field.
+/// @param Xn Is the 64-bit name of the general-purpose base register or stack
+/// pointer, encoded in the "Rn" field.
+/// @param simm Is the signed immediate byte offset, in the range -256 to 255,
+/// encoded in the "imm9" field.
+void LDRSW(XReg Xt, PreIndex Xn, SImm<9> simm)
+{
+	Emit<"10111000100iiiiiiiii11nnnnnttttt", "t", "n", "i">(Xt, Xn, simm);
+}
+
+/// @brief LDRSW - Load Register Signed Word (immediate) loads a word from
+/// memory, sign-extends it to 64 bits, and writes the result to a register. The
+/// address that is used for the load is calculated from a base register and an
+/// immediate offset.
+/// @note LDRSW_64_ldst_pos
+/// @param Xt Is the 64-bit name of the general-purpose register to be
+/// transferred, encoded in the "Rt" field.
+/// @param Xn Is the 64-bit name of the general-purpose base register or stack
+/// pointer, encoded in the "Rn" field.
+/// @param pimm Is the optional positive immediate byte offset, a multiple of 4
+/// in the range 0 to 16380, defaulting to 0 and encoded in the "imm12" field as
+/// <pimm>/4.
+void LDRSW(XReg Xt, XRegSp Xn, Imm<12, 4> pimm = 0)
+{
+	Emit<"1011100110iiiiiiiiiiiinnnnnttttt", "t", "n", "i">(Xt, Xn, pimm);
+}
+
+/// @brief LDRSW - Load Register Signed Word (literal) calculates an address
+/// from the PC value and an immediate offset, loads a word from memory, and
+/// writes it to a register.
+/// @note LDRSW_64_loadlit
+/// @param Xt Is the 64-bit name of the general-purpose register to be loaded,
+/// encoded in the "Rt" field.
+/// @param label Is the program label from which the data is to be loaded. Its
+/// offset from the address of this instruction, in the range +/-1MB, is encoded
+/// as "imm19" times 4.
+void LDRSW(XReg Xt, SImm<19, 4> label)
+{
+	Emit<"10011000iiiiiiiiiiiiiiiiiiittttt", "t", "i">(Xt, label);
+}
+
+/// @brief LDRSW - Load Register Signed Word (register) calculates an address
+/// from a base register value and an offset register value, loads a word from
+/// memory, sign-extends it to form a 64-bit value, and writes it to a register.
+/// The offset register value can be shifted left by 0 or 2 bits.
+/// @note LDRSW_64_ldst_regoff
+/// @param Xt Is the 64-bit name of the general-purpose register to be
+/// transferred, encoded in the "Rt" field.
+/// @param Xn Is the 64-bit name of the general-purpose base register or stack
+/// pointer, encoded in the "Rn" field.
+/// @param Wm When <field>option<0></field> is set to 0, is the 32-bit
+/// name of the general-purpose index register, encoded in the "Rm" field.
+/// @param Xm When <field>option<0></field> is set to 1, is the 64-bit
+/// name of the general-purpose index register, encoded in the "Rm" field.
+/// @param extend Is the index extend/shift specifier, defaulting to LSL, and
+/// which must be omitted for the LSL option when <amount> is omitted.
+/// @param amount Is the index shift amount, optional only when <extend>
+/// is not LSL. Where it is permitted to be optional, it defaults to #0.
+void LDRSW(
+	XReg Xt, XRegSp Xn, RReg Rm,
+	RegisterExtension extend = RegisterExtension::UXTX,
+	ImmChoice<0, 2>   amount = 0
+)
+{
+	// TODO: Allow "LSL" as extension argument
+	// TODO: Verify extension with Rm width
+	Emit<"10111000101mmmmmxxxS10nnnnnttttt", "t", "n", "m", "x", "S">(
+		Xt, Xn, Rm, extend, amount
+	);
+}
+
 /// @brief LDTR - Load Register (unprivileged) loads a word or doubleword from
 /// memory, and writes it to a register. The address that is used for the load
 /// is calculated from a base register and an immediate offset. Memory accesses
