@@ -5074,8 +5074,7 @@ void SSBB()
 }
 
 /// @brief STLRB - Store-Release Register Byte stores a byte from a 32-bit
-/// register to a memory location. The instruction also has memory ordering
-/// semantics as described in Load-Acquire, Store-Release.
+/// register to a memory location.
 /// @note STLRB_SL32_ldstord
 /// @param Wt Is the 32-bit name of the general-purpose register to be
 /// transferred, encoded in the "Rt" field.
@@ -5087,9 +5086,7 @@ void STLRB(WReg Wt, XRegSp Xn)
 }
 
 /// @brief STLRH - Store-Release Register Halfword stores a halfword from a
-/// 32-bit register to a memory location. The instruction also has memory
-/// ordering semantics as described in Load-Acquire, Store-Release. For
-/// information about addressing modes, see Load/Store addressing modes.
+/// 32-bit register to a memory location.
 /// @note STLRH_SL32_ldstord
 /// @param Wt Is the 32-bit name of the general-purpose register to be
 /// transferred, encoded in the "Rt" field.
@@ -5499,7 +5496,7 @@ void STR(XReg Xt, XRegSp Xn, Imm<12, 8> pimm = 0)
 /// which must be omitted for the LSL option when <amount> is omitted.
 /// @param amount For the 32-bit variant: is the index shift amount, optional
 /// only when <extend> is not LSL. Where it is permitted to be optional,
-/// it defaults to #0. It is
+/// it defaults to #0.
 void STR(
 	WReg Wt, XRegSp Xn, RReg Rm,
 	RegisterExtension extend = RegisterExtension::UXTX,
@@ -5532,7 +5529,7 @@ void STR(
 /// which must be omitted for the LSL option when <amount> is omitted.
 /// @param amount For the 64-bit variant: is the index shift amount, optional
 /// only when <extend> is not LSL. Where it is permitted to be optional,
-/// it defaults to #0. It is
+/// it defaults to #0.
 void STR(
 	XReg Xt, XRegSp Xn, RReg Rm,
 	RegisterExtension     extend = RegisterExtension::UXTX,
@@ -5712,7 +5709,7 @@ void STRH(WReg Wt, XRegSp Xn, Imm<12, 2> pimm = 0)
 /// @param extend Is the index extend/shift specifier, defaulting to LSL, and
 /// which must be omitted for the LSL option when <amount> is omitted.
 /// @param amount Is the index shift amount, optional only when <extend>
-/// is not LSL. Where it is permitted to be optional, it defaults to #0. It is
+/// is not LSL. Where it is permitted to be optional, it defaults to #0.
 void STRH(
 	WReg Wt, XRegSp Xn, RReg Rm,
 	RegisterExtension extend = RegisterExtension::UXTX,
