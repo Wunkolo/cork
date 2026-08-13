@@ -2444,6 +2444,200 @@ void LDPSW(XReg Xt, XReg Xt2, XRegSp Xn, SImm<7, 4> imm = 0)
 	);
 }
 
+/// @brief LDR - Load Register (immediate) loads a word or doubleword from
+/// memory and writes it to a register. The address that is used for the load is
+/// calculated from a base register and an immediate offset. The Unsigned offset
+/// variant scales the immediate offset value by the size of the value accessed
+/// before adding it to the base register value.
+/// @note LDR_32_ldst_immpost
+/// @param Wt Is the 32-bit name of the general-purpose register to be
+/// transferred, encoded in the "Rt" field.
+/// @param Xn Is the 64-bit name of the general-purpose base register or stack
+/// pointer, encoded in the "Rn" field.
+/// @param simm Is the signed immediate byte offset, in the range -256 to 255,
+/// encoded in the "imm9" field.
+void LDR(WReg Wt, PostIndex Xn, SImm<9> simm)
+{
+	Emit<"10111000010iiiiiiiii01nnnnnttttt", "t", "n", "i">(Wt, Xn, simm);
+}
+
+/// @brief LDR - Load Register (immediate) loads a word or doubleword from
+/// memory and writes it to a register. The address that is used for the load is
+/// calculated from a base register and an immediate offset. The Unsigned
+/// offset variant scales the immediate offset value by the size of the value
+/// accessed before adding it to the base register value.
+/// @note LDR_64_ldst_immpost
+/// @param Xt Is the 64-bit name of the general-purpose register to be
+/// transferred, encoded in the "Rt" field.
+/// @param Xn Is the 64-bit name of the general-purpose base register or stack
+/// pointer, encoded in the "Rn" field.
+/// @param simm Is the signed immediate byte offset, in the range -256 to 255,
+/// encoded in the "imm9" field.
+void LDR(XReg Xt, PostIndex Xn, SImm<9> simm)
+{
+	Emit<"11111000010iiiiiiiii01nnnnnttttt", "t", "n", "i">(Xt, Xn, simm);
+}
+
+/// @brief LDR - Load Register (immediate) loads a word or doubleword from
+/// memory and writes it to a register. The address that is used for the load is
+/// calculated from a base register and an immediate offset. The Unsigned offset
+/// variant scales the immediate offset value by the size of the value accessed
+/// before adding it to the base register value.
+/// @note LDR_32_ldst_immpre
+/// @param Wt Is the 32-bit name of the general-purpose register to be
+/// transferred, encoded in the "Rt" field.
+/// @param Xn Is the 64-bit name of the general-purpose base register or stack
+/// pointer, encoded in the "Rn" field.
+/// @param simm Is the signed immediate byte offset, in the range -256 to 255,
+/// encoded in the "imm9" field.
+void LDR(WReg Wt, PreIndex Xn, SImm<9> simm)
+{
+	Emit<"10111000010iiiiiiiii11nnnnnttttt", "t", "n", "i">(Wt, Xn, simm);
+}
+
+/// @brief LDR - Load Register (immediate) loads a word or doubleword from
+/// memory and writes it to a register. The address that is used for the load is
+/// calculated from a base register and an immediate offset. The Unsigned offset
+/// variant scales the immediate offset value by the size of the value accessed
+/// before adding it to the base register value.
+/// @note LDR_64_ldst_immpre
+/// @param Xt Is the 64-bit name of the general-purpose register to be
+/// transferred, encoded in the "Rt" field.
+/// @param Xn Is the 64-bit name of the general-purpose base register or stack
+/// pointer, encoded in the "Rn" field.
+/// @param simm Is the signed immediate byte offset, in the range -256 to 255,
+/// encoded in the "imm9" field.
+void LDR(XReg Xt, PreIndex Xn, SImm<9> simm)
+{
+	Emit<"11111000010iiiiiiiii11nnnnnttttt", "t", "n", "i">(Xt, Xn, simm);
+}
+
+/// @brief LDR - Load Register (immediate) loads a word or doubleword from
+/// memory and writes it to a register. The address that is used for the load is
+/// calculated from a base register and an immediate offset. The Unsigned offset
+/// variant scales the immediate offset value by the size of the value accessed
+/// before adding it to the base register value.
+/// @note LDR_32_ldst_pos
+/// @param Wt Is the 32-bit name of the general-purpose register to be
+/// transferred, encoded in the "Rt" field.
+/// @param Xn Is the 64-bit name of the general-purpose base register or stack
+/// pointer, encoded in the "Rn" field.
+/// @param pimm For the 32-bit variant: is the optional positive immediate byte
+/// offset, a multiple of 4 in the range 0 to 16380, defaulting to 0 and encoded
+/// in the "imm12" field as <pimm>/4.
+void LDR(WReg Wt, XRegSp Xn, Imm<12, 4> pimm = 0)
+{
+	Emit<"1011100101iiiiiiiiiiiinnnnnttttt", "t", "n", "i">(Wt, Xn, pimm);
+}
+
+/// @brief LDR - Load Register (immediate) loads a word or doubleword from
+/// memory and writes it to a register. The address that is used for the load is
+/// calculated from a base register and an immediate offset. The Unsigned offset
+/// variant scales the immediate offset value by the size of the value accessed
+/// before adding it to the base register value.
+/// @note LDR_64_ldst_pos
+/// @param Xt Is the 64-bit name of the general-purpose register to be
+/// transferred, encoded in the "Rt" field.
+/// @param Xn Is the 64-bit name of the general-purpose base register or stack
+/// pointer, encoded in the "Rn" field.
+/// @param pimm For the 64-bit variant: is the optional positive immediate byte
+/// offset, a multiple of 8 in the range 0 to 32760, defaulting to 0 and encoded
+/// in the "imm12" field as <pimm>/8.
+void LDR(XReg Xt, XRegSp Xn, Imm<12, 8> pimm = 0)
+{
+	Emit<"1111100101iiiiiiiiiiiinnnnnttttt", "t", "n", "i">(Xt, Xn, pimm);
+}
+
+/// @brief LDR - Load Register (literal) calculates an address from the PC value
+/// and an immediate offset, loads a word from memory, and writes it to a
+/// register.
+/// @note LDR_32_loadlit
+/// @param Wt Is the 32-bit name of the general-purpose register to be loaded,
+/// encoded in the "Rt" field.
+/// @param label Is the program label from which the data is to be loaded. Its
+/// offset from the address of this instruction, in the range +/-1MB, is encoded
+/// as "imm19" times 4.
+void LDR(WReg Wt, SImm<19, 4> label)
+{
+	Emit<"00011000iiiiiiiiiiiiiiiiiiittttt", "t", "i">(Wt, label);
+}
+
+/// @brief LDR - Load Register (literal) calculates an address from the PC value
+/// and an immediate offset, loads a word from memory, and writes it to a
+/// register.
+/// @note LDR_64_loadlit
+/// @param Xt Is the 64-bit name of the general-purpose register to be loaded,
+/// encoded in the "Rt" field.
+/// @param label Is the program label from which the data is to be loaded. Its
+/// offset from the address of this instruction, in the range +/-1MB, is encoded
+/// as "imm19" times 4.
+void LDR(XReg Xt, SImm<19, 4> label)
+{
+	Emit<"01011000iiiiiiiiiiiiiiiiiiittttt", "t", "i">(Xt, label);
+}
+
+/// @brief LDR - Load Register (register) calculates an address from a base
+/// register value and an offset register value, loads a word from memory, and
+/// writes it to a register. The offset register value can optionally be shifted
+/// and extended.
+/// @note LDR_32_ldst_regoff
+/// @param Wt Is the 32-bit name of the general-purpose register to be
+/// transferred, encoded in the "Rt" field.
+/// @param Xn Is the 64-bit name of the general-purpose base register or stack
+/// pointer, encoded in the "Rn" field.
+/// @param Wm When <field>option<0></field> is set to 0, is the 32-bit
+/// name of the general-purpose index register, encoded in the "Rm" field.
+/// @param Xm When <field>option<0></field> is set to 1, is the 64-bit
+/// name of the general-purpose index register, encoded in the "Rm" field.
+/// @param extend Is the index extend/shift specifier, defaulting to LSL, and
+/// which must be omitted for the LSL option when <amount> is omitted.
+/// @param amount For the 32-bit variant: is the index shift amount, optional
+/// only when <extend> is not LSL. Where it is permitted to be optional,
+/// it defaults to #0.
+void LDR(
+	WReg Wt, XRegSp Xn, RReg Rm,
+	RegisterExtension extend = RegisterExtension::UXTX,
+	ImmChoice<0, 2>   amount = 0
+)
+{
+	// TODO: Allow "LSL" as extension argument
+	// TODO: Verify extension with Rm width
+	Emit<"10111000011mmmmmxxxS10nnnnnttttt", "t", "n", "m", "x", "S">(
+		Wt, Xn, Rm, extend, amount
+	);
+}
+
+/// @brief LDR - Load Register (register) calculates an address from a base
+/// register value and an offset register value, loads a word from memory, and
+/// writes it to a register. The offset register value can optionally be shifted
+/// and extended.
+/// @note LDR_64_ldst_regoff
+/// @param Xt Is the 64-bit name of the general-purpose register to be
+/// transferred, encoded in the "Rt" field.
+/// @param Xn Is the 64-bit name of the general-purpose base register or stack
+/// pointer, encoded in the "Rn" field.
+/// @param Wm When <field>option<0></field> is set to 0, is the 32-bit
+/// name of the general-purpose index register, encoded in the "Rm" field.
+/// @param Xm When <field>option<0></field> is set to 1, is the 64-bit
+/// name of the general-purpose index register, encoded in the "Rm" field.
+/// @param extend Is the index extend/shift specifier, defaulting to LSL, and
+/// which must be omitted for the LSL option when <amount> is omitted.
+/// @param amount For the 64-bit variant: is the index shift amount, optional
+/// only when <extend> is not LSL. Where it is permitted to be optional,
+/// it defaults to #0.
+void LDR(
+	XReg Xt, XRegSp Xn, RReg Rm,
+	RegisterExtension extend = RegisterExtension::UXTX,
+	ImmChoice<0, 3>   amount = 0
+)
+{
+	// TODO: Allow "LSL" as extension argument
+	// TODO: Verify extension with Rm width
+	Emit<"11111000011mmmmmxxxS10nnnnnttttt", "t", "n", "m", "x", "S">(
+		Xt, Xn, Rm, extend, amount
+	);
+}
+
 /// @brief LDTR - Load Register (unprivileged) loads a word or doubleword from
 /// memory, and writes it to a register. The address that is used for the load
 /// is calculated from a base register and an immediate offset. Memory accesses
