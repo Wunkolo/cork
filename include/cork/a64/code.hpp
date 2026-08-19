@@ -187,7 +187,8 @@ template<std::uint32_t Splat, std::uint8_t... Choices>
 inline std::uint32_t Encode(ImmChoice<Choices...> Value)
 {
 	static_assert(
-		static_cast<std::size_t>(std::popcount(Splat)) >= ImmChoice<Choices...>::BitWidth,
+		static_cast<std::size_t>(std::popcount(Splat))
+			>= ImmChoice<Choices...>::BitWidth,
 		"Not enough bits to encode choices"
 	);
 	return BitExpand<Splat>(static_cast<std::uint32_t>(Value.Value));
@@ -243,6 +244,32 @@ public:
 	CodeGenerator() = default;
 
 #include <cork/a64/instructions/a64-base.inc.hpp>
+
+	// Assembly directives
+	void word(std::uint32_t Value)
+	{
+		Instructions.emplace_back(Value);
+	}
+	void word(float Value)
+	{
+		word(std::bit_cast<std::uint32_t>(Value));
+	}
+
+	void xword(std::uint64_t Value)
+	{
+		word(static_cast<std::uint32_t>(Value >> 0));
+		word(static_cast<std::uint32_t>(Value >> 32));
+	}
+	void xword(double Value)
+	{
+		xword(std::bit_cast<std::uint64_t>(Value));
+	}
+
+	void hword(std::uint16_t ValueLow, std::uint16_t ValueHigh = 0)
+	{
+		word(ValueLow | (static_cast<std::uint32_t>(ValueHigh) >> 16));
+	}
+	}
 
 	std::span<const std::uint32_t> GetCode() const
 	{
