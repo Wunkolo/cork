@@ -269,6 +269,29 @@ public:
 	{
 		word(ValueLow | (static_cast<std::uint32_t>(ValueHigh) >> 16));
 	}
+
+	void align(std::size_t Alignment, std::uint32_t FillValue = 0)
+	{
+		assert(Alignment >= 4);
+		assert(std::has_single_bit(Alignment));
+
+		// Continue to add values until the mis-aligned bits are 0
+		while( (Instructions.size() & (Alignment - 1)) != 0 )
+		{
+			word(FillValue);
+		}
+	}
+
+	void fill(std::size_t Count, std::uint32_t FillValue = 0)
+	{
+		assert(Count >= 4);
+		assert(Count % 4 == 0);
+
+		Count /= 4;
+		while( (Count--) != 0u )
+		{
+			word(FillValue);
+		}
 	}
 
 	std::span<const std::uint32_t> GetCode() const
