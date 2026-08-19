@@ -7,6 +7,7 @@
 #include <algorithm>
 #include <bit>
 #include <span>
+#include <string_view>
 #include <vector>
 
 namespace Cork
@@ -300,10 +301,37 @@ public:
 		assert(Count >= 4);
 		assert(Count % 4 == 0);
 
-		Count /= 4;
-		while( (Count--) != 0u )
+		std::size_t WordCount = Count / 4;
+		while( (WordCount--) != 0u )
 		{
 			word(FillValue);
+		}
+	}
+
+	void ascii(std::string_view StringLiteral)
+	{
+		const std::size_t WordCount = (StringLiteral.size() + 3) / 4;
+
+		for( std::size_t WordIndex = 0; WordIndex < WordCount; ++WordIndex )
+		{
+			const std::string_view WordSpan
+				= StringLiteral.substr(WordIndex * 4);
+
+			switch( WordSpan.size() )
+			{
+			default:
+				word(*reinterpret_cast<const std::uint32_t*>(WordSpan.data()));
+				break;
+			case 3:
+				byte(WordSpan[0], WordSpan[1], WordSpan[2]);
+				break;
+			case 2:
+				byte(WordSpan[0], WordSpan[1]);
+				break;
+			case 1:
+				byte(WordSpan[0]);
+				break;
+			}
 		}
 	}
 
