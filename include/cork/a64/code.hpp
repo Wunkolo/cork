@@ -270,6 +270,19 @@ public:
 		word(ValueLow | (static_cast<std::uint32_t>(ValueHigh) >> 16));
 	}
 
+	void byte(
+		std::uint8_t Value0, std::uint8_t Value1 = 0, std::uint8_t Value2 = 0,
+		std::uint8_t Value3 = 0
+	)
+	{
+		word(
+			(static_cast<std::uint32_t>(Value0) << 0)
+			| (static_cast<std::uint32_t>(Value1) << 8)
+			| (static_cast<std::uint32_t>(Value2) << 16)
+			| (static_cast<std::uint32_t>(Value3) << 24)
+		);
+	}
+
 	void align(std::size_t Alignment, std::uint32_t FillValue = 0)
 	{
 		assert(Alignment >= 4);
